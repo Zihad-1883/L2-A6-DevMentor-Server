@@ -16,6 +16,8 @@ import { env } from "./config/env.js";
 import { generalLimiter } from "./middlewares/rateLimiter.middleware.js";
 import { notFoundHandler } from "./middlewares/notFound.middleware.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./lib/auth.js";
 import v1Router from "./routes/v1/index.js";
 
 const app = express();
@@ -43,11 +45,13 @@ app.use(generalLimiter);
 app.get("/", (_req, res) => {
   res.json({
     success: true,
-    name: "Kōdex API",
-    version: "1.0.0",
-    docs: "/api/v1/health",
+    message: "Welcome to Kōdex API",
+    data: { name: "Kōdex API", version: "1.0.0", docs: "/api/v1/health" },
   });
 });
+
+// ── Better Auth routes (must be before v1Router — needs full req.url) ───────────
+app.all("/api/v1/auth/*splat", toNodeHandler(auth));
 
 // ── API routes ────────────────────────────────────────────────────────────────
 app.use("/api/v1", v1Router);

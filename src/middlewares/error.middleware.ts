@@ -44,9 +44,13 @@ export const errorHandler = (
   const payload: Record<string, unknown> = {
     success: false,
     message: err.message || "Internal Server Error",
+    errors: err.errors
+      ? Array.isArray(err.errors)
+        ? err.errors
+        : [err.errors]
+      : [],
   };
 
-  if (err.errors) payload.errors = err.errors;
   if (env.NODE_ENV === "development") payload.stack = err.stack;
 
   console.error(`[${req.method}] ${req.originalUrl} → ${statusCode}:`, err.message);

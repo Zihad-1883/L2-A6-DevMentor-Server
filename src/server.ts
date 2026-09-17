@@ -3,29 +3,60 @@
  * @description Application Server Entry Point
  *
  * - Loads .env via dotenv
- * - Starts the HTTP server on PORT from env
- * - Handles unhandledRejection and uncaughtException for safe shutdown
- * - Exports `app` for Vercel serverless deployment
+ * - Connects to the database before accepting requests
+ * - Starts Express server listening on PORT
+ * - Disconnects DB and closes server gracefully on shutdown
+ * - Exports app for Vercel serverless deployment
  */
 
 import "dotenv/config";
 import app from "./app.js";
 import { env } from "./config/env.js";
+import { connectDB, disconnectDB } from "./config/db.js";
 
-const server = app.listen(env.PORT, () => {
-  console.log(`✅  Kōdex Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
-  console.log(`🔗  http://localhost:${env.PORT}/api/v1/health`);
-});
+async function bootstrap(): Promise<void> {
+  // 1. Verify DB is reachable before accepting any traffic
+  await connectDB();
 
-// ── Graceful shutdown on unhandled errors ─────────────────────────────────────
-process.on("unhandledRejection", (reason: unknown) => {
-  console.error("💥 Unhandled Rejection:", reason);
-  server.close(() => process.exit(1));
-});
+  // 2. Start HTTP server
+  const server = app.listen(env.PORT, () => {
+    console.log(`✅  Kōdex Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
+    console.log(`🔗  http://localhost:${env.PORT}/api/v1/health`);
+  });
 
-process.on("uncaughtException", (error: Error) => {
-  console.error("💥 Uncaught Exception:", error.message);
-  server.close(() => process.exit(1));
+  // ── Graceful shutdown ──────────────────────────────────────────────────────
+  const shutdown = async (signal: string) => {
+    console.log(`\n⚠️  ${signal} received — shutting down gracefully...`);
+    server.close(async () => {
+      await disconnectDB();
+      console.log("👋  Server closed.");
+      process.exit(0);
+    });
+  };
+
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+  process.on("SIGINT",  () => shutdown("SIGINT"));   // Ctrl+C
+
+  process.on("unhandledRejection", (reason: unknown) => {
+    console.error("💥 Unhandled Rejection:", reason);
+    server.close(async () => {
+      await disconnectDB();
+      process.exit(1);
+    });
+  });
+
+  process.on("uncaughtException", (error: Error) => {
+    console.error("💥 Uncaught Exception:", error.message);
+    server.close(async () => {
+      await disconnectDB();
+      process.exit(1);
+    });
+  });
+}
+
+bootstrap().catch((error) => {
+  console.error("❌ Failed to start server:", error);
+  process.exit(1);
 });
 
 // Export for Vercel / serverless platforms

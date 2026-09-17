@@ -1,9 +1,19 @@
 /**
  * @file src/config/db.ts
- * @description Prisma Database Client Singleton
- * 
- * WHAT WILL BE DONE HERE:
- * - Instantiates and exports a global PrismaClient instance.
- * - Handles connection pooling setup for serverless execution (Neon PostgreSQL).
- * - Implements graceful connection teardown on server shutdown.
+ * @description Prisma Database Connection Helper
+ *
+ * Exports a function to verify the DB is reachable at server startup.
+ * The actual prisma singleton lives in src/lib/prisma.ts.
  */
+
+import { prisma } from "../lib/prisma.js";
+
+export async function connectDB(): Promise<void> {
+  await prisma.$connect();
+  console.log("🗄️  Database connected successfully");
+}
+
+export async function disconnectDB(): Promise<void> {
+  await prisma.$disconnect();
+  console.log("🗄️  Database disconnected");
+}
