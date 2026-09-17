@@ -1,0 +1,10 @@
+// prisma/schema.prisma
+// Prisma Schema Definition for DevMentor Platform
+//
+// WHAT WILL BE DONE HERE:
+// - Define datasource (PostgreSQL) and generator (Prisma Client).
+// - Define User, Session, Account, Verification models (Better Auth core).
+// - Define MentorProfile, Program, ProgramSession, Enrollment, SessionParticipant models.
+// - Define CodeReviewRequest, Exam, Question, Option, ExamAttempt, ExamAnswer models.
+// - Define Material, Wallet, CreditTransaction, Payment, PayoutRequest models.
+// - Define CommissionSetting, PlatformSetting, and AuditLog models.
