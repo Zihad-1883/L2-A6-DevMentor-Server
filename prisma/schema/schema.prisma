@@ -8,3 +8,13 @@
 // - Define CodeReviewRequest, Exam, Question, Option, ExamAttempt, ExamAnswer models.
 // - Define Material, Wallet, CreditTransaction, Payment, PayoutRequest models.
 // - Define CommissionSetting, PlatformSetting, and AuditLog models.
+
+generator client {
+    provider = "prisma-client" // v7 new provider name
+    output   = "../../src/generated/prisma" // where client gets generated
+}
+
+datasource db {
+    provider = "postgresql"
+    // NO url here — it's in prisma.config.ts
+}

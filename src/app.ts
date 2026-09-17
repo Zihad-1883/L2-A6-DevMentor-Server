@@ -1,11 +1,59 @@
 /**
  * @file src/app.ts
  * @description Express Application Configuration
- * 
- * WHAT WILL BE DONE HERE:
- * - Instantiate Express app.
- * - Register global middlewares (helmet, cors, rateLimiter, body parsers).
- * - Mount API v1 router under `/api/v1`.
- * - Register 404 handler and global error handler middleware.
- * - Export configured Express application instance.
+ *
+ * Creates and configures the Express app:
+ *  1. Global security & parsing middlewares (helmet, cors, json, urlencoded)
+ *  2. General rate limiter
+ *  3. API v1 router mounted at /api/v1
+ *  4. 404 handler → global error handler (must be last)
  */
+
+import express from "express";
+import helmet from "helmet";
+import cors from "cors";
+import { env } from "./config/env.js";
+import { generalLimiter } from "./middlewares/rateLimiter.middleware.js";
+import { notFoundHandler } from "./middlewares/notFound.middleware.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
+import v1Router from "./routes/v1/index.js";
+
+const app = express();
+
+// ── Security headers ──────────────────────────────────────────────────────────
+app.use(helmet());
+
+// ── CORS ──────────────────────────────────────────────────────────────────────
+app.use(
+  cors({
+    origin: env.CLIENT_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  }),
+);
+
+// ── Body parsers ──────────────────────────────────────────────────────────────
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// ── Rate limiting ─────────────────────────────────────────────────────────────
+app.use(generalLimiter);
+
+// ── Root route ────────────────────────────────────────────────────────────────
+app.get("/", (_req, res) => {
+  res.json({
+    success: true,
+    name: "Kōdex API",
+    version: "1.0.0",
+    docs: "/api/v1/health",
+  });
+});
+
+// ── API routes ────────────────────────────────────────────────────────────────
+app.use("/api/v1", v1Router);
+
+// ── 404 & global error handler (ORDER MATTERS — must be last) ─────────────────
+app.use(notFoundHandler);
+app.use(errorHandler);
+
+export default app;
