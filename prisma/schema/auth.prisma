@@ -11,7 +11,7 @@ model User {
     email         String    @unique
     emailVerified Boolean
     image         String?
-    role          String    @default("user") // app-level: "user" | "mentor" | "admin"
+    role          String    @default("student") // app-level: "student" | "mentor" | "admin"
     createdAt     DateTime
     updatedAt     DateTime
 

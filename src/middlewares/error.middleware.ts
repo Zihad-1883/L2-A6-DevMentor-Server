@@ -1,12 +1,3 @@
-/**
- * @file src/middlewares/error.middleware.ts
- * @description Centralized Application Error Handling Middleware
- *
- * Formats every error into:  { success: false, message, errors?, stack? }
- * - In production: stack trace is hidden.
- * - Prisma known errors are mapped to readable messages.
- */
-
 import type { Request, Response, NextFunction } from "express";
 import { env } from "../config/env.js";
 

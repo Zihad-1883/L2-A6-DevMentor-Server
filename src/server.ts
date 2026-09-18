@@ -1,14 +1,3 @@
-/**
- * @file src/server.ts
- * @description Application Server Entry Point
- *
- * - Loads .env via dotenv
- * - Connects to the database before accepting requests
- * - Starts Express server listening on PORT
- * - Disconnects DB and closes server gracefully on shutdown
- * - Exports app for Vercel serverless deployment
- */
-
 import "dotenv/config";
 import app from "./app.js";
 import { env } from "./config/env.js";
@@ -24,7 +13,7 @@ async function bootstrap(): Promise<void> {
     console.log(`🔗  http://localhost:${env.PORT}/api/v1/health`);
   });
 
-  // ── Graceful shutdown ──────────────────────────────────────────────────────
+  // 3. Graceful shutdown 
   const shutdown = async (signal: string) => {
     console.log(`\n⚠️  ${signal} received — shutting down gracefully...`);
     server.close(async () => {

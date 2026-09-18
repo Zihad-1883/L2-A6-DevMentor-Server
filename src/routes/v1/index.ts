@@ -16,7 +16,6 @@ v1Router.get("/health", (_req, res) => {
 });
 
 
-
 // ── Module routes (add as features are built) ─────────────────────────────────
 // import userRouter   from "../../modules/user/user.routes.js";
 // v1Router.use("/users", userRouter);
