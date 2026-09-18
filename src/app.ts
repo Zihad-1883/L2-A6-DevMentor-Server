@@ -51,7 +51,12 @@ app.get("/", (_req, res) => {
 });
 
 // ── Better Auth routes (must be before v1Router — needs full req.url) ───────────
-app.all("/api/v1/auth/*splat", toNodeHandler(auth));
+app.all("/api/v1/auth/*splat", (req, _res, next) => {
+  if (!req.headers.origin) {
+    req.headers.origin = env.CLIENT_URL || env.BETTER_AUTH_URL || "http://localhost:5000";
+  }
+  next();
+}, toNodeHandler(auth));
 
 // ── API routes ────────────────────────────────────────────────────────────────
 app.use("/api/v1", v1Router);

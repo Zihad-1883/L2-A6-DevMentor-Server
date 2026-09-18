@@ -40,6 +40,8 @@ const envSchema = z.object({
   BKASH_USERNAME: z.string().min(1),
   BKASH_PASSWORD: z.string().min(1),
   BKASH_BASE_URL: z.string().url(),
+  BKASH_CALLBACK_URL: z.string().url(),
+
 });
 
 const parsed = envSchema.safeParse(process.env);

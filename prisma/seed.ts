@@ -5,10 +5,6 @@ import { auth } from "../src/lib/auth.js";
 async function main() {
   console.log("🌱 Seeding database...");
 
-  // ── Admin User ──────────────────────────────────────────────────────────────
-  // Uses Better Auth's internal API to create user with properly hashed password.
-  // These credentials are used for demo/submission — store safely.
-
   const adminEmail = "admin@kodex.dev";
   const adminPassword = "Admin@123456";
 
@@ -23,7 +19,6 @@ async function main() {
       },
     });
 
-    // Better Auth creates user with role "student" by default — update to "admin"
     await prisma.user.update({
       where: { email: adminEmail },
       data: { role: "admin" },
@@ -34,7 +29,6 @@ async function main() {
     console.log(`   Password: ${adminPassword}`);
     console.log(`   Role:     admin`);
   } else {
-    // Ensure existing user has admin role (idempotent re-run safety)
     await prisma.user.update({
       where: { email: adminEmail },
       data: { role: "admin" },

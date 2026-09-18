@@ -1,23 +1,18 @@
-// prisma/schema/auth.prisma
-// Better Auth Core Models
-//
-// These 4 models are required by Better Auth.
-// DO NOT rename or remove fields — Better Auth maps to them directly.
-// Additional app-specific fields (e.g. role) can be added to User.
-
 model User {
-    id            String    @id
+    id            String   @id
     name          String
-    email         String    @unique
+    email         String   @unique
     emailVerified Boolean
     image         String?
-    role          String    @default("student") // app-level: "student" | "mentor" | "admin"
+    role          String   @default("student")
     createdAt     DateTime
     updatedAt     DateTime
 
-    sessions      Session[]
-    accounts      Account[]
-    mentorProfile MentorProfile? // null for students, set when mentor applies
+    sessions        Session[]
+    accounts        Account[]
+    mentorProfile   MentorProfile?
+    programsCreated Program[]      @relation("MentorPrograms")
+    enrollments     Enrollment[]   @relation("StudentEnrollments")
 
     @@map("user")
 }

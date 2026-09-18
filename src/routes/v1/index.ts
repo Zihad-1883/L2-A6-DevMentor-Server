@@ -39,8 +39,11 @@ v1Router.get(
   })
 );
 
-// ── Module routes (add as features are built) ─────────────────────────────────
-// import userRouter   from "../../modules/user/user.routes.js";
-// v1Router.use("/users", userRouter);
+// ── Module routes ─────────────────────────────────────────────────────────────
+import programRouter from "../../modules/program/program.routes.js";
+import programSessionRouter from "../../modules/programSession/programSession.routes.js";
+
+v1Router.use("/programs", programRouter);
+v1Router.use("/program-sessions", programSessionRouter);
 
 export default v1Router;

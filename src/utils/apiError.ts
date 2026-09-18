@@ -1,10 +1,3 @@
-// Custom operational error class.
-// Throw this anywhere in the app — the global errorHandler catches it.
-//
-// Usage:
-//   throw new AppError("User not found", 404);
-//   throw new AppError("Validation failed", 400, zodIssues);
-
 export class AppError extends Error {
   public readonly statusCode: number;
   public readonly errors: unknown[];

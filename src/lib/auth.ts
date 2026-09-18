@@ -1,13 +1,3 @@
-/**
- * @file src/lib/auth.ts
- * @description Better Auth Configuration & Initialization
- * 
- * WHAT WILL BE DONE HERE:
- * - Configure Better Auth instance with Prisma adapter.
- * - Enable Email/Password, Google OAuth, and Bearer token plugins.
- * - Export `auth` helper for session/token verification across backend services.
- */
-
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma.js";
@@ -18,8 +8,8 @@ export const auth = betterAuth({
 
     secret: env.BETTER_AUTH_SECRET,
     baseURL: env.BETTER_AUTH_URL,
-    basePath: "/api/v1/auth",  // must match where it's mounted in app.ts
-    trustedOrigins: [env.CLIENT_URL, env.BETTER_AUTH_URL],
+    basePath: "/api/v1/auth",
+    trustedOrigins: [env.CLIENT_URL, env.BETTER_AUTH_URL, "http://localhost:5000", "http://localhost:3000"],
 
     user: {
         additionalFields: {

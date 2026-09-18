@@ -1,0 +1,81 @@
+// prisma/schema/program.prisma
+// Program, ProgramSession, and Enrollment Models
+//
+// Mentors create Sprint programs (1-on-1).
+// Students enroll in programs and book sessions.
+
+enum ProgramStatus {
+    DRAFT
+    PUBLISHED
+    ARCHIVED
+}
+
+enum SessionStatus {
+    PENDING
+    CONFIRMED
+    COMPLETED
+    CANCELLED
+}
+
+enum EnrollmentStatus {
+    ACTIVE
+    COMPLETED
+    DROPPED
+}
+
+model Program {
+    id            String        @id @default(cuid())
+    title         String
+    description   String
+    durationWeeks Int           @default(1)
+    techStackTags String[]      // e.g. ["Node.js", "Express", "PostgreSQL"]
+    status        ProgramStatus @default(DRAFT)
+
+    mentorId      String
+    mentor        User          @relation("MentorPrograms", fields: [mentorId], references: [id], onDelete: Cascade)
+
+    sessions      ProgramSession[]
+    enrollments   Enrollment[]
+
+    createdAt     DateTime      @default(now())
+    updatedAt     DateTime      @updatedAt
+    deletedAt     DateTime?     // Soft delete
+
+    @@map("program")
+}
+
+model ProgramSession {
+    id              String        @id @default(cuid())
+    programId       String
+    program         Program       @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+    title           String?       // e.g., "Week 1 - Day 1: System Architecture"
+    sessionNumber   Int           @default(1)
+    weekNumber      Int           @default(1)
+    priceInCredits  Int           @default(0)
+    scheduledAt     DateTime?
+    durationMinutes Int           @default(60)
+    status          SessionStatus @default(PENDING)
+    joinLink        String?
+
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
+
+    @@map("program_session")
+}
+
+model Enrollment {
+    id          String           @id @default(cuid())
+    studentId   String
+    student     User             @relation("StudentEnrollments", fields: [studentId], references: [id], onDelete: Cascade)
+
+    programId   String
+    program     Program          @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+    status      EnrollmentStatus @default(ACTIVE)
+    enrolledAt  DateTime         @default(now())
+    completedAt DateTime?
+
+    @@unique([studentId, programId])
+    @@map("enrollment")
+}

@@ -2,7 +2,6 @@ import type { Request, Response, NextFunction } from "express";
 import { auth } from "../lib/auth.js";
 import { prisma } from "../lib/prisma.js";
 
-// ── Extend Express Request to carry the authenticated user ────────────────────
 declare global {
   namespace Express {
     interface Request {
@@ -20,10 +19,7 @@ declare global {
   }
 }
 
-// ── requireAuth middleware ─────────────────────────────────────────────────────
-// Verifies the Bearer token from Authorization header using Better Auth.
-// Attaches the user to req.user on success.
-// Returns 401 if token is missing or invalid.
+
 export const requireAuth = async (
   req: Request,
   res: Response,

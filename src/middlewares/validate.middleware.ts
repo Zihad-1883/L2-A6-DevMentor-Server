@@ -17,7 +17,14 @@ export const validate = (schema: ZodType, target: Target = "body") => {
             return next(new AppError("Validation failed", 400, errors));
         }
 
-        req[target] = result.data;
+        if (target === "body") {
+            req.body = result.data;
+        } else if (target === "query") {
+            Object.assign(req.query, result.data);
+        } else if (target === "params") {
+            Object.assign(req.params, result.data);
+        }
+
         next();
     };
 };
