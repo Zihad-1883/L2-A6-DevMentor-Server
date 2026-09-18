@@ -42,10 +42,11 @@ router.delete(
   programSessionController.deleteSession,
 );
 
-// Book / schedule a session (Authenticated student/user)
+// Book / schedule a session (Student only - accepts mentor schedule)
 router.post(
   "/:sessionId/book",
   requireAuth,
+  requireRole("student"),
   validate(bookSessionSchema),
   programSessionController.bookSession,
 );

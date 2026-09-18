@@ -29,6 +29,10 @@ const addSessionToProgram = async (
     throw new AppError("You are not authorized to add sessions to this program", 403);
   }
 
+  if (!payload.scheduledAt) {
+    throw new AppError("Mentor must provide a valid schedule date and time (scheduledAt) for the session", 400);
+  }
+
   const session = await prisma.programSession.create({
     data: {
       programId,
@@ -36,7 +40,7 @@ const addSessionToProgram = async (
       sessionNumber: payload.sessionNumber || 1,
       weekNumber: payload.weekNumber,
       priceInCredits: payload.priceInCredits,
-      scheduledAt: payload.scheduledAt ? new Date(payload.scheduledAt) : null,
+      scheduledAt: new Date(payload.scheduledAt),
       durationMinutes: payload.durationMinutes || 60,
       joinLink: payload.joinLink,
       status: "PENDING",
@@ -98,7 +102,7 @@ const deleteSession = async (sessionId: string, mentorId: string) => {
   return { message: "Session removed successfully" };
 };
 
-// ── 4. Book / Schedule Session (With Conflict Detection!) ─────────────────────
+// ── 4. Book / Schedule Session (Student Accepts Mentor Schedule) ─────────────
 const bookSession = async (
   sessionId: string,
   userId: string,
@@ -113,12 +117,23 @@ const bookSession = async (
     throw new AppError("Session not found", 404);
   }
 
-  const mentorId = session.program.mentorId;
-  const newStart = new Date(payload.scheduledAt);
-  const durationMs = (payload.durationMinutes || session.durationMinutes || 60) * 60 * 1000;
-  const newEnd = new Date(newStart.getTime() + durationMs);
+  if (session.status === "CONFIRMED") {
+    throw new AppError("This session slot has already been booked", 400);
+  }
 
-  // ⚠️ CONFLICT DETECTION: Check if mentor already has a confirmed overlapping session!
+  const targetStart = payload.scheduledAt
+    ? new Date(payload.scheduledAt)
+    : session.scheduledAt;
+
+  if (!targetStart) {
+    throw new AppError("This session slot does not have a scheduled date & time set by the mentor", 400);
+  }
+
+  const mentorId = session.program.mentorId;
+  const durationMs = (payload.durationMinutes || session.durationMinutes || 60) * 60 * 1000;
+  const targetEnd = new Date(targetStart.getTime() + durationMs);
+
+  // ⚠️ CONFLICT DETECTION: Check if mentor already has another confirmed session overlapping this slot!
   const conflictingSession = await prisma.programSession.findFirst({
     where: {
       id: { not: sessionId },
@@ -132,9 +147,9 @@ const bookSession = async (
     const existingStart = conflictingSession.scheduledAt;
     const existingEnd = new Date(existingStart.getTime() + conflictingSession.durationMinutes * 60 * 1000);
 
-    if (newStart < existingEnd && newEnd > existingStart) {
+    if (targetStart < existingEnd && targetEnd > existingStart) {
       throw new AppError(
-        "Booking conflict: The mentor already has a confirmed session scheduled during this time slot.",
+        "Booking conflict: The mentor already has another confirmed session scheduled during this time slot.",
         409,
       );
     }
@@ -143,7 +158,7 @@ const bookSession = async (
   const confirmedSession = await prisma.programSession.update({
     where: { id: sessionId },
     data: {
-      scheduledAt: newStart,
+      scheduledAt: targetStart,
       durationMinutes: payload.durationMinutes || session.durationMinutes,
       joinLink: payload.joinLink || session.joinLink,
       status: "CONFIRMED",
