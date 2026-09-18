@@ -21,6 +21,16 @@ export const auth = betterAuth({
     basePath: "/api/v1/auth",  // must match where it's mounted in app.ts
     trustedOrigins: [env.CLIENT_URL, env.BETTER_AUTH_URL],
 
+    user: {
+        additionalFields: {
+            role: {
+                type: "string",
+                defaultValue: "student",
+                required: false,
+            },
+        },
+    },
+
     emailAndPassword: { enabled: true },
 
     socialProviders: {

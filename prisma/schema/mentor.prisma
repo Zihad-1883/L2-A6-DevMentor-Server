@@ -1,0 +1,38 @@
+// prisma/schema/mentor.prisma
+// MentorProfile Model
+//
+// One-to-one with User. Created when a user applies to become a mentor.
+// Admin approves/rejects via approvalStatus.
+
+enum ExperienceLevel {
+    JUNIOR
+    MID
+    SENIOR
+}
+
+enum ApprovalStatus {
+    PENDING
+    APPROVED
+    REJECTED
+}
+
+model MentorProfile {
+    id              String          @id @default(cuid())
+    userId          String          @unique
+    user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    bio             String
+    techStackTags   String[]        // e.g. ["TypeScript", "React", "Node.js"]
+    experienceLevel ExperienceLevel @default(JUNIOR)
+    githubUrl       String?
+    resumeUrl       String?         // Cloudinary URL — uploaded during mentor application
+
+    approvalStatus  ApprovalStatus  @default(PENDING)
+    approvedBy      String?         // admin User.id who approved/rejected
+    approvedAt      DateTime?
+
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+
+    @@map("mentor_profile")
+}

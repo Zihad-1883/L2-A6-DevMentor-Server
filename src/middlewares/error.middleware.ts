@@ -1,12 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 import { env } from "../config/env.js";
+import { AppError } from "../utils/apiError.js";
 
-interface AppError extends Error {
-  statusCode?: number;
-  code?: string;
-  errors?: unknown;
-  meta?: unknown;
-}
+
 
 export const errorHandler = (
   err: AppError,

@@ -15,8 +15,9 @@ model User {
     createdAt     DateTime
     updatedAt     DateTime
 
-    sessions Session[]
-    accounts Account[]
+    sessions      Session[]
+    accounts      Account[]
+    mentorProfile MentorProfile? // null for students, set when mentor applies
 
     @@map("user")
 }

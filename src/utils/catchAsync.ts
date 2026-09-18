@@ -1,7 +1,11 @@
-/**
- * @file src/utils/catchAsync.ts
- * @description Async Controller Exception Handler Wrapper
- * 
- * WHAT WILL BE DONE HERE:
- * - Wrap Express async route handlers to automatically catch rejected promises and forward errors to `next(err)`.
- */
+import type { NextFunction, Request, RequestHandler, Response } from "express";
+
+export const catchAsync = (fn: RequestHandler) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await fn(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    };
+};
