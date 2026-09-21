@@ -37,11 +37,15 @@ import sprintSessionRouter from "../../modules/sprintSession/sprintSession.route
 import cohortRouter from "../../modules/cohort/cohort.routes.js";
 import cohortSessionRouter from "../../modules/cohortSession/cohortSession.routes.js";
 import mentorRouter from "../../modules/mentor/mentor.routes.js";
+import userRouter from "../../modules/user/user.routes.js";
+import enrollmentRouter from "../../modules/enrollment/enrollment.routes.js";
 
 v1Router.use("/sprints", sprintRouter);
 v1Router.use("/sprint-sessions", sprintSessionRouter);
 v1Router.use("/cohorts", cohortRouter);
 v1Router.use("/cohort-sessions", cohortSessionRouter);
 v1Router.use("/mentors", mentorRouter);
+v1Router.use("/users", userRouter);
+v1Router.use("/enrollments", enrollmentRouter);
 
 export default v1Router;

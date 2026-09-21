@@ -1,7 +1,8 @@
-/**
- * @file src/modules/user/user.validation.ts
- * @description User Request Validation Schemas
- * 
- * WHAT WILL BE DONE HERE:
- * - Define Zod schemas for updating user profile (name, image, bio, tech stack tags).
- */
+import { z } from "zod";
+
+export const updateUserProfileSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters long").max(50).optional(),
+  image: z.string().url("Invalid image URL").optional().nullable(),
+  bio: z.string().min(10, "Bio must be at least 10 characters long").max(1000).optional(),
+});
+
