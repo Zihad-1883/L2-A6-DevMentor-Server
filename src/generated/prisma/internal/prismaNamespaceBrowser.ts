@@ -60,9 +60,6 @@ export const ModelName = {
   CohortSession: 'CohortSession',
   CohortSessionParticipant: 'CohortSessionParticipant',
   MentorProfile: 'MentorProfile',
-  Program: 'Program',
-  ProgramSession: 'ProgramSession',
-  Enrollment: 'Enrollment',
   SprintRequest: 'SprintRequest',
   SprintSession: 'SprintSession'
 } as const
@@ -220,57 +217,12 @@ export const MentorProfileScalarFieldEnum = {
 export type MentorProfileScalarFieldEnum = (typeof MentorProfileScalarFieldEnum)[keyof typeof MentorProfileScalarFieldEnum]
 
 
-export const ProgramScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  description: 'description',
-  durationWeeks: 'durationWeeks',
-  techStackTags: 'techStackTags',
-  status: 'status',
-  mentorId: 'mentorId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
-} as const
-
-export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
-
-
-export const ProgramSessionScalarFieldEnum = {
-  id: 'id',
-  programId: 'programId',
-  title: 'title',
-  sessionNumber: 'sessionNumber',
-  weekNumber: 'weekNumber',
-  priceInCredits: 'priceInCredits',
-  scheduledAt: 'scheduledAt',
-  durationMinutes: 'durationMinutes',
-  status: 'status',
-  joinLink: 'joinLink',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ProgramSessionScalarFieldEnum = (typeof ProgramSessionScalarFieldEnum)[keyof typeof ProgramSessionScalarFieldEnum]
-
-
-export const EnrollmentScalarFieldEnum = {
-  id: 'id',
-  studentId: 'studentId',
-  programId: 'programId',
-  status: 'status',
-  enrolledAt: 'enrolledAt',
-  completedAt: 'completedAt'
-} as const
-
-export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
-
-
 export const SprintRequestScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
   title: 'title',
   description: 'description',
+  techStackTags: 'techStackTags',
   startDate: 'startDate',
   durationDays: 'durationDays',
   selectedDays: 'selectedDays',

@@ -11,8 +11,6 @@ model User {
     sessions             Session[]
     accounts             Account[]
     mentorProfile        MentorProfile?
-    programsCreated      Program[]                  @relation("MentorPrograms")
-    enrollments          Enrollment[]               @relation("StudentEnrollments")
     sprintsRequested     SprintRequest[]            @relation("StudentSprints")
     sprintsClaimed       SprintRequest[]            @relation("MentorSprints")
     cohortsCreated       CohortProgram[]            @relation("MentorCohorts")

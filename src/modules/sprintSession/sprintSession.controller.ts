@@ -1,14 +1,9 @@
-/**
- * @file src/modules/sprintSession/sprintSession.controller.ts
- * @description HTTP Controllers for Sprint Session operations.
- */
-
 import type { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync.js";
 import { sendSuccess } from "../../utils/apiResponse.js";
 import { sprintSessionService } from "./sprintSession.service.js";
 
-// ── 1. Mentor Proposes Session Slot ───────────────────────────────────────────
+// 1. Mentor Proposes Session Slot
 const proposeSprintSessionSlot = catchAsync(async (req: Request, res: Response) => {
   const mentorId = req.user!.id;
   const sessionId = req.params.sessionId as string;
@@ -16,7 +11,7 @@ const proposeSprintSessionSlot = catchAsync(async (req: Request, res: Response) 
   sendSuccess(res, "Sprint session time slot proposed successfully", result);
 });
 
-// ── 2. Student Confirms Session Slot & Pays Credits ───────────────────────────
+// 2. Student Confirms Session Slot & Pays Credits
 const confirmSprintSession = catchAsync(async (req: Request, res: Response) => {
   const studentId = req.user!.id;
   const sessionId = req.params.sessionId as string;
@@ -24,7 +19,7 @@ const confirmSprintSession = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, result.message, result.session);
 });
 
-// ── 3. Complete Sprint Session ────────────────────────────────────────────────
+// 3. Complete Sprint Session
 const completeSprintSession = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const sessionId = req.params.sessionId as string;
@@ -32,7 +27,7 @@ const completeSprintSession = catchAsync(async (req: Request, res: Response) => 
   sendSuccess(res, result.message, result.session);
 });
 
-// ── 4. Cancel Sprint Session (1-Hour Cutoff Rule) ─────────────────────────────
+// 4. Cancel Sprint Session (1-Hour Cutoff Rule)
 const cancelSprintSession = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const sessionId = req.params.sessionId as string;
@@ -43,7 +38,7 @@ const cancelSprintSession = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// ── 5. Get Sessions for a Sprint Request ─────────────────────────────────────
+// 5. Get Sessions for a Sprint Request
 const getSprintSessionsBySprintId = catchAsync(async (req: Request, res: Response) => {
   const sprintId = req.params.sprintId as string;
   const result = await sprintSessionService.getSprintSessionsBySprintId(sprintId);

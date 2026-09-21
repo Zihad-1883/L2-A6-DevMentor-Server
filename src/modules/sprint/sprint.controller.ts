@@ -25,14 +25,14 @@ const getOpenSprintPool = catchAsync(async (req: Request, res: Response) => {
 const claimSprint = catchAsync(async (req: Request, res: Response) => {
   const mentorId = req.user!.id;
   const { sprintId } = req.params;
-  const result = await sprintService.claimSprint(sprintId, mentorId);
+  const result = await sprintService.claimSprint(sprintId as string, mentorId);
   sendSuccess(res, "Sprint request claimed successfully", result);
 });
 
 // ── 4. Get Single Sprint By ID ────────────────────────────────────────────────
 const getSprintById = catchAsync(async (req: Request, res: Response) => {
   const { sprintId } = req.params;
-  const result = await sprintService.getSprintById(sprintId);
+  const result = await sprintService.getSprintById(sprintId as string);
   sendSuccess(res, "Sprint request details fetched successfully", result);
 });
 
@@ -48,7 +48,7 @@ const getUserSprints = catchAsync(async (req: Request, res: Response) => {
 const updateSprint = catchAsync(async (req: Request, res: Response) => {
   const studentId = req.user!.id;
   const { sprintId } = req.params;
-  const result = await sprintService.updateSprint(sprintId, studentId, req.body);
+  const result = await sprintService.updateSprint(sprintId as string, studentId, req.body);
   sendSuccess(res, "Sprint request updated successfully", result);
 });
 
@@ -56,7 +56,7 @@ const updateSprint = catchAsync(async (req: Request, res: Response) => {
 const deleteSprint = catchAsync(async (req: Request, res: Response) => {
   const studentId = req.user!.id;
   const { sprintId } = req.params;
-  const result = await sprintService.deleteSprint(sprintId, studentId);
+  const result = await sprintService.deleteSprint(sprintId as string, studentId);
   sendSuccess(res, result.message, result);
 });
 

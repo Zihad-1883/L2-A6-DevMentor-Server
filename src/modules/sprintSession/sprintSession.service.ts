@@ -1,17 +1,8 @@
-/**
- * @file src/modules/sprintSession/sprintSession.service.ts
- * @description Service functions for 1-on-1 Sprint Sessions:
- * 1. Mentor proposes time slot & join link (status: PENDING)
- * 2. Student confirms session time & pays credits (status: CONFIRMED)
- * 3. Session completion & mentor credit release (status: COMPLETED)
- * 4. Cancellation & 1-hour cutoff refund rule (status: CANCELLED)
- */
-
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/apiError.js";
 import type { IScheduleSprintSessionInput } from "./sprintSession.interface.js";
 
-// ── 1. Propose Session Time Slot (Mentor Only) ────────────────────────────────
+// 1. Propose Session Time Slot (Mentor Only)
 const proposeSprintSessionSlot = async (
   sessionId: string,
   mentorId: string,
@@ -68,7 +59,7 @@ const proposeSprintSessionSlot = async (
       scheduledAt: proposedScheduledAt,
       durationMinutes,
       joinLink: payload.joinLink || session.joinLink,
-      status: "PENDING", // Pending student confirmation & credit deduction
+      status: "PENDING", 
     },
     include: {
       sprintRequest: {
@@ -83,7 +74,7 @@ const proposeSprintSessionSlot = async (
   return updatedSession;
 };
 
-// ── 2. Student Confirms Session Slot & Deducts Credit (Student Only) ──────────
+// 2. Student Confirms Session Slot & Deducts Credit (Student Only)
 const confirmSprintSession = async (sessionId: string, studentId: string) => {
   const session = await prisma.sprintSession.findUnique({
     where: { id: sessionId },
@@ -134,7 +125,7 @@ const confirmSprintSession = async (sessionId: string, studentId: string) => {
   };
 };
 
-// ── 3. Complete Session & Release Credit to Mentor (Mentor or Student) ───────
+// 3. Complete Session & Release Credit to Mentor (Mentor or Student)
 const completeSprintSession = async (sessionId: string, userId: string) => {
   const session = await prisma.sprintSession.findUnique({
     where: { id: sessionId },
@@ -175,7 +166,7 @@ const completeSprintSession = async (sessionId: string, userId: string) => {
   };
 };
 
-// ── 4. Cancel Session & Apply 1-Hour Refund Rule ─────────────────────────────
+// 4. Cancel Session & Apply 1-Hour Refund Rule
 const cancelSprintSession = async (sessionId: string, userId: string) => {
   const session = await prisma.sprintSession.findUnique({
     where: { id: sessionId },
@@ -205,6 +196,11 @@ const cancelSprintSession = async (sessionId: string, userId: string) => {
     if (hoursRemaining >= 1) {
       isEligibleForRefund = true;
     }
+
+    // Eligible if mentor cancelled 
+    if( userId === claimedByMentorId){
+        isEligibleForRefund = true;
+    }
   }
 
   const cancelledSession = await prisma.sprintSession.update({
@@ -231,7 +227,7 @@ const cancelSprintSession = async (sessionId: string, userId: string) => {
   };
 };
 
-// ── 5. Get Sessions for a Sprint Request ─────────────────────────────────────
+// 5. Get Sessions for a Sprint Request
 const getSprintSessionsBySprintId = async (sprintRequestId: string) => {
   const sessions = await prisma.sprintSession.findMany({
     where: { sprintRequestId },
@@ -241,7 +237,7 @@ const getSprintSessionsBySprintId = async (sprintRequestId: string) => {
   return sessions;
 };
 
-// ── Export Service Object ─────────────────────────────────────────────────────
+// Export Service Object
 export const sprintSessionService = {
   proposeSprintSessionSlot,
   confirmSprintSession,

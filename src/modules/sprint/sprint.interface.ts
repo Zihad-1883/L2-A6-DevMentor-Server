@@ -1,4 +1,5 @@
-import type { SprintStatus } from "../../generated/prisma/index.js";
+import { SprintStatus } from "../../generated/prisma/enums";
+
 
 export interface ICreateSprintInput {
   title: string;

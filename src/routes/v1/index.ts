@@ -40,13 +40,9 @@ v1Router.get(
 );
 
 // ── Module routes ─────────────────────────────────────────────────────────────
-import programRouter from "../../modules/program/program.routes.js";
-import programSessionRouter from "../../modules/programSession/programSession.routes.js";
 import sprintRouter from "../../modules/sprint/sprint.routes.js";
 import sprintSessionRouter from "../../modules/sprintSession/sprintSession.routes.js";
 
-v1Router.use("/programs", programRouter);
-v1Router.use("/program-sessions", programSessionRouter);
 v1Router.use("/sprints", sprintRouter);
 v1Router.use("/sprint-sessions", sprintSessionRouter);
 

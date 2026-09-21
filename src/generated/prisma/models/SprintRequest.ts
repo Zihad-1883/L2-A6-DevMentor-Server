@@ -71,6 +71,7 @@ export type SprintRequestCountAggregateOutputType = {
   studentId: number
   title: number
   description: number
+  techStackTags: number
   startDate: number
   durationDays: number
   selectedDays: number
@@ -129,6 +130,7 @@ export type SprintRequestCountAggregateInputType = {
   studentId?: true
   title?: true
   description?: true
+  techStackTags?: true
   startDate?: true
   durationDays?: true
   selectedDays?: true
@@ -232,6 +234,7 @@ export type SprintRequestGroupByOutputType = {
   studentId: string
   title: string
   description: string
+  techStackTags: string[]
   startDate: Date
   durationDays: number
   selectedDays: number[]
@@ -271,6 +274,7 @@ export type SprintRequestWhereInput = {
   studentId?: Prisma.StringFilter<"SprintRequest"> | string
   title?: Prisma.StringFilter<"SprintRequest"> | string
   description?: Prisma.StringFilter<"SprintRequest"> | string
+  techStackTags?: Prisma.StringNullableListFilter<"SprintRequest">
   startDate?: Prisma.DateTimeFilter<"SprintRequest"> | Date | string
   durationDays?: Prisma.IntFilter<"SprintRequest"> | number
   selectedDays?: Prisma.IntNullableListFilter<"SprintRequest">
@@ -290,6 +294,7 @@ export type SprintRequestOrderByWithRelationInput = {
   studentId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  techStackTags?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   durationDays?: Prisma.SortOrder
   selectedDays?: Prisma.SortOrder
@@ -312,6 +317,7 @@ export type SprintRequestWhereUniqueInput = Prisma.AtLeast<{
   studentId?: Prisma.StringFilter<"SprintRequest"> | string
   title?: Prisma.StringFilter<"SprintRequest"> | string
   description?: Prisma.StringFilter<"SprintRequest"> | string
+  techStackTags?: Prisma.StringNullableListFilter<"SprintRequest">
   startDate?: Prisma.DateTimeFilter<"SprintRequest"> | Date | string
   durationDays?: Prisma.IntFilter<"SprintRequest"> | number
   selectedDays?: Prisma.IntNullableListFilter<"SprintRequest">
@@ -331,6 +337,7 @@ export type SprintRequestOrderByWithAggregationInput = {
   studentId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  techStackTags?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   durationDays?: Prisma.SortOrder
   selectedDays?: Prisma.SortOrder
@@ -355,6 +362,7 @@ export type SprintRequestScalarWhereWithAggregatesInput = {
   studentId?: Prisma.StringWithAggregatesFilter<"SprintRequest"> | string
   title?: Prisma.StringWithAggregatesFilter<"SprintRequest"> | string
   description?: Prisma.StringWithAggregatesFilter<"SprintRequest"> | string
+  techStackTags?: Prisma.StringNullableListFilter<"SprintRequest">
   startDate?: Prisma.DateTimeWithAggregatesFilter<"SprintRequest"> | Date | string
   durationDays?: Prisma.IntWithAggregatesFilter<"SprintRequest"> | number
   selectedDays?: Prisma.IntNullableListFilter<"SprintRequest">
@@ -370,6 +378,7 @@ export type SprintRequestCreateInput = {
   id?: string
   title: string
   description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
   startDate: Date | string
   durationDays: number
   selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
@@ -388,6 +397,7 @@ export type SprintRequestUncheckedCreateInput = {
   studentId: string
   title: string
   description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
   startDate: Date | string
   durationDays: number
   selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
@@ -404,6 +414,7 @@ export type SprintRequestUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
   selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
@@ -422,6 +433,7 @@ export type SprintRequestUncheckedUpdateInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
   selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
@@ -439,6 +451,7 @@ export type SprintRequestCreateManyInput = {
   studentId: string
   title: string
   description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
   startDate: Date | string
   durationDays: number
   selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
@@ -454,6 +467,7 @@ export type SprintRequestUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
   selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
@@ -469,6 +483,7 @@ export type SprintRequestUncheckedUpdateManyInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
   selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
@@ -503,6 +518,7 @@ export type SprintRequestCountOrderByAggregateInput = {
   studentId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  techStackTags?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   durationDays?: Prisma.SortOrder
   selectedDays?: Prisma.SortOrder
@@ -643,8 +659,17 @@ export type SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput = 
   deleteMany?: Prisma.SprintRequestScalarWhereInput | Prisma.SprintRequestScalarWhereInput[]
 }
 
+export type SprintRequestCreatetechStackTagsInput = {
+  set: string[]
+}
+
 export type SprintRequestCreateselectedDaysInput = {
   set: number[]
+}
+
+export type SprintRequestUpdatetechStackTagsInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type SprintRequestUpdateselectedDaysInput = {
@@ -674,6 +699,7 @@ export type SprintRequestCreateWithoutStudentInput = {
   id?: string
   title: string
   description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
   startDate: Date | string
   durationDays: number
   selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
@@ -690,6 +716,7 @@ export type SprintRequestUncheckedCreateWithoutStudentInput = {
   id?: string
   title: string
   description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
   startDate: Date | string
   durationDays: number
   selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
@@ -716,6 +743,7 @@ export type SprintRequestCreateWithoutClaimedByMentorInput = {
   id?: string
   title: string
   description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
   startDate: Date | string
   durationDays: number
   selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
@@ -733,6 +761,7 @@ export type SprintRequestUncheckedCreateWithoutClaimedByMentorInput = {
   studentId: string
   title: string
   description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
   startDate: Date | string
   durationDays: number
   selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
@@ -778,6 +807,7 @@ export type SprintRequestScalarWhereInput = {
   studentId?: Prisma.StringFilter<"SprintRequest"> | string
   title?: Prisma.StringFilter<"SprintRequest"> | string
   description?: Prisma.StringFilter<"SprintRequest"> | string
+  techStackTags?: Prisma.StringNullableListFilter<"SprintRequest">
   startDate?: Prisma.DateTimeFilter<"SprintRequest"> | Date | string
   durationDays?: Prisma.IntFilter<"SprintRequest"> | number
   selectedDays?: Prisma.IntNullableListFilter<"SprintRequest">
@@ -809,6 +839,7 @@ export type SprintRequestCreateWithoutSessionsInput = {
   id?: string
   title: string
   description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
   startDate: Date | string
   durationDays: number
   selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
@@ -826,6 +857,7 @@ export type SprintRequestUncheckedCreateWithoutSessionsInput = {
   studentId: string
   title: string
   description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
   startDate: Date | string
   durationDays: number
   selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
@@ -857,6 +889,7 @@ export type SprintRequestUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
   selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
@@ -874,6 +907,7 @@ export type SprintRequestUncheckedUpdateWithoutSessionsInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
   selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
@@ -889,6 +923,7 @@ export type SprintRequestCreateManyStudentInput = {
   id?: string
   title: string
   description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
   startDate: Date | string
   durationDays: number
   selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
@@ -905,6 +940,7 @@ export type SprintRequestCreateManyClaimedByMentorInput = {
   studentId: string
   title: string
   description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
   startDate: Date | string
   durationDays: number
   selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
@@ -919,6 +955,7 @@ export type SprintRequestUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
   selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
@@ -935,6 +972,7 @@ export type SprintRequestUncheckedUpdateWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
   selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
@@ -951,6 +989,7 @@ export type SprintRequestUncheckedUpdateManyWithoutStudentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
   selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
@@ -966,6 +1005,7 @@ export type SprintRequestUpdateWithoutClaimedByMentorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
   selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
@@ -983,6 +1023,7 @@ export type SprintRequestUncheckedUpdateWithoutClaimedByMentorInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
   selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
@@ -999,6 +1040,7 @@ export type SprintRequestUncheckedUpdateManyWithoutClaimedByMentorInput = {
   studentId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
   selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
@@ -1045,6 +1087,7 @@ export type SprintRequestSelect<ExtArgs extends runtime.Types.Extensions.Interna
   studentId?: boolean
   title?: boolean
   description?: boolean
+  techStackTags?: boolean
   startDate?: boolean
   durationDays?: boolean
   selectedDays?: boolean
@@ -1065,6 +1108,7 @@ export type SprintRequestSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   studentId?: boolean
   title?: boolean
   description?: boolean
+  techStackTags?: boolean
   startDate?: boolean
   durationDays?: boolean
   selectedDays?: boolean
@@ -1083,6 +1127,7 @@ export type SprintRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   studentId?: boolean
   title?: boolean
   description?: boolean
+  techStackTags?: boolean
   startDate?: boolean
   durationDays?: boolean
   selectedDays?: boolean
@@ -1101,6 +1146,7 @@ export type SprintRequestSelectScalar = {
   studentId?: boolean
   title?: boolean
   description?: boolean
+  techStackTags?: boolean
   startDate?: boolean
   durationDays?: boolean
   selectedDays?: boolean
@@ -1112,7 +1158,7 @@ export type SprintRequestSelectScalar = {
   deletedAt?: boolean
 }
 
-export type SprintRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "title" | "description" | "startDate" | "durationDays" | "selectedDays" | "status" | "claimedByMentorId" | "claimedAt" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["sprintRequest"]>
+export type SprintRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "title" | "description" | "techStackTags" | "startDate" | "durationDays" | "selectedDays" | "status" | "claimedByMentorId" | "claimedAt" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["sprintRequest"]>
 export type SprintRequestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   claimedByMentor?: boolean | Prisma.SprintRequest$claimedByMentorArgs<ExtArgs>
@@ -1140,6 +1186,7 @@ export type $SprintRequestPayload<ExtArgs extends runtime.Types.Extensions.Inter
     studentId: string
     title: string
     description: string
+    techStackTags: string[]
     startDate: Date
     durationDays: number
     selectedDays: number[]
@@ -1579,6 +1626,7 @@ export interface SprintRequestFieldRefs {
   readonly studentId: Prisma.FieldRef<"SprintRequest", 'String'>
   readonly title: Prisma.FieldRef<"SprintRequest", 'String'>
   readonly description: Prisma.FieldRef<"SprintRequest", 'String'>
+  readonly techStackTags: Prisma.FieldRef<"SprintRequest", 'String[]'>
   readonly startDate: Prisma.FieldRef<"SprintRequest", 'DateTime'>
   readonly durationDays: Prisma.FieldRef<"SprintRequest", 'Int'>
   readonly selectedDays: Prisma.FieldRef<"SprintRequest", 'Int[]'>

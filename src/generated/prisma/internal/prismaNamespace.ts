@@ -406,9 +406,6 @@ export const ModelName = {
   CohortSession: 'CohortSession',
   CohortSessionParticipant: 'CohortSessionParticipant',
   MentorProfile: 'MentorProfile',
-  Program: 'Program',
-  ProgramSession: 'ProgramSession',
-  Enrollment: 'Enrollment',
   SprintRequest: 'SprintRequest',
   SprintSession: 'SprintSession'
 } as const
@@ -426,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "cohortProgram" | "cohortEnrollment" | "cohortSession" | "cohortSessionParticipant" | "mentorProfile" | "program" | "programSession" | "enrollment" | "sprintRequest" | "sprintSession"
+    modelProps: "user" | "session" | "account" | "verification" | "cohortProgram" | "cohortEnrollment" | "cohortSession" | "cohortSessionParticipant" | "mentorProfile" | "sprintRequest" | "sprintSession"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1096,228 +1093,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Program: {
-      payload: Prisma.$ProgramPayload<ExtArgs>
-      fields: Prisma.ProgramFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.ProgramFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.ProgramFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPayload>
-        }
-        findFirst: {
-          args: Prisma.ProgramFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.ProgramFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPayload>
-        }
-        findMany: {
-          args: Prisma.ProgramFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPayload>[]
-        }
-        create: {
-          args: Prisma.ProgramCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPayload>
-        }
-        createMany: {
-          args: Prisma.ProgramCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.ProgramCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPayload>[]
-        }
-        delete: {
-          args: Prisma.ProgramDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPayload>
-        }
-        update: {
-          args: Prisma.ProgramUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPayload>
-        }
-        deleteMany: {
-          args: Prisma.ProgramDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.ProgramUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.ProgramUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPayload>[]
-        }
-        upsert: {
-          args: Prisma.ProgramUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPayload>
-        }
-        aggregate: {
-          args: Prisma.ProgramAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateProgram>
-        }
-        groupBy: {
-          args: Prisma.ProgramGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ProgramGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.ProgramCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ProgramCountAggregateOutputType> | number
-        }
-      }
-    }
-    ProgramSession: {
-      payload: Prisma.$ProgramSessionPayload<ExtArgs>
-      fields: Prisma.ProgramSessionFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.ProgramSessionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramSessionPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.ProgramSessionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramSessionPayload>
-        }
-        findFirst: {
-          args: Prisma.ProgramSessionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramSessionPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.ProgramSessionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramSessionPayload>
-        }
-        findMany: {
-          args: Prisma.ProgramSessionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramSessionPayload>[]
-        }
-        create: {
-          args: Prisma.ProgramSessionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramSessionPayload>
-        }
-        createMany: {
-          args: Prisma.ProgramSessionCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.ProgramSessionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramSessionPayload>[]
-        }
-        delete: {
-          args: Prisma.ProgramSessionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramSessionPayload>
-        }
-        update: {
-          args: Prisma.ProgramSessionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramSessionPayload>
-        }
-        deleteMany: {
-          args: Prisma.ProgramSessionDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.ProgramSessionUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.ProgramSessionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramSessionPayload>[]
-        }
-        upsert: {
-          args: Prisma.ProgramSessionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramSessionPayload>
-        }
-        aggregate: {
-          args: Prisma.ProgramSessionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateProgramSession>
-        }
-        groupBy: {
-          args: Prisma.ProgramSessionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ProgramSessionGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.ProgramSessionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ProgramSessionCountAggregateOutputType> | number
-        }
-      }
-    }
-    Enrollment: {
-      payload: Prisma.$EnrollmentPayload<ExtArgs>
-      fields: Prisma.EnrollmentFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.EnrollmentFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnrollmentPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.EnrollmentFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnrollmentPayload>
-        }
-        findFirst: {
-          args: Prisma.EnrollmentFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnrollmentPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.EnrollmentFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnrollmentPayload>
-        }
-        findMany: {
-          args: Prisma.EnrollmentFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnrollmentPayload>[]
-        }
-        create: {
-          args: Prisma.EnrollmentCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnrollmentPayload>
-        }
-        createMany: {
-          args: Prisma.EnrollmentCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.EnrollmentCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnrollmentPayload>[]
-        }
-        delete: {
-          args: Prisma.EnrollmentDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnrollmentPayload>
-        }
-        update: {
-          args: Prisma.EnrollmentUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnrollmentPayload>
-        }
-        deleteMany: {
-          args: Prisma.EnrollmentDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.EnrollmentUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.EnrollmentUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnrollmentPayload>[]
-        }
-        upsert: {
-          args: Prisma.EnrollmentUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EnrollmentPayload>
-        }
-        aggregate: {
-          args: Prisma.EnrollmentAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateEnrollment>
-        }
-        groupBy: {
-          args: Prisma.EnrollmentGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.EnrollmentGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.EnrollmentCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.EnrollmentCountAggregateOutputType> | number
-        }
-      }
-    }
     SprintRequest: {
       payload: Prisma.$SprintRequestPayload<ExtArgs>
       fields: Prisma.SprintRequestFieldRefs
@@ -1642,57 +1417,12 @@ export const MentorProfileScalarFieldEnum = {
 export type MentorProfileScalarFieldEnum = (typeof MentorProfileScalarFieldEnum)[keyof typeof MentorProfileScalarFieldEnum]
 
 
-export const ProgramScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  description: 'description',
-  durationWeeks: 'durationWeeks',
-  techStackTags: 'techStackTags',
-  status: 'status',
-  mentorId: 'mentorId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
-} as const
-
-export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
-
-
-export const ProgramSessionScalarFieldEnum = {
-  id: 'id',
-  programId: 'programId',
-  title: 'title',
-  sessionNumber: 'sessionNumber',
-  weekNumber: 'weekNumber',
-  priceInCredits: 'priceInCredits',
-  scheduledAt: 'scheduledAt',
-  durationMinutes: 'durationMinutes',
-  status: 'status',
-  joinLink: 'joinLink',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ProgramSessionScalarFieldEnum = (typeof ProgramSessionScalarFieldEnum)[keyof typeof ProgramSessionScalarFieldEnum]
-
-
-export const EnrollmentScalarFieldEnum = {
-  id: 'id',
-  studentId: 'studentId',
-  programId: 'programId',
-  status: 'status',
-  enrolledAt: 'enrolledAt',
-  completedAt: 'completedAt'
-} as const
-
-export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
-
-
 export const SprintRequestScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
   title: 'title',
   description: 'description',
+  techStackTags: 'techStackTags',
   startDate: 'startDate',
   durationDays: 'durationDays',
   selectedDays: 'selectedDays',
@@ -1904,48 +1634,6 @@ export type ListEnumApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
- * Reference to a field of type 'ProgramStatus'
- */
-export type EnumProgramStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgramStatus'>
-    
-
-
-/**
- * Reference to a field of type 'ProgramStatus[]'
- */
-export type ListEnumProgramStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgramStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'SessionStatus'
- */
-export type EnumSessionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SessionStatus'>
-    
-
-
-/**
- * Reference to a field of type 'SessionStatus[]'
- */
-export type ListEnumSessionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SessionStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'EnrollmentStatus'
- */
-export type EnumEnrollmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnrollmentStatus'>
-    
-
-
-/**
- * Reference to a field of type 'EnrollmentStatus[]'
- */
-export type ListEnumEnrollmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EnrollmentStatus[]'>
-    
-
-
-/**
  * Reference to a field of type 'SprintStatus'
  */
 export type EnumSprintStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SprintStatus'>
@@ -2146,9 +1834,6 @@ export type GlobalOmitConfig = {
   cohortSession?: Prisma.CohortSessionOmit
   cohortSessionParticipant?: Prisma.CohortSessionParticipantOmit
   mentorProfile?: Prisma.MentorProfileOmit
-  program?: Prisma.ProgramOmit
-  programSession?: Prisma.ProgramSessionOmit
-  enrollment?: Prisma.EnrollmentOmit
   sprintRequest?: Prisma.SprintRequestOmit
   sprintSession?: Prisma.SprintSessionOmit
 }

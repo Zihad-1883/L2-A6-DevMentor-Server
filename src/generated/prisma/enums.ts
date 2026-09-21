@@ -55,34 +55,6 @@ export const ApprovalStatus = {
 export type ApprovalStatus = (typeof ApprovalStatus)[keyof typeof ApprovalStatus]
 
 
-export const ProgramStatus = {
-  DRAFT: 'DRAFT',
-  PUBLISHED: 'PUBLISHED',
-  ARCHIVED: 'ARCHIVED'
-} as const
-
-export type ProgramStatus = (typeof ProgramStatus)[keyof typeof ProgramStatus]
-
-
-export const SessionStatus = {
-  PENDING: 'PENDING',
-  CONFIRMED: 'CONFIRMED',
-  COMPLETED: 'COMPLETED',
-  CANCELLED: 'CANCELLED'
-} as const
-
-export type SessionStatus = (typeof SessionStatus)[keyof typeof SessionStatus]
-
-
-export const EnrollmentStatus = {
-  ACTIVE: 'ACTIVE',
-  COMPLETED: 'COMPLETED',
-  DROPPED: 'DROPPED'
-} as const
-
-export type EnrollmentStatus = (typeof EnrollmentStatus)[keyof typeof EnrollmentStatus]
-
-
 export const SprintStatus = {
   PENDING_CLAIM: 'PENDING_CLAIM',
   CLAIMED: 'CLAIMED',

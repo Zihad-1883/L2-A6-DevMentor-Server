@@ -87,21 +87,6 @@ export type CohortSessionParticipant = Prisma.CohortSessionParticipantModel
  */
 export type MentorProfile = Prisma.MentorProfileModel
 /**
- * Model Program
- * 
- */
-export type Program = Prisma.ProgramModel
-/**
- * Model ProgramSession
- * 
- */
-export type ProgramSession = Prisma.ProgramSessionModel
-/**
- * Model Enrollment
- * 
- */
-export type Enrollment = Prisma.EnrollmentModel
-/**
  * Model SprintRequest
  * 
  */
