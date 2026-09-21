@@ -20,6 +20,7 @@ model SprintRequest {
 
     title         String
     description   String
+    techStackTags String[]
     startDate     DateTime
     durationDays  Int
     selectedDays  Int[]
