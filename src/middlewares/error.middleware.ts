@@ -22,6 +22,14 @@ export const errorHandler = (
     err.message = "A record with this value already exists.";
   }
 
+  // Multer error handling (e.g., file size limit, unexpected field)
+  if (err.name === "MulterError") {
+    statusCode = 400;
+    if (err.code === "LIMIT_FILE_SIZE") {
+      err.message = "File size limit exceeded. Maximum allowed size is 10MB per file.";
+    }
+  }
+
   // Prisma record not found
   if (err.code === "P2025") {
     statusCode = 404;
