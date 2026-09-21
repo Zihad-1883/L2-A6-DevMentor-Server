@@ -144,6 +144,10 @@ const claimSprint = async (sprintId: string, mentorId: string) => {
     throw new AppError("Only mentors can claim student sprint requests", 403);
   }
 
+  if (mentor.isBlocked) {
+    throw new AppError("Your account has been blocked by an administrator", 403);
+  }
+
   if (mentor.mentorProfile?.approvalStatus !== "APPROVED") {
     throw new AppError("Your mentor profile must be approved by an Admin before claiming sprints", 403);
   }

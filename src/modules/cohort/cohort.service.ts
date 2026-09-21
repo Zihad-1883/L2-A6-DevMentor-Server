@@ -26,6 +26,10 @@ const createCohort = async (mentorId: string, payload: ICreateCohortInput) => {
     throw new AppError("Only registered mentors can create cohort programs", 403);
   }
 
+  if (mentor.isBlocked) {
+    throw new AppError("Your account has been blocked by an administrator", 403);
+  }
+
   if (mentor.mentorProfile?.approvalStatus !== "APPROVED") {
     throw new AppError("Your mentor profile must be approved by an Admin before creating cohorts", 403);
   }

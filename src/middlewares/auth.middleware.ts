@@ -10,6 +10,7 @@ declare global {
         name: string;
         email: string;
         role: string;
+        isBlocked: boolean;
         emailVerified: boolean;
         image: string | null;
         createdAt: Date;
@@ -39,19 +40,26 @@ export const requireAuth = async (
       return;
     }
 
-    let userRole = (session.user as { role?: string }).role;
+    const dbUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { role: true, isBlocked: true },
+    });
 
-    if (!userRole) {
-      const dbUser = await prisma.user.findUnique({
-        where: { id: session.user.id },
-        select: { role: true },
+    if (dbUser?.isBlocked) {
+      res.status(403).json({
+        success: false,
+        message: "Forbidden: Your account has been blocked by an administrator",
+        errors: [],
       });
-      userRole = dbUser?.role || "student";
+      return;
     }
+
+    const userRole = dbUser?.role || (session.user as { role?: string }).role || "student";
 
     req.user = {
       ...(session.user as Record<string, unknown>),
       role: userRole,
+      isBlocked: dbUser?.isBlocked || false,
     } as Request["user"];
 
     next();
@@ -63,3 +71,4 @@ export const requireAuth = async (
     });
   }
 };
+
