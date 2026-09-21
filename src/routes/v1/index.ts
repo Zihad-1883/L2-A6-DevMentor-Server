@@ -1,11 +1,3 @@
-/**
- * @file src/routes/v1/index.ts
- * @description Master API Router — v1
- *
- * All module routers are mounted here under /api/v1.
- * Add new module routes in this file as the platform grows.
- */
-
 import { Router } from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { requireRole } from "../../middlewares/rbac.middleware.js";
@@ -14,12 +6,12 @@ import { catchAsync } from "../../utils/catchAsync.js";
 
 const v1Router = Router();
 
-// ── Health check ──────────────────────────────────────────────────────────────
+// Health check 
 v1Router.get("/health", (_req, res) => {
   res.json({ success: true, message: "Kōdex API v1 is up and running 🚀", data: null });
 });
 
-// ── Auth & RBAC Testing Routes ────────────────────────────────────────────────
+// Auth & RBAC Testing Routes 
 // Protected route for any authenticated user
 v1Router.get(
   "/test/protected",
@@ -39,13 +31,15 @@ v1Router.get(
   })
 );
 
-// ── Module routes ─────────────────────────────────────────────────────────────
+// Module routes
 import sprintRouter from "../../modules/sprint/sprint.routes.js";
 import sprintSessionRouter from "../../modules/sprintSession/sprintSession.routes.js";
 import cohortRouter from "../../modules/cohort/cohort.routes.js";
+import cohortSessionRouter from "../../modules/cohortSession/cohortSession.routes.js";
 
 v1Router.use("/sprints", sprintRouter);
 v1Router.use("/sprint-sessions", sprintSessionRouter);
 v1Router.use("/cohorts", cohortRouter);
+v1Router.use("/cohort-sessions", cohortSessionRouter);
 
 export default v1Router;
