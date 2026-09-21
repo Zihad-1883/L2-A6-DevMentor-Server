@@ -156,7 +156,7 @@ const getAllUsers = async (filters: IUserQueryFilters = {}) => {
 
 // 4. Approve or Reject Mentor Cohort Program
 const approveOrRejectCohort = async (
-    _adminId: string,
+    adminId: string,
     cohortId: string,
     payload: IApproveCohortInput,
 ) => {
@@ -168,10 +168,18 @@ const approveOrRejectCohort = async (
         throw new AppError("Cohort program not found", 404);
     }
 
+    if (cohort.approvalStatus === "APPROVED" && payload.status === "APPROVED") {
+        throw new AppError("Cohort program is already approved", 400);
+    }
+
+    const { status } = payload;
+
     const updatedCohort = await prisma.cohortProgram.update({
         where: { id: cohortId },
         data: {
-            status: payload.status as any,
+            approvalStatus: status,
+            approvedBy: adminId,
+            approvedAt: status === "APPROVED" ? new Date() : null,
         },
         include: {
             mentor: {

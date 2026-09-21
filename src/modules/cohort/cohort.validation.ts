@@ -9,5 +9,7 @@ export const createCohortSchema = z.object({
   techStackTags: z.array(z.string()).min(1, "At least one tech stack tag is required"),
 });
 
-export const updateCohortSchema = createCohortSchema.partial();
+export const updateCohortSchema = createCohortSchema.partial().extend({
+  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional(),
+});
 

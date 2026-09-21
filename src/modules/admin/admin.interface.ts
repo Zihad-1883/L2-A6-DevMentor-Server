@@ -17,7 +17,7 @@ export interface IApproveMentorInput {
 }
 
 export interface IApproveCohortInput {
-  status: "APPROVED" | "REJECTED" | "PUBLISHED";
+  status: "APPROVED" | "REJECTED";
 }
 
 export interface IToggleUserBlockInput {

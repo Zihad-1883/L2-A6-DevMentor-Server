@@ -35,7 +35,7 @@ const approveOrRejectCohort = catchAsync(async (req: Request, res: Response) => 
   const adminId = req.user!.id;
   const id = req.params.id as string;
   const result = await adminService.approveOrRejectCohort(adminId, id, req.body);
-  sendSuccess(res, `Cohort program status updated to ${result.status}`, result);
+  sendSuccess(res, `Cohort program approval status updated to ${result.approvalStatus}`, result);
 });
 
 export const adminController = {

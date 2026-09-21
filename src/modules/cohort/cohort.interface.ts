@@ -14,6 +14,7 @@ export interface IUpdateCohortInput {
   capacity?: number;
   totalCost?: number;
   techStackTags?: string[];
+  status?: "DRAFT" | "PUBLISHED" | "ARCHIVED";
 }
 
 export interface ICohortQueryFilters {

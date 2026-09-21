@@ -29,28 +29,48 @@ const proposeSprintSessionSlot = async (
   const durationMinutes = payload.durationMinutes || session.durationMinutes || 60;
   const proposedEndAt = new Date(proposedScheduledAt.getTime() + durationMinutes * 60 * 1000);
 
-  // Mentor Overlap Conflict Guard
-  const conflictingSessions = await prisma.sprintSession.findMany({
-    where: {
-      id: { not: sessionId },
-      status: "CONFIRMED",
-      sprintRequest: {
-        claimedByMentorId: mentorId,
-        deletedAt: null,
+  // Mentor Overlap Conflict Guard across Sprint Sessions AND Cohort Sessions
+  const [conflictingSprintSessions, conflictingCohortSessions] = await Promise.all([
+    prisma.sprintSession.findMany({
+      where: {
+        id: { not: sessionId },
+        status: { in: ["PENDING", "CONFIRMED"] },
+        sprintRequest: {
+          claimedByMentorId: mentorId,
+          deletedAt: null,
+        },
+        scheduledAt: { not: null },
       },
-      scheduledAt: { not: null },
-    },
-  });
+    }),
+    prisma.cohortSession.findMany({
+      where: {
+        status: { in: ["PENDING", "CONFIRMED"] },
+        cohort: {
+          mentorId,
+          deletedAt: null,
+        },
+      },
+    }),
+  ]);
 
-  const hasConflict = conflictingSessions.some((s) => {
+  // Check overlap against Sprint Sessions
+  const hasSprintConflict = conflictingSprintSessions.some((s) => {
     if (!s.scheduledAt) return false;
     const sStart = new Date(s.scheduledAt);
     const sEnd = new Date(sStart.getTime() + s.durationMinutes * 60 * 1000);
     return proposedScheduledAt < sEnd && proposedEndAt > sStart;
   });
 
-  if (hasConflict) {
-    throw new AppError("You already have another confirmed session scheduled at this overlapping time slot", 409);
+  // Check overlap against Cohort Sessions
+  const hasCohortConflict = conflictingCohortSessions.some((s) => {
+    if (!s.scheduledAt) return false;
+    const sStart = new Date(s.scheduledAt);
+    const sEnd = new Date(sStart.getTime() + s.durationMinutes * 60 * 1000);
+    return proposedScheduledAt < sEnd && proposedEndAt > sStart;
+  });
+
+  if (hasSprintConflict || hasCohortConflict) {
+    throw new AppError("You already have another Sprint or Cohort session scheduled at this overlapping time slot", 409);
   }
 
   const updatedSession = await prisma.sprintSession.update({

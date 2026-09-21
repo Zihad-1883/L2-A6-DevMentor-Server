@@ -19,7 +19,7 @@ export const toggleUserBlockSchema = z.object({
 });
 
 export const approveCohortSchema = z.object({
-  status: z.enum(["APPROVED", "REJECTED", "PUBLISHED"], {
-    error: "Status must be APPROVED, REJECTED, or PUBLISHED",
+  status: z.enum(["APPROVED", "REJECTED"], {
+    error: "Status must be APPROVED or REJECTED",
   }),
 });

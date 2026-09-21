@@ -220,6 +220,28 @@ const updateCohort = async (
     throw new AppError("You are not authorized to update this cohort program", 403);
   }
 
+  // If mentor is publishing the cohort
+  if (payload.status === "PUBLISHED" && existingCohort.status !== "PUBLISHED") {
+    // Guard 1: Must be approved by an administrator first
+    if (existingCohort.approvalStatus !== "APPROVED") {
+      throw new AppError("Cannot publish cohort program until it has been approved by an administrator", 400);
+    }
+
+    // Guard 2: A mentor cannot have more than 1 active published cohort at the same time
+    const existingPublishedCohort = await prisma.cohortProgram.findFirst({
+      where: {
+        mentorId,
+        status: "PUBLISHED",
+        id: { not: cohortId },
+        deletedAt: null,
+      },
+    });
+
+    if (existingPublishedCohort) {
+      throw new AppError("You already have an active published cohort program. Only 1 published cohort is allowed at a time.", 400);
+    }
+  }
+
   const updatedCohort = await prisma.cohortProgram.update({
     where: { id: cohortId },
     data: {
