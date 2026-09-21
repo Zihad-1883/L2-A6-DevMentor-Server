@@ -40,6 +40,7 @@ import mentorRouter from "../../modules/mentor/mentor.routes.js";
 import userRouter from "../../modules/user/user.routes.js";
 import enrollmentRouter from "../../modules/enrollment/enrollment.routes.js";
 import uploadRouter from "../../modules/upload/upload.routes.js";
+import adminRouter from "../../modules/admin/admin.routes.js";
 
 v1Router.use("/sprints", sprintRouter);
 v1Router.use("/sprint-sessions", sprintSessionRouter);
@@ -49,5 +50,6 @@ v1Router.use("/mentors", mentorRouter);
 v1Router.use("/users", userRouter);
 v1Router.use("/enrollments", enrollmentRouter);
 v1Router.use("/upload", uploadRouter);
+v1Router.use("/admin", adminRouter);
 
 export default v1Router;
