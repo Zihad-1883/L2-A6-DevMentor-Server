@@ -147,6 +147,7 @@ export const CohortProgramScalarFieldEnum = {
   description: 'description',
   durationWeeks: 'durationWeeks',
   capacity: 'capacity',
+  totalCost: 'totalCost',
   techStackTags: 'techStackTags',
   approvalStatus: 'approvalStatus',
   status: 'status',

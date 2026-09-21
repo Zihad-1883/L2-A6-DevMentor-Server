@@ -26,6 +26,7 @@ model CohortProgram {
     description   String
     durationWeeks Int
     capacity      Int
+    totalCost     Int      @default(0)
     techStackTags String[]
 
     approvalStatus CohortApprovalStatus @default(PENDING_APPROVAL)

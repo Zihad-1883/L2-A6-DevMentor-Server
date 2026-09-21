@@ -29,11 +29,13 @@ export type AggregateCohortProgram = {
 export type CohortProgramAvgAggregateOutputType = {
   durationWeeks: number | null
   capacity: number | null
+  totalCost: number | null
 }
 
 export type CohortProgramSumAggregateOutputType = {
   durationWeeks: number | null
   capacity: number | null
+  totalCost: number | null
 }
 
 export type CohortProgramMinAggregateOutputType = {
@@ -43,6 +45,7 @@ export type CohortProgramMinAggregateOutputType = {
   description: string | null
   durationWeeks: number | null
   capacity: number | null
+  totalCost: number | null
   approvalStatus: $Enums.CohortApprovalStatus | null
   status: $Enums.CohortStatus | null
   approvedBy: string | null
@@ -59,6 +62,7 @@ export type CohortProgramMaxAggregateOutputType = {
   description: string | null
   durationWeeks: number | null
   capacity: number | null
+  totalCost: number | null
   approvalStatus: $Enums.CohortApprovalStatus | null
   status: $Enums.CohortStatus | null
   approvedBy: string | null
@@ -75,6 +79,7 @@ export type CohortProgramCountAggregateOutputType = {
   description: number
   durationWeeks: number
   capacity: number
+  totalCost: number
   techStackTags: number
   approvalStatus: number
   status: number
@@ -90,11 +95,13 @@ export type CohortProgramCountAggregateOutputType = {
 export type CohortProgramAvgAggregateInputType = {
   durationWeeks?: true
   capacity?: true
+  totalCost?: true
 }
 
 export type CohortProgramSumAggregateInputType = {
   durationWeeks?: true
   capacity?: true
+  totalCost?: true
 }
 
 export type CohortProgramMinAggregateInputType = {
@@ -104,6 +111,7 @@ export type CohortProgramMinAggregateInputType = {
   description?: true
   durationWeeks?: true
   capacity?: true
+  totalCost?: true
   approvalStatus?: true
   status?: true
   approvedBy?: true
@@ -120,6 +128,7 @@ export type CohortProgramMaxAggregateInputType = {
   description?: true
   durationWeeks?: true
   capacity?: true
+  totalCost?: true
   approvalStatus?: true
   status?: true
   approvedBy?: true
@@ -136,6 +145,7 @@ export type CohortProgramCountAggregateInputType = {
   description?: true
   durationWeeks?: true
   capacity?: true
+  totalCost?: true
   techStackTags?: true
   approvalStatus?: true
   status?: true
@@ -240,6 +250,7 @@ export type CohortProgramGroupByOutputType = {
   description: string
   durationWeeks: number
   capacity: number
+  totalCost: number
   techStackTags: string[]
   approvalStatus: $Enums.CohortApprovalStatus
   status: $Enums.CohortStatus
@@ -280,6 +291,7 @@ export type CohortProgramWhereInput = {
   description?: Prisma.StringFilter<"CohortProgram"> | string
   durationWeeks?: Prisma.IntFilter<"CohortProgram"> | number
   capacity?: Prisma.IntFilter<"CohortProgram"> | number
+  totalCost?: Prisma.IntFilter<"CohortProgram"> | number
   techStackTags?: Prisma.StringNullableListFilter<"CohortProgram">
   approvalStatus?: Prisma.EnumCohortApprovalStatusFilter<"CohortProgram"> | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFilter<"CohortProgram"> | $Enums.CohortStatus
@@ -300,6 +312,7 @@ export type CohortProgramOrderByWithRelationInput = {
   description?: Prisma.SortOrder
   durationWeeks?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  totalCost?: Prisma.SortOrder
   techStackTags?: Prisma.SortOrder
   approvalStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -323,6 +336,7 @@ export type CohortProgramWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringFilter<"CohortProgram"> | string
   durationWeeks?: Prisma.IntFilter<"CohortProgram"> | number
   capacity?: Prisma.IntFilter<"CohortProgram"> | number
+  totalCost?: Prisma.IntFilter<"CohortProgram"> | number
   techStackTags?: Prisma.StringNullableListFilter<"CohortProgram">
   approvalStatus?: Prisma.EnumCohortApprovalStatusFilter<"CohortProgram"> | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFilter<"CohortProgram"> | $Enums.CohortStatus
@@ -343,6 +357,7 @@ export type CohortProgramOrderByWithAggregationInput = {
   description?: Prisma.SortOrder
   durationWeeks?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  totalCost?: Prisma.SortOrder
   techStackTags?: Prisma.SortOrder
   approvalStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -368,6 +383,7 @@ export type CohortProgramScalarWhereWithAggregatesInput = {
   description?: Prisma.StringWithAggregatesFilter<"CohortProgram"> | string
   durationWeeks?: Prisma.IntWithAggregatesFilter<"CohortProgram"> | number
   capacity?: Prisma.IntWithAggregatesFilter<"CohortProgram"> | number
+  totalCost?: Prisma.IntWithAggregatesFilter<"CohortProgram"> | number
   techStackTags?: Prisma.StringNullableListFilter<"CohortProgram">
   approvalStatus?: Prisma.EnumCohortApprovalStatusWithAggregatesFilter<"CohortProgram"> | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusWithAggregatesFilter<"CohortProgram"> | $Enums.CohortStatus
@@ -384,6 +400,7 @@ export type CohortProgramCreateInput = {
   description: string
   durationWeeks: number
   capacity: number
+  totalCost?: number
   techStackTags?: Prisma.CohortProgramCreatetechStackTagsInput | string[]
   approvalStatus?: $Enums.CohortApprovalStatus
   status?: $Enums.CohortStatus
@@ -404,6 +421,7 @@ export type CohortProgramUncheckedCreateInput = {
   description: string
   durationWeeks: number
   capacity: number
+  totalCost?: number
   techStackTags?: Prisma.CohortProgramCreatetechStackTagsInput | string[]
   approvalStatus?: $Enums.CohortApprovalStatus
   status?: $Enums.CohortStatus
@@ -422,6 +440,7 @@ export type CohortProgramUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   durationWeeks?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCost?: Prisma.IntFieldUpdateOperationsInput | number
   techStackTags?: Prisma.CohortProgramUpdatetechStackTagsInput | string[]
   approvalStatus?: Prisma.EnumCohortApprovalStatusFieldUpdateOperationsInput | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFieldUpdateOperationsInput | $Enums.CohortStatus
@@ -442,6 +461,7 @@ export type CohortProgramUncheckedUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   durationWeeks?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCost?: Prisma.IntFieldUpdateOperationsInput | number
   techStackTags?: Prisma.CohortProgramUpdatetechStackTagsInput | string[]
   approvalStatus?: Prisma.EnumCohortApprovalStatusFieldUpdateOperationsInput | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFieldUpdateOperationsInput | $Enums.CohortStatus
@@ -461,6 +481,7 @@ export type CohortProgramCreateManyInput = {
   description: string
   durationWeeks: number
   capacity: number
+  totalCost?: number
   techStackTags?: Prisma.CohortProgramCreatetechStackTagsInput | string[]
   approvalStatus?: $Enums.CohortApprovalStatus
   status?: $Enums.CohortStatus
@@ -477,6 +498,7 @@ export type CohortProgramUpdateManyMutationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   durationWeeks?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCost?: Prisma.IntFieldUpdateOperationsInput | number
   techStackTags?: Prisma.CohortProgramUpdatetechStackTagsInput | string[]
   approvalStatus?: Prisma.EnumCohortApprovalStatusFieldUpdateOperationsInput | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFieldUpdateOperationsInput | $Enums.CohortStatus
@@ -494,6 +516,7 @@ export type CohortProgramUncheckedUpdateManyInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   durationWeeks?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCost?: Prisma.IntFieldUpdateOperationsInput | number
   techStackTags?: Prisma.CohortProgramUpdatetechStackTagsInput | string[]
   approvalStatus?: Prisma.EnumCohortApprovalStatusFieldUpdateOperationsInput | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFieldUpdateOperationsInput | $Enums.CohortStatus
@@ -529,6 +552,7 @@ export type CohortProgramCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   durationWeeks?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  totalCost?: Prisma.SortOrder
   techStackTags?: Prisma.SortOrder
   approvalStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -542,6 +566,7 @@ export type CohortProgramCountOrderByAggregateInput = {
 export type CohortProgramAvgOrderByAggregateInput = {
   durationWeeks?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  totalCost?: Prisma.SortOrder
 }
 
 export type CohortProgramMaxOrderByAggregateInput = {
@@ -551,6 +576,7 @@ export type CohortProgramMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   durationWeeks?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  totalCost?: Prisma.SortOrder
   approvalStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
   approvedBy?: Prisma.SortOrder
@@ -567,6 +593,7 @@ export type CohortProgramMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   durationWeeks?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  totalCost?: Prisma.SortOrder
   approvalStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
   approvedBy?: Prisma.SortOrder
@@ -579,6 +606,7 @@ export type CohortProgramMinOrderByAggregateInput = {
 export type CohortProgramSumOrderByAggregateInput = {
   durationWeeks?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  totalCost?: Prisma.SortOrder
 }
 
 export type CohortProgramScalarRelationFilter = {
@@ -687,6 +715,7 @@ export type CohortProgramCreateWithoutMentorInput = {
   description: string
   durationWeeks: number
   capacity: number
+  totalCost?: number
   techStackTags?: Prisma.CohortProgramCreatetechStackTagsInput | string[]
   approvalStatus?: $Enums.CohortApprovalStatus
   status?: $Enums.CohortStatus
@@ -705,6 +734,7 @@ export type CohortProgramUncheckedCreateWithoutMentorInput = {
   description: string
   durationWeeks: number
   capacity: number
+  totalCost?: number
   techStackTags?: Prisma.CohortProgramCreatetechStackTagsInput | string[]
   approvalStatus?: $Enums.CohortApprovalStatus
   status?: $Enums.CohortStatus
@@ -753,6 +783,7 @@ export type CohortProgramScalarWhereInput = {
   description?: Prisma.StringFilter<"CohortProgram"> | string
   durationWeeks?: Prisma.IntFilter<"CohortProgram"> | number
   capacity?: Prisma.IntFilter<"CohortProgram"> | number
+  totalCost?: Prisma.IntFilter<"CohortProgram"> | number
   techStackTags?: Prisma.StringNullableListFilter<"CohortProgram">
   approvalStatus?: Prisma.EnumCohortApprovalStatusFilter<"CohortProgram"> | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFilter<"CohortProgram"> | $Enums.CohortStatus
@@ -769,6 +800,7 @@ export type CohortProgramCreateWithoutEnrollmentsInput = {
   description: string
   durationWeeks: number
   capacity: number
+  totalCost?: number
   techStackTags?: Prisma.CohortProgramCreatetechStackTagsInput | string[]
   approvalStatus?: $Enums.CohortApprovalStatus
   status?: $Enums.CohortStatus
@@ -788,6 +820,7 @@ export type CohortProgramUncheckedCreateWithoutEnrollmentsInput = {
   description: string
   durationWeeks: number
   capacity: number
+  totalCost?: number
   techStackTags?: Prisma.CohortProgramCreatetechStackTagsInput | string[]
   approvalStatus?: $Enums.CohortApprovalStatus
   status?: $Enums.CohortStatus
@@ -821,6 +854,7 @@ export type CohortProgramUpdateWithoutEnrollmentsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   durationWeeks?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCost?: Prisma.IntFieldUpdateOperationsInput | number
   techStackTags?: Prisma.CohortProgramUpdatetechStackTagsInput | string[]
   approvalStatus?: Prisma.EnumCohortApprovalStatusFieldUpdateOperationsInput | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFieldUpdateOperationsInput | $Enums.CohortStatus
@@ -840,6 +874,7 @@ export type CohortProgramUncheckedUpdateWithoutEnrollmentsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   durationWeeks?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCost?: Prisma.IntFieldUpdateOperationsInput | number
   techStackTags?: Prisma.CohortProgramUpdatetechStackTagsInput | string[]
   approvalStatus?: Prisma.EnumCohortApprovalStatusFieldUpdateOperationsInput | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFieldUpdateOperationsInput | $Enums.CohortStatus
@@ -857,6 +892,7 @@ export type CohortProgramCreateWithoutSessionsInput = {
   description: string
   durationWeeks: number
   capacity: number
+  totalCost?: number
   techStackTags?: Prisma.CohortProgramCreatetechStackTagsInput | string[]
   approvalStatus?: $Enums.CohortApprovalStatus
   status?: $Enums.CohortStatus
@@ -876,6 +912,7 @@ export type CohortProgramUncheckedCreateWithoutSessionsInput = {
   description: string
   durationWeeks: number
   capacity: number
+  totalCost?: number
   techStackTags?: Prisma.CohortProgramCreatetechStackTagsInput | string[]
   approvalStatus?: $Enums.CohortApprovalStatus
   status?: $Enums.CohortStatus
@@ -909,6 +946,7 @@ export type CohortProgramUpdateWithoutSessionsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   durationWeeks?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCost?: Prisma.IntFieldUpdateOperationsInput | number
   techStackTags?: Prisma.CohortProgramUpdatetechStackTagsInput | string[]
   approvalStatus?: Prisma.EnumCohortApprovalStatusFieldUpdateOperationsInput | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFieldUpdateOperationsInput | $Enums.CohortStatus
@@ -928,6 +966,7 @@ export type CohortProgramUncheckedUpdateWithoutSessionsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   durationWeeks?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCost?: Prisma.IntFieldUpdateOperationsInput | number
   techStackTags?: Prisma.CohortProgramUpdatetechStackTagsInput | string[]
   approvalStatus?: Prisma.EnumCohortApprovalStatusFieldUpdateOperationsInput | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFieldUpdateOperationsInput | $Enums.CohortStatus
@@ -945,6 +984,7 @@ export type CohortProgramCreateManyMentorInput = {
   description: string
   durationWeeks: number
   capacity: number
+  totalCost?: number
   techStackTags?: Prisma.CohortProgramCreatetechStackTagsInput | string[]
   approvalStatus?: $Enums.CohortApprovalStatus
   status?: $Enums.CohortStatus
@@ -961,6 +1001,7 @@ export type CohortProgramUpdateWithoutMentorInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   durationWeeks?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCost?: Prisma.IntFieldUpdateOperationsInput | number
   techStackTags?: Prisma.CohortProgramUpdatetechStackTagsInput | string[]
   approvalStatus?: Prisma.EnumCohortApprovalStatusFieldUpdateOperationsInput | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFieldUpdateOperationsInput | $Enums.CohortStatus
@@ -979,6 +1020,7 @@ export type CohortProgramUncheckedUpdateWithoutMentorInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   durationWeeks?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCost?: Prisma.IntFieldUpdateOperationsInput | number
   techStackTags?: Prisma.CohortProgramUpdatetechStackTagsInput | string[]
   approvalStatus?: Prisma.EnumCohortApprovalStatusFieldUpdateOperationsInput | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFieldUpdateOperationsInput | $Enums.CohortStatus
@@ -997,6 +1039,7 @@ export type CohortProgramUncheckedUpdateManyWithoutMentorInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   durationWeeks?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  totalCost?: Prisma.IntFieldUpdateOperationsInput | number
   techStackTags?: Prisma.CohortProgramUpdatetechStackTagsInput | string[]
   approvalStatus?: Prisma.EnumCohortApprovalStatusFieldUpdateOperationsInput | $Enums.CohortApprovalStatus
   status?: Prisma.EnumCohortStatusFieldUpdateOperationsInput | $Enums.CohortStatus
@@ -1054,6 +1097,7 @@ export type CohortProgramSelect<ExtArgs extends runtime.Types.Extensions.Interna
   description?: boolean
   durationWeeks?: boolean
   capacity?: boolean
+  totalCost?: boolean
   techStackTags?: boolean
   approvalStatus?: boolean
   status?: boolean
@@ -1075,6 +1119,7 @@ export type CohortProgramSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   description?: boolean
   durationWeeks?: boolean
   capacity?: boolean
+  totalCost?: boolean
   techStackTags?: boolean
   approvalStatus?: boolean
   status?: boolean
@@ -1093,6 +1138,7 @@ export type CohortProgramSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   description?: boolean
   durationWeeks?: boolean
   capacity?: boolean
+  totalCost?: boolean
   techStackTags?: boolean
   approvalStatus?: boolean
   status?: boolean
@@ -1111,6 +1157,7 @@ export type CohortProgramSelectScalar = {
   description?: boolean
   durationWeeks?: boolean
   capacity?: boolean
+  totalCost?: boolean
   techStackTags?: boolean
   approvalStatus?: boolean
   status?: boolean
@@ -1121,7 +1168,7 @@ export type CohortProgramSelectScalar = {
   deletedAt?: boolean
 }
 
-export type CohortProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "mentorId" | "title" | "description" | "durationWeeks" | "capacity" | "techStackTags" | "approvalStatus" | "status" | "approvedBy" | "approvedAt" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["cohortProgram"]>
+export type CohortProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "mentorId" | "title" | "description" | "durationWeeks" | "capacity" | "totalCost" | "techStackTags" | "approvalStatus" | "status" | "approvedBy" | "approvedAt" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["cohortProgram"]>
 export type CohortProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   mentor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enrollments?: boolean | Prisma.CohortProgram$enrollmentsArgs<ExtArgs>
@@ -1149,6 +1196,7 @@ export type $CohortProgramPayload<ExtArgs extends runtime.Types.Extensions.Inter
     description: string
     durationWeeks: number
     capacity: number
+    totalCost: number
     techStackTags: string[]
     approvalStatus: $Enums.CohortApprovalStatus
     status: $Enums.CohortStatus
@@ -1589,6 +1637,7 @@ export interface CohortProgramFieldRefs {
   readonly description: Prisma.FieldRef<"CohortProgram", 'String'>
   readonly durationWeeks: Prisma.FieldRef<"CohortProgram", 'Int'>
   readonly capacity: Prisma.FieldRef<"CohortProgram", 'Int'>
+  readonly totalCost: Prisma.FieldRef<"CohortProgram", 'Int'>
   readonly techStackTags: Prisma.FieldRef<"CohortProgram", 'String[]'>
   readonly approvalStatus: Prisma.FieldRef<"CohortProgram", 'CohortApprovalStatus'>
   readonly status: Prisma.FieldRef<"CohortProgram", 'CohortStatus'>

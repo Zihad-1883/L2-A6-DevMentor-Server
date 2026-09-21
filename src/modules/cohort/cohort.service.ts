@@ -34,7 +34,7 @@ const createCohort = async (mentorId: string, payload: ICreateCohortInput) => {
     throw new AppError("Your mentor profile must be approved by an Admin before creating cohorts", 403);
   }
 
-  const { title, description, durationWeeks, capacity, techStackTags } = payload;
+  const { title, description, durationWeeks, capacity, totalCost, techStackTags } = payload;
 
   const cohort = await prisma.cohortProgram.create({
     data: {
@@ -43,6 +43,7 @@ const createCohort = async (mentorId: string, payload: ICreateCohortInput) => {
       description,
       durationWeeks,
       capacity,
+      totalCost: totalCost || 0,
       techStackTags: techStackTags || [],
       approvalStatus: "PENDING_APPROVAL",
       status: "DRAFT",

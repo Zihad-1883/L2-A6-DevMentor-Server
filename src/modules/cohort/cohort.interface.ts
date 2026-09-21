@@ -3,6 +3,7 @@ export interface ICreateCohortInput {
   description: string;
   durationWeeks: number;
   capacity: number;
+  totalCost: number;
   techStackTags: string[];
 }
 
@@ -11,6 +12,7 @@ export interface IUpdateCohortInput {
   description?: string;
   durationWeeks?: number;
   capacity?: number;
+  totalCost?: number;
   techStackTags?: string[];
 }
 
