@@ -42,8 +42,10 @@ v1Router.get(
 // ── Module routes ─────────────────────────────────────────────────────────────
 import sprintRouter from "../../modules/sprint/sprint.routes.js";
 import sprintSessionRouter from "../../modules/sprintSession/sprintSession.routes.js";
+import cohortRouter from "../../modules/cohort/cohort.routes.js";
 
 v1Router.use("/sprints", sprintRouter);
 v1Router.use("/sprint-sessions", sprintSessionRouter);
+v1Router.use("/cohorts", cohortRouter);
 
 export default v1Router;

@@ -32,7 +32,8 @@ const claimSprint = catchAsync(async (req: Request, res: Response) => {
 // ── 4. Get Single Sprint By ID ────────────────────────────────────────────────
 const getSprintById = catchAsync(async (req: Request, res: Response) => {
   const { sprintId } = req.params;
-  const result = await sprintService.getSprintById(sprintId as string);
+  const userId = req.user!.id;
+  const result = await sprintService.getSprintById(sprintId as string, userId);
   sendSuccess(res, "Sprint request details fetched successfully", result);
 });
 
