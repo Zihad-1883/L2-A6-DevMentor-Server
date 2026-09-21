@@ -21,7 +21,23 @@ const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
     throw new AppError("Student user account not found", 404);
   }
 
-  //   To do : Add validation for available credits to start a sprint
+  // Validate that the student has sufficient wallet credits to start the sprint
+  const platformSetting = await (prisma as any).platformSetting?.findFirst();
+  const creditCostPerSession = platformSetting?.sprintCreditPerSession || 50;
+  const totalRequiredCredits = payload.selectedDays.length * creditCostPerSession;
+
+  const studentWallet = await (prisma as any).wallet?.findUnique({
+    where: { userId: studentId },
+  });
+
+  const availableBalance = studentWallet?.balance ?? 0;
+
+  if (availableBalance < totalRequiredCredits) {
+    throw new AppError(
+      `Insufficient credit balance. You need at least ${totalRequiredCredits} credit(s) for this ${payload.selectedDays.length}-session sprint program (your available balance: ${availableBalance} credits). Please top up your wallet via bKash.`,
+      400
+    );
+  }
 
   const { title, description, techStackTags, startDate, durationDays, selectedDays } = payload;
 
