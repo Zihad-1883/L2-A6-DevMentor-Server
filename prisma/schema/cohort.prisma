@@ -1,0 +1,94 @@
+enum CohortApprovalStatus {
+    PENDING_APPROVAL
+    APPROVED
+    REJECTED
+}
+
+enum CohortStatus {
+    DRAFT
+    PUBLISHED
+    ARCHIVED
+}
+
+enum CohortSessionStatus {
+    PENDING
+    CONFIRMED
+    COMPLETED
+    CANCELLED
+}
+
+model CohortProgram {
+    id       String @id @default(cuid())
+    mentorId String
+    mentor   User   @relation("MentorCohorts", fields: [mentorId], references: [id], onDelete: Cascade)
+
+    title         String
+    description   String
+    durationWeeks Int
+    capacity      Int
+    techStackTags String[]
+
+    approvalStatus CohortApprovalStatus @default(PENDING_APPROVAL)
+    status         CohortStatus         @default(DRAFT)
+    approvedBy     String?
+    approvedAt     DateTime?
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    enrollments CohortEnrollment[]
+    sessions    CohortSession[]
+
+    @@map("cohort_program")
+}
+
+model CohortEnrollment {
+    id        String        @id @default(cuid())
+    cohortId  String
+    cohort    CohortProgram @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+    studentId String
+    student   User          @relation("StudentCohortEnrollments", fields: [studentId], references: [id], onDelete: Cascade)
+
+    enrolledAt DateTime @default(now())
+
+    @@unique([cohortId, studentId])
+    @@map("cohort_enrollment")
+}
+
+model CohortSession {
+    id       String        @id @default(cuid())
+    cohortId String
+    cohort   CohortProgram @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+
+    sessionNumber   Int
+    dayNumber       Int
+    title           String
+    scheduledAt     DateTime
+    durationMinutes Int                 @default(60)
+    creditCost      Int
+    status          CohortSessionStatus @default(PENDING)
+    joinLink        String?
+    resources       Json?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    participants CohortSessionParticipant[]
+
+    @@map("cohort_session")
+}
+
+model CohortSessionParticipant {
+    id              String        @id @default(cuid())
+    cohortSessionId String
+    cohortSession   CohortSession @relation(fields: [cohortSessionId], references: [id], onDelete: Cascade)
+    studentId       String
+    student         User          @relation("StudentCohortSessions", fields: [studentId], references: [id], onDelete: Cascade)
+
+    paid     Boolean  @default(true)
+    joinedAt DateTime @default(now())
+
+    @@unique([cohortSessionId, studentId])
+    @@map("cohort_session_participant")
+}

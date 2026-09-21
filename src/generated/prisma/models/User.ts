@@ -211,6 +211,11 @@ export type UserWhereInput = {
   mentorProfile?: Prisma.XOR<Prisma.MentorProfileNullableScalarRelationFilter, Prisma.MentorProfileWhereInput> | null
   programsCreated?: Prisma.ProgramListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
+  sprintsRequested?: Prisma.SprintRequestListRelationFilter
+  sprintsClaimed?: Prisma.SprintRequestListRelationFilter
+  cohortsCreated?: Prisma.CohortProgramListRelationFilter
+  cohortEnrollments?: Prisma.CohortEnrollmentListRelationFilter
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -227,6 +232,11 @@ export type UserOrderByWithRelationInput = {
   mentorProfile?: Prisma.MentorProfileOrderByWithRelationInput
   programsCreated?: Prisma.ProgramOrderByRelationAggregateInput
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
+  sprintsRequested?: Prisma.SprintRequestOrderByRelationAggregateInput
+  sprintsClaimed?: Prisma.SprintRequestOrderByRelationAggregateInput
+  cohortsCreated?: Prisma.CohortProgramOrderByRelationAggregateInput
+  cohortEnrollments?: Prisma.CohortEnrollmentOrderByRelationAggregateInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -246,6 +256,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   mentorProfile?: Prisma.XOR<Prisma.MentorProfileNullableScalarRelationFilter, Prisma.MentorProfileWhereInput> | null
   programsCreated?: Prisma.ProgramListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
+  sprintsRequested?: Prisma.SprintRequestListRelationFilter
+  sprintsClaimed?: Prisma.SprintRequestListRelationFilter
+  cohortsCreated?: Prisma.CohortProgramListRelationFilter
+  cohortEnrollments?: Prisma.CohortEnrollmentListRelationFilter
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -290,6 +305,11 @@ export type UserCreateInput = {
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   programsCreated?: Prisma.ProgramCreateNestedManyWithoutMentorInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -306,6 +326,11 @@ export type UserUncheckedCreateInput = {
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   programsCreated?: Prisma.ProgramUncheckedCreateNestedManyWithoutMentorInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserUpdateInput = {
@@ -322,6 +347,11 @@ export type UserUpdateInput = {
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   programsCreated?: Prisma.ProgramUpdateManyWithoutMentorNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -338,6 +368,11 @@ export type UserUncheckedUpdateInput = {
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   programsCreated?: Prisma.ProgramUncheckedUpdateManyWithoutMentorNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -411,6 +446,11 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -455,6 +495,48 @@ export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountsInput, Prisma.UserUpdateWithoutAccountsInput>, Prisma.UserUncheckedUpdateWithoutAccountsInput>
 }
 
+export type UserCreateNestedOneWithoutCohortsCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCohortsCreatedInput, Prisma.UserUncheckedCreateWithoutCohortsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCohortsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCohortsCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCohortsCreatedInput, Prisma.UserUncheckedCreateWithoutCohortsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCohortsCreatedInput
+  upsert?: Prisma.UserUpsertWithoutCohortsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCohortsCreatedInput, Prisma.UserUpdateWithoutCohortsCreatedInput>, Prisma.UserUncheckedUpdateWithoutCohortsCreatedInput>
+}
+
+export type UserCreateNestedOneWithoutCohortEnrollmentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCohortEnrollmentsInput, Prisma.UserUncheckedCreateWithoutCohortEnrollmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCohortEnrollmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCohortEnrollmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCohortEnrollmentsInput, Prisma.UserUncheckedCreateWithoutCohortEnrollmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCohortEnrollmentsInput
+  upsert?: Prisma.UserUpsertWithoutCohortEnrollmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCohortEnrollmentsInput, Prisma.UserUpdateWithoutCohortEnrollmentsInput>, Prisma.UserUncheckedUpdateWithoutCohortEnrollmentsInput>
+}
+
+export type UserCreateNestedOneWithoutCohortSessionsJoinedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCohortSessionsJoinedInput, Prisma.UserUncheckedCreateWithoutCohortSessionsJoinedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCohortSessionsJoinedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCohortSessionsJoinedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCohortSessionsJoinedInput, Prisma.UserUncheckedCreateWithoutCohortSessionsJoinedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCohortSessionsJoinedInput
+  upsert?: Prisma.UserUpsertWithoutCohortSessionsJoinedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCohortSessionsJoinedInput, Prisma.UserUpdateWithoutCohortSessionsJoinedInput>, Prisma.UserUncheckedUpdateWithoutCohortSessionsJoinedInput>
+}
+
 export type UserCreateNestedOneWithoutMentorProfileInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutMentorProfileInput, Prisma.UserUncheckedCreateWithoutMentorProfileInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutMentorProfileInput
@@ -497,6 +579,36 @@ export type UserUpdateOneRequiredWithoutEnrollmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEnrollmentsInput, Prisma.UserUpdateWithoutEnrollmentsInput>, Prisma.UserUncheckedUpdateWithoutEnrollmentsInput>
 }
 
+export type UserCreateNestedOneWithoutSprintsRequestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSprintsRequestedInput, Prisma.UserUncheckedCreateWithoutSprintsRequestedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSprintsRequestedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutSprintsClaimedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSprintsClaimedInput, Prisma.UserUncheckedCreateWithoutSprintsClaimedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSprintsClaimedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSprintsRequestedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSprintsRequestedInput, Prisma.UserUncheckedCreateWithoutSprintsRequestedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSprintsRequestedInput
+  upsert?: Prisma.UserUpsertWithoutSprintsRequestedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSprintsRequestedInput, Prisma.UserUpdateWithoutSprintsRequestedInput>, Prisma.UserUncheckedUpdateWithoutSprintsRequestedInput>
+}
+
+export type UserUpdateOneWithoutSprintsClaimedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSprintsClaimedInput, Prisma.UserUncheckedCreateWithoutSprintsClaimedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSprintsClaimedInput
+  upsert?: Prisma.UserUpsertWithoutSprintsClaimedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSprintsClaimedInput, Prisma.UserUpdateWithoutSprintsClaimedInput>, Prisma.UserUncheckedUpdateWithoutSprintsClaimedInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id: string
   name: string
@@ -510,6 +622,11 @@ export type UserCreateWithoutSessionsInput = {
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   programsCreated?: Prisma.ProgramCreateNestedManyWithoutMentorInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -525,6 +642,11 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   programsCreated?: Prisma.ProgramUncheckedCreateNestedManyWithoutMentorInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -556,6 +678,11 @@ export type UserUpdateWithoutSessionsInput = {
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   programsCreated?: Prisma.ProgramUpdateManyWithoutMentorNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -571,6 +698,11 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   programsCreated?: Prisma.ProgramUncheckedUpdateManyWithoutMentorNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -586,6 +718,11 @@ export type UserCreateWithoutAccountsInput = {
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   programsCreated?: Prisma.ProgramCreateNestedManyWithoutMentorInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -601,6 +738,11 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   programsCreated?: Prisma.ProgramUncheckedCreateNestedManyWithoutMentorInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -632,6 +774,11 @@ export type UserUpdateWithoutAccountsInput = {
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   programsCreated?: Prisma.ProgramUpdateManyWithoutMentorNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -647,6 +794,299 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   programsCreated?: Prisma.ProgramUncheckedUpdateManyWithoutMentorNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedUpdateManyWithoutStudentNestedInput
+}
+
+export type UserCreateWithoutCohortsCreatedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  programsCreated?: Prisma.ProgramCreateNestedManyWithoutMentorInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestCreateNestedManyWithoutClaimedByMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantCreateNestedManyWithoutStudentInput
+}
+
+export type UserUncheckedCreateWithoutCohortsCreatedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  programsCreated?: Prisma.ProgramUncheckedCreateNestedManyWithoutMentorInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutClaimedByMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedCreateNestedManyWithoutStudentInput
+}
+
+export type UserCreateOrConnectWithoutCohortsCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCohortsCreatedInput, Prisma.UserUncheckedCreateWithoutCohortsCreatedInput>
+}
+
+export type UserUpsertWithoutCohortsCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCohortsCreatedInput, Prisma.UserUncheckedUpdateWithoutCohortsCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCohortsCreatedInput, Prisma.UserUncheckedCreateWithoutCohortsCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCohortsCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCohortsCreatedInput, Prisma.UserUncheckedUpdateWithoutCohortsCreatedInput>
+}
+
+export type UserUpdateWithoutCohortsCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  programsCreated?: Prisma.ProgramUpdateManyWithoutMentorNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUpdateManyWithoutClaimedByMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUpdateManyWithoutStudentNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCohortsCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  programsCreated?: Prisma.ProgramUncheckedUpdateManyWithoutMentorNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedUpdateManyWithoutStudentNestedInput
+}
+
+export type UserCreateWithoutCohortEnrollmentsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  programsCreated?: Prisma.ProgramCreateNestedManyWithoutMentorInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramCreateNestedManyWithoutMentorInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantCreateNestedManyWithoutStudentInput
+}
+
+export type UserUncheckedCreateWithoutCohortEnrollmentsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  programsCreated?: Prisma.ProgramUncheckedCreateNestedManyWithoutMentorInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedCreateNestedManyWithoutMentorInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedCreateNestedManyWithoutStudentInput
+}
+
+export type UserCreateOrConnectWithoutCohortEnrollmentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCohortEnrollmentsInput, Prisma.UserUncheckedCreateWithoutCohortEnrollmentsInput>
+}
+
+export type UserUpsertWithoutCohortEnrollmentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCohortEnrollmentsInput, Prisma.UserUncheckedUpdateWithoutCohortEnrollmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCohortEnrollmentsInput, Prisma.UserUncheckedCreateWithoutCohortEnrollmentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCohortEnrollmentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCohortEnrollmentsInput, Prisma.UserUncheckedUpdateWithoutCohortEnrollmentsInput>
+}
+
+export type UserUpdateWithoutCohortEnrollmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  programsCreated?: Prisma.ProgramUpdateManyWithoutMentorNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUpdateManyWithoutMentorNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUpdateManyWithoutStudentNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCohortEnrollmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  programsCreated?: Prisma.ProgramUncheckedUpdateManyWithoutMentorNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedUpdateManyWithoutMentorNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedUpdateManyWithoutStudentNestedInput
+}
+
+export type UserCreateWithoutCohortSessionsJoinedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  programsCreated?: Prisma.ProgramCreateNestedManyWithoutMentorInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentCreateNestedManyWithoutStudentInput
+}
+
+export type UserUncheckedCreateWithoutCohortSessionsJoinedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  programsCreated?: Prisma.ProgramUncheckedCreateNestedManyWithoutMentorInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+}
+
+export type UserCreateOrConnectWithoutCohortSessionsJoinedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCohortSessionsJoinedInput, Prisma.UserUncheckedCreateWithoutCohortSessionsJoinedInput>
+}
+
+export type UserUpsertWithoutCohortSessionsJoinedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCohortSessionsJoinedInput, Prisma.UserUncheckedUpdateWithoutCohortSessionsJoinedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCohortSessionsJoinedInput, Prisma.UserUncheckedCreateWithoutCohortSessionsJoinedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCohortSessionsJoinedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCohortSessionsJoinedInput, Prisma.UserUncheckedUpdateWithoutCohortSessionsJoinedInput>
+}
+
+export type UserUpdateWithoutCohortSessionsJoinedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  programsCreated?: Prisma.ProgramUpdateManyWithoutMentorNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUpdateManyWithoutStudentNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCohortSessionsJoinedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  programsCreated?: Prisma.ProgramUncheckedUpdateManyWithoutMentorNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutMentorProfileInput = {
@@ -662,6 +1102,11 @@ export type UserCreateWithoutMentorProfileInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   programsCreated?: Prisma.ProgramCreateNestedManyWithoutMentorInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutMentorProfileInput = {
@@ -677,6 +1122,11 @@ export type UserUncheckedCreateWithoutMentorProfileInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   programsCreated?: Prisma.ProgramUncheckedCreateNestedManyWithoutMentorInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutMentorProfileInput = {
@@ -708,6 +1158,11 @@ export type UserUpdateWithoutMentorProfileInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   programsCreated?: Prisma.ProgramUpdateManyWithoutMentorNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMentorProfileInput = {
@@ -723,6 +1178,11 @@ export type UserUncheckedUpdateWithoutMentorProfileInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   programsCreated?: Prisma.ProgramUncheckedUpdateManyWithoutMentorNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutProgramsCreatedInput = {
@@ -738,6 +1198,11 @@ export type UserCreateWithoutProgramsCreatedInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutProgramsCreatedInput = {
@@ -753,6 +1218,11 @@ export type UserUncheckedCreateWithoutProgramsCreatedInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutProgramsCreatedInput = {
@@ -784,6 +1254,11 @@ export type UserUpdateWithoutProgramsCreatedInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProgramsCreatedInput = {
@@ -799,6 +1274,11 @@ export type UserUncheckedUpdateWithoutProgramsCreatedInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutEnrollmentsInput = {
@@ -814,6 +1294,11 @@ export type UserCreateWithoutEnrollmentsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   programsCreated?: Prisma.ProgramCreateNestedManyWithoutMentorInput
+  sprintsRequested?: Prisma.SprintRequestCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -829,6 +1314,11 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   programsCreated?: Prisma.ProgramUncheckedCreateNestedManyWithoutMentorInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -860,6 +1350,11 @@ export type UserUpdateWithoutEnrollmentsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   programsCreated?: Prisma.ProgramUpdateManyWithoutMentorNestedInput
+  sprintsRequested?: Prisma.SprintRequestUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -875,6 +1370,203 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   programsCreated?: Prisma.ProgramUncheckedUpdateManyWithoutMentorNestedInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedUpdateManyWithoutStudentNestedInput
+}
+
+export type UserCreateWithoutSprintsRequestedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  programsCreated?: Prisma.ProgramCreateNestedManyWithoutMentorInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantCreateNestedManyWithoutStudentInput
+}
+
+export type UserUncheckedCreateWithoutSprintsRequestedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  programsCreated?: Prisma.ProgramUncheckedCreateNestedManyWithoutMentorInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedCreateNestedManyWithoutStudentInput
+}
+
+export type UserCreateOrConnectWithoutSprintsRequestedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSprintsRequestedInput, Prisma.UserUncheckedCreateWithoutSprintsRequestedInput>
+}
+
+export type UserCreateWithoutSprintsClaimedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  programsCreated?: Prisma.ProgramCreateNestedManyWithoutMentorInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestCreateNestedManyWithoutStudentInput
+  cohortsCreated?: Prisma.CohortProgramCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantCreateNestedManyWithoutStudentInput
+}
+
+export type UserUncheckedCreateWithoutSprintsClaimedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  programsCreated?: Prisma.ProgramUncheckedCreateNestedManyWithoutMentorInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutStudentInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedCreateNestedManyWithoutStudentInput
+}
+
+export type UserCreateOrConnectWithoutSprintsClaimedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSprintsClaimedInput, Prisma.UserUncheckedCreateWithoutSprintsClaimedInput>
+}
+
+export type UserUpsertWithoutSprintsRequestedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSprintsRequestedInput, Prisma.UserUncheckedUpdateWithoutSprintsRequestedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSprintsRequestedInput, Prisma.UserUncheckedCreateWithoutSprintsRequestedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSprintsRequestedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSprintsRequestedInput, Prisma.UserUncheckedUpdateWithoutSprintsRequestedInput>
+}
+
+export type UserUpdateWithoutSprintsRequestedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  programsCreated?: Prisma.ProgramUpdateManyWithoutMentorNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUpdateManyWithoutStudentNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSprintsRequestedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  programsCreated?: Prisma.ProgramUncheckedUpdateManyWithoutMentorNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedUpdateManyWithoutStudentNestedInput
+}
+
+export type UserUpsertWithoutSprintsClaimedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSprintsClaimedInput, Prisma.UserUncheckedUpdateWithoutSprintsClaimedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSprintsClaimedInput, Prisma.UserUncheckedCreateWithoutSprintsClaimedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSprintsClaimedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSprintsClaimedInput, Prisma.UserUncheckedUpdateWithoutSprintsClaimedInput>
+}
+
+export type UserUpdateWithoutSprintsClaimedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  programsCreated?: Prisma.ProgramUpdateManyWithoutMentorNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUpdateManyWithoutStudentNestedInput
+  cohortsCreated?: Prisma.CohortProgramUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUpdateManyWithoutStudentNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSprintsClaimedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  programsCreated?: Prisma.ProgramUncheckedUpdateManyWithoutMentorNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedUpdateManyWithoutStudentNestedInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 
@@ -887,6 +1579,11 @@ export type UserCountOutputType = {
   accounts: number
   programsCreated: number
   enrollments: number
+  sprintsRequested: number
+  sprintsClaimed: number
+  cohortsCreated: number
+  cohortEnrollments: number
+  cohortSessionsJoined: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -894,6 +1591,11 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   programsCreated?: boolean | UserCountOutputTypeCountProgramsCreatedArgs
   enrollments?: boolean | UserCountOutputTypeCountEnrollmentsArgs
+  sprintsRequested?: boolean | UserCountOutputTypeCountSprintsRequestedArgs
+  sprintsClaimed?: boolean | UserCountOutputTypeCountSprintsClaimedArgs
+  cohortsCreated?: boolean | UserCountOutputTypeCountCohortsCreatedArgs
+  cohortEnrollments?: boolean | UserCountOutputTypeCountCohortEnrollmentsArgs
+  cohortSessionsJoined?: boolean | UserCountOutputTypeCountCohortSessionsJoinedArgs
 }
 
 /**
@@ -934,6 +1636,41 @@ export type UserCountOutputTypeCountEnrollmentsArgs<ExtArgs extends runtime.Type
   where?: Prisma.EnrollmentWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSprintsRequestedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SprintRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSprintsClaimedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SprintRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCohortsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CohortProgramWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCohortEnrollmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CohortEnrollmentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCohortSessionsJoinedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CohortSessionParticipantWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -949,6 +1686,11 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   mentorProfile?: boolean | Prisma.User$mentorProfileArgs<ExtArgs>
   programsCreated?: boolean | Prisma.User$programsCreatedArgs<ExtArgs>
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
+  sprintsRequested?: boolean | Prisma.User$sprintsRequestedArgs<ExtArgs>
+  sprintsClaimed?: boolean | Prisma.User$sprintsClaimedArgs<ExtArgs>
+  cohortsCreated?: boolean | Prisma.User$cohortsCreatedArgs<ExtArgs>
+  cohortEnrollments?: boolean | Prisma.User$cohortEnrollmentsArgs<ExtArgs>
+  cohortSessionsJoined?: boolean | Prisma.User$cohortSessionsJoinedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -992,6 +1734,11 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   mentorProfile?: boolean | Prisma.User$mentorProfileArgs<ExtArgs>
   programsCreated?: boolean | Prisma.User$programsCreatedArgs<ExtArgs>
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
+  sprintsRequested?: boolean | Prisma.User$sprintsRequestedArgs<ExtArgs>
+  sprintsClaimed?: boolean | Prisma.User$sprintsClaimedArgs<ExtArgs>
+  cohortsCreated?: boolean | Prisma.User$cohortsCreatedArgs<ExtArgs>
+  cohortEnrollments?: boolean | Prisma.User$cohortEnrollmentsArgs<ExtArgs>
+  cohortSessionsJoined?: boolean | Prisma.User$cohortSessionsJoinedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1005,6 +1752,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     mentorProfile: Prisma.$MentorProfilePayload<ExtArgs> | null
     programsCreated: Prisma.$ProgramPayload<ExtArgs>[]
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
+    sprintsRequested: Prisma.$SprintRequestPayload<ExtArgs>[]
+    sprintsClaimed: Prisma.$SprintRequestPayload<ExtArgs>[]
+    cohortsCreated: Prisma.$CohortProgramPayload<ExtArgs>[]
+    cohortEnrollments: Prisma.$CohortEnrollmentPayload<ExtArgs>[]
+    cohortSessionsJoined: Prisma.$CohortSessionParticipantPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1414,6 +2166,11 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   mentorProfile<T extends Prisma.User$mentorProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mentorProfileArgs<ExtArgs>>): Prisma.Prisma__MentorProfileClient<runtime.Types.Result.GetResult<Prisma.$MentorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   programsCreated<T extends Prisma.User$programsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$programsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrollments<T extends Prisma.User$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sprintsRequested<T extends Prisma.User$sprintsRequestedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sprintsRequestedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SprintRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sprintsClaimed<T extends Prisma.User$sprintsClaimedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sprintsClaimedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SprintRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cohortsCreated<T extends Prisma.User$cohortsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$cohortsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CohortProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cohortEnrollments<T extends Prisma.User$cohortEnrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$cohortEnrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CohortEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cohortSessionsJoined<T extends Prisma.User$cohortSessionsJoinedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$cohortSessionsJoinedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CohortSessionParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1956,6 +2713,126 @@ export type User$enrollmentsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.EnrollmentScalarFieldEnum | Prisma.EnrollmentScalarFieldEnum[]
+}
+
+/**
+ * User.sprintsRequested
+ */
+export type User$sprintsRequestedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SprintRequest
+   */
+  select?: Prisma.SprintRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SprintRequest
+   */
+  omit?: Prisma.SprintRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SprintRequestInclude<ExtArgs> | null
+  where?: Prisma.SprintRequestWhereInput
+  orderBy?: Prisma.SprintRequestOrderByWithRelationInput | Prisma.SprintRequestOrderByWithRelationInput[]
+  cursor?: Prisma.SprintRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SprintRequestScalarFieldEnum | Prisma.SprintRequestScalarFieldEnum[]
+}
+
+/**
+ * User.sprintsClaimed
+ */
+export type User$sprintsClaimedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SprintRequest
+   */
+  select?: Prisma.SprintRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SprintRequest
+   */
+  omit?: Prisma.SprintRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SprintRequestInclude<ExtArgs> | null
+  where?: Prisma.SprintRequestWhereInput
+  orderBy?: Prisma.SprintRequestOrderByWithRelationInput | Prisma.SprintRequestOrderByWithRelationInput[]
+  cursor?: Prisma.SprintRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SprintRequestScalarFieldEnum | Prisma.SprintRequestScalarFieldEnum[]
+}
+
+/**
+ * User.cohortsCreated
+ */
+export type User$cohortsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CohortProgram
+   */
+  select?: Prisma.CohortProgramSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CohortProgram
+   */
+  omit?: Prisma.CohortProgramOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CohortProgramInclude<ExtArgs> | null
+  where?: Prisma.CohortProgramWhereInput
+  orderBy?: Prisma.CohortProgramOrderByWithRelationInput | Prisma.CohortProgramOrderByWithRelationInput[]
+  cursor?: Prisma.CohortProgramWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CohortProgramScalarFieldEnum | Prisma.CohortProgramScalarFieldEnum[]
+}
+
+/**
+ * User.cohortEnrollments
+ */
+export type User$cohortEnrollmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CohortEnrollment
+   */
+  select?: Prisma.CohortEnrollmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CohortEnrollment
+   */
+  omit?: Prisma.CohortEnrollmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CohortEnrollmentInclude<ExtArgs> | null
+  where?: Prisma.CohortEnrollmentWhereInput
+  orderBy?: Prisma.CohortEnrollmentOrderByWithRelationInput | Prisma.CohortEnrollmentOrderByWithRelationInput[]
+  cursor?: Prisma.CohortEnrollmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CohortEnrollmentScalarFieldEnum | Prisma.CohortEnrollmentScalarFieldEnum[]
+}
+
+/**
+ * User.cohortSessionsJoined
+ */
+export type User$cohortSessionsJoinedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CohortSessionParticipant
+   */
+  select?: Prisma.CohortSessionParticipantSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CohortSessionParticipant
+   */
+  omit?: Prisma.CohortSessionParticipantOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CohortSessionParticipantInclude<ExtArgs> | null
+  where?: Prisma.CohortSessionParticipantWhereInput
+  orderBy?: Prisma.CohortSessionParticipantOrderByWithRelationInput | Prisma.CohortSessionParticipantOrderByWithRelationInput[]
+  cursor?: Prisma.CohortSessionParticipantWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CohortSessionParticipantScalarFieldEnum | Prisma.CohortSessionParticipantScalarFieldEnum[]
 }
 
 /**

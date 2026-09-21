@@ -8,11 +8,16 @@ model User {
     createdAt     DateTime
     updatedAt     DateTime
 
-    sessions        Session[]
-    accounts        Account[]
-    mentorProfile   MentorProfile?
-    programsCreated Program[]      @relation("MentorPrograms")
-    enrollments     Enrollment[]   @relation("StudentEnrollments")
+    sessions             Session[]
+    accounts             Account[]
+    mentorProfile        MentorProfile?
+    programsCreated      Program[]                  @relation("MentorPrograms")
+    enrollments          Enrollment[]               @relation("StudentEnrollments")
+    sprintsRequested     SprintRequest[]            @relation("StudentSprints")
+    sprintsClaimed       SprintRequest[]            @relation("MentorSprints")
+    cohortsCreated       CohortProgram[]            @relation("MentorCohorts")
+    cohortEnrollments    CohortEnrollment[]         @relation("StudentCohortEnrollments")
+    cohortSessionsJoined CohortSessionParticipant[] @relation("StudentCohortSessions")
 
     @@map("user")
 }

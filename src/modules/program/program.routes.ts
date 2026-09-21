@@ -1,8 +1,3 @@
-/**
- * @file src/modules/program/program.routes.ts
- * @description Express routes for Program operations.
- */
-
 import { Router } from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { requireRole } from "../../middlewares/rbac.middleware.js";

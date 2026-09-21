@@ -1,0 +1,57 @@
+enum SprintStatus {
+    PENDING_CLAIM
+    CLAIMED
+    IN_PROGRESS
+    COMPLETED
+    CANCELLED
+}
+
+enum SprintSessionStatus {
+    PENDING
+    CONFIRMED
+    COMPLETED
+    CANCELLED
+}
+
+model SprintRequest {
+    id          String   @id @default(cuid())
+    studentId   String
+    student     User     @relation("StudentSprints", fields: [studentId], references: [id], onDelete: Cascade)
+
+    title         String
+    description   String
+    startDate     DateTime
+    durationDays  Int
+    selectedDays  Int[]
+
+    status            SprintStatus @default(PENDING_CLAIM)
+    claimedByMentorId String?
+    claimedByMentor   User?        @relation("MentorSprints", fields: [claimedByMentorId], references: [id], onDelete: SetNull)
+    claimedAt         DateTime?
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    sessions SprintSession[]
+
+    @@map("sprint_request")
+}
+
+model SprintSession {
+    id              String        @id @default(cuid())
+    sprintRequestId String
+    sprintRequest   SprintRequest @relation(fields: [sprintRequestId], references: [id], onDelete: Cascade)
+
+    dayNumber       Int
+    scheduledAt     DateTime?
+    durationMinutes Int                 @default(60)
+    creditCost      Int                 @default(0)
+    status          SprintSessionStatus @default(PENDING)
+    joinLink        String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("sprint_session")
+}

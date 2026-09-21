@@ -38,6 +38,26 @@ export type Account = Prisma.AccountModel
  */
 export type Verification = Prisma.VerificationModel
 /**
+ * Model CohortProgram
+ * 
+ */
+export type CohortProgram = Prisma.CohortProgramModel
+/**
+ * Model CohortEnrollment
+ * 
+ */
+export type CohortEnrollment = Prisma.CohortEnrollmentModel
+/**
+ * Model CohortSession
+ * 
+ */
+export type CohortSession = Prisma.CohortSessionModel
+/**
+ * Model CohortSessionParticipant
+ * 
+ */
+export type CohortSessionParticipant = Prisma.CohortSessionParticipantModel
+/**
  * Model MentorProfile
  * 
  */
@@ -57,3 +77,13 @@ export type ProgramSession = Prisma.ProgramSessionModel
  * 
  */
 export type Enrollment = Prisma.EnrollmentModel
+/**
+ * Model SprintRequest
+ * 
+ */
+export type SprintRequest = Prisma.SprintRequestModel
+/**
+ * Model SprintSession
+ * 
+ */
+export type SprintSession = Prisma.SprintSessionModel

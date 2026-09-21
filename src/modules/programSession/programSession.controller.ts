@@ -1,14 +1,9 @@
-/**
- * @file src/modules/programSession/programSession.controller.ts
- * @description Controller handlers for Program Session operations.
- */
-
 import type { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync.js";
 import { sendSuccess } from "../../utils/apiResponse.js";
 import { programSessionService } from "./programSession.service.js";
 
-// ── 1. Add Session to Program ─────────────────────────────────────────────────
+// 1. Add Session to Program
 const addSessionToProgram = catchAsync(async (req: Request, res: Response) => {
   const programId = req.params.programId as string;
   const mentorId = req.user!.id;
@@ -16,7 +11,7 @@ const addSessionToProgram = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Session added to program successfully", result, 201);
 });
 
-// ── 2. Update Session ─────────────────────────────────────────────────────────
+// 2. Update Session
 const updateSession = catchAsync(async (req: Request, res: Response) => {
   const sessionId = req.params.sessionId as string;
   const mentorId = req.user!.id;
@@ -24,7 +19,7 @@ const updateSession = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Session updated successfully", result);
 });
 
-// ── 3. Delete Session ─────────────────────────────────────────────────────────
+// 3. Delete Session
 const deleteSession = catchAsync(async (req: Request, res: Response) => {
   const sessionId = req.params.sessionId as string;
   const mentorId = req.user!.id;
@@ -32,7 +27,7 @@ const deleteSession = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Session removed successfully", result);
 });
 
-// ── 4. Book Session ───────────────────────────────────────────────────────────
+// 4. Book Session
 const bookSession = catchAsync(async (req: Request, res: Response) => {
   const sessionId = req.params.sessionId as string;
   const userId = req.user!.id;
@@ -40,7 +35,7 @@ const bookSession = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Session booked successfully", result);
 });
 
-// ── 5. Cancel Session ─────────────────────────────────────────────────────────
+// 5. Cancel Session
 const cancelSession = catchAsync(async (req: Request, res: Response) => {
   const sessionId = req.params.sessionId as string;
   const userId = req.user!.id;
@@ -48,7 +43,7 @@ const cancelSession = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, result.message, result);
 });
 
-// ── Controller Export Object ──────────────────────────────────────────────────
+
 export const programSessionController = {
   addSessionToProgram,
   updateSession,

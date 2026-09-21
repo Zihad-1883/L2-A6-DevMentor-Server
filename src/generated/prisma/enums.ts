@@ -9,6 +9,34 @@
 * 🟢 You can import this file directly.
 */
 
+export const CohortApprovalStatus = {
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type CohortApprovalStatus = (typeof CohortApprovalStatus)[keyof typeof CohortApprovalStatus]
+
+
+export const CohortStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type CohortStatus = (typeof CohortStatus)[keyof typeof CohortStatus]
+
+
+export const CohortSessionStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type CohortSessionStatus = (typeof CohortSessionStatus)[keyof typeof CohortSessionStatus]
+
+
 export const ExperienceLevel = {
   JUNIOR: 'JUNIOR',
   MID: 'MID',
@@ -53,3 +81,24 @@ export const EnrollmentStatus = {
 } as const
 
 export type EnrollmentStatus = (typeof EnrollmentStatus)[keyof typeof EnrollmentStatus]
+
+
+export const SprintStatus = {
+  PENDING_CLAIM: 'PENDING_CLAIM',
+  CLAIMED: 'CLAIMED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type SprintStatus = (typeof SprintStatus)[keyof typeof SprintStatus]
+
+
+export const SprintSessionStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type SprintSessionStatus = (typeof SprintSessionStatus)[keyof typeof SprintSessionStatus]

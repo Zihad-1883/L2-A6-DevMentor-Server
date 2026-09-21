@@ -55,10 +55,16 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
+  CohortProgram: 'CohortProgram',
+  CohortEnrollment: 'CohortEnrollment',
+  CohortSession: 'CohortSession',
+  CohortSessionParticipant: 'CohortSessionParticipant',
   MentorProfile: 'MentorProfile',
   Program: 'Program',
   ProgramSession: 'ProgramSession',
-  Enrollment: 'Enrollment'
+  Enrollment: 'Enrollment',
+  SprintRequest: 'SprintRequest',
+  SprintSession: 'SprintSession'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -136,6 +142,66 @@ export const VerificationScalarFieldEnum = {
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
+export const CohortProgramScalarFieldEnum = {
+  id: 'id',
+  mentorId: 'mentorId',
+  title: 'title',
+  description: 'description',
+  durationWeeks: 'durationWeeks',
+  capacity: 'capacity',
+  techStackTags: 'techStackTags',
+  approvalStatus: 'approvalStatus',
+  status: 'status',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type CohortProgramScalarFieldEnum = (typeof CohortProgramScalarFieldEnum)[keyof typeof CohortProgramScalarFieldEnum]
+
+
+export const CohortEnrollmentScalarFieldEnum = {
+  id: 'id',
+  cohortId: 'cohortId',
+  studentId: 'studentId',
+  enrolledAt: 'enrolledAt'
+} as const
+
+export type CohortEnrollmentScalarFieldEnum = (typeof CohortEnrollmentScalarFieldEnum)[keyof typeof CohortEnrollmentScalarFieldEnum]
+
+
+export const CohortSessionScalarFieldEnum = {
+  id: 'id',
+  cohortId: 'cohortId',
+  sessionNumber: 'sessionNumber',
+  dayNumber: 'dayNumber',
+  title: 'title',
+  scheduledAt: 'scheduledAt',
+  durationMinutes: 'durationMinutes',
+  creditCost: 'creditCost',
+  status: 'status',
+  joinLink: 'joinLink',
+  resources: 'resources',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CohortSessionScalarFieldEnum = (typeof CohortSessionScalarFieldEnum)[keyof typeof CohortSessionScalarFieldEnum]
+
+
+export const CohortSessionParticipantScalarFieldEnum = {
+  id: 'id',
+  cohortSessionId: 'cohortSessionId',
+  studentId: 'studentId',
+  paid: 'paid',
+  joinedAt: 'joinedAt'
+} as const
+
+export type CohortSessionParticipantScalarFieldEnum = (typeof CohortSessionParticipantScalarFieldEnum)[keyof typeof CohortSessionParticipantScalarFieldEnum]
+
+
 export const MentorProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -200,12 +266,55 @@ export const EnrollmentScalarFieldEnum = {
 export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
 
 
+export const SprintRequestScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  title: 'title',
+  description: 'description',
+  startDate: 'startDate',
+  durationDays: 'durationDays',
+  selectedDays: 'selectedDays',
+  status: 'status',
+  claimedByMentorId: 'claimedByMentorId',
+  claimedAt: 'claimedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type SprintRequestScalarFieldEnum = (typeof SprintRequestScalarFieldEnum)[keyof typeof SprintRequestScalarFieldEnum]
+
+
+export const SprintSessionScalarFieldEnum = {
+  id: 'id',
+  sprintRequestId: 'sprintRequestId',
+  dayNumber: 'dayNumber',
+  scheduledAt: 'scheduledAt',
+  durationMinutes: 'durationMinutes',
+  creditCost: 'creditCost',
+  status: 'status',
+  joinLink: 'joinLink',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SprintSessionScalarFieldEnum = (typeof SprintSessionScalarFieldEnum)[keyof typeof SprintSessionScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -222,4 +331,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
