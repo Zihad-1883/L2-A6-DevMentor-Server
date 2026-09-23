@@ -2,12 +2,16 @@ import "dotenv/config";
 import app from "./app.js";
 import { env } from "./config/env.js";
 import { connectDB, disconnectDB } from "./config/db.js";
+import { initCronJobs } from "./jobs/cron.js";
 
 async function bootstrap(): Promise<void> {
   // 1. Verify DB is reachable before accepting any traffic
   await connectDB();
 
-  // 2. Start HTTP server
+  // 2. Initialize background cron jobs
+  initCronJobs();
+
+  // 3. Start HTTP server
   const server = app.listen(env.PORT, () => {
     console.log(`✅  Kōdex Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
     console.log(`🔗  http://localhost:${env.PORT}/api/v1/health`);
