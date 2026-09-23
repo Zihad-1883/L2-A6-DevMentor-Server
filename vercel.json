@@ -15,7 +15,7 @@
   "crons": [
     {
       "path": "/api/v1/cron/cleanup-payments",
-      "schedule": "*/5 * * * *"
+      "schedule": "0 0 * * *"
     }
   ]
 }
