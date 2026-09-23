@@ -58,10 +58,13 @@ const cancelReviewRequestHandler = catchAsync(async (req: Request, res: Response
   sendSuccess(res, result.message, result.data, 200);
 });
 
-// 8. Get Open Pool Directory (Mentor / Admin)
+// 8. Get Open Pool Directory with Filters & Pagination (Mentor / Admin)
 const getOpenPoolHandler = catchAsync(async (req: Request, res: Response) => {
-  const result = await codeReviewService.getOpenCodeReviewPool();
-  sendSuccess(res, "Open code review requests retrieved successfully", result.data, 200);
+  const result = await codeReviewService.getOpenCodeReviewPool(req.query);
+  sendSuccess(res, "Open code review requests retrieved successfully", {
+    requests: result.data,
+    meta: result.meta,
+  }, 200);
 });
 
 export const codeReviewController = {

@@ -436,32 +436,75 @@ const cancelReviewRequest = async (studentId: string, requestId: string) => {
   };
 };
 
-// 8. Get Open Code Review Requests Pool (Mentors)
-const getOpenCodeReviewPool = async () => {
+// 8. Get Open Code Review Requests Pool with Filters & Pagination (Mentors)
+const getOpenCodeReviewPool = async (filters: import("./codeReview.interface.js").ICodeReviewQueryFilters = {}) => {
+  const page = Math.max(1, Number(filters.page) || 1);
+  const limit = Math.max(1, Math.min(50, Number(filters.limit) || 10));
+  const skip = (page - 1) * limit;
+
   const now = new Date();
-  
-  // Find all OPEN requests or PREVIEW_LOCKED whose 10-min lock has expired
-  const requests = await prisma.codeReviewRequest.findMany({
-    where: {
-      OR: [
-        { status: "OPEN" },
-        {
-          status: "PREVIEW_LOCKED",
-          previewExpiresAt: { lte: now },
-        },
-      ],
-    },
-    include: {
-      student: {
-        select: { id: true, name: true, email: true, image: true },
+
+  // Availability condition: OPEN or PREVIEW_LOCKED whose 10-min lock has expired
+  const availabilityCondition: any = {
+    OR: [
+      { status: "OPEN" },
+      {
+        status: "PREVIEW_LOCKED",
+        previewExpiresAt: { lte: now },
       },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+    ],
+  };
+
+  const whereConditions: any[] = [availabilityCondition];
+
+  if (filters.tier) {
+    whereConditions.push({ tier: filters.tier });
+  }
+
+  if (filters.language) {
+    whereConditions.push({
+      language: { contains: filters.language, mode: "insensitive" },
+    });
+  }
+
+  if (filters.search) {
+    whereConditions.push({
+      OR: [
+        { title: { contains: filters.search, mode: "insensitive" } },
+        { description: { contains: filters.search, mode: "insensitive" } },
+        { specificFiles: { contains: filters.search, mode: "insensitive" } },
+      ],
+    });
+  }
+
+  const where = { AND: whereConditions };
+
+  const [totalCount, requests] = await Promise.all([
+    prisma.codeReviewRequest.count({ where }),
+    prisma.codeReviewRequest.findMany({
+      where,
+      skip,
+      take: limit,
+      include: {
+        student: {
+          select: { id: true, name: true, email: true, image: true },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    }),
+  ]);
+
+  const totalPages = Math.ceil(totalCount / limit);
 
   return {
     success: true,
     data: requests,
+    meta: {
+      page,
+      limit,
+      totalCount,
+      totalPages,
+    },
   };
 };
 

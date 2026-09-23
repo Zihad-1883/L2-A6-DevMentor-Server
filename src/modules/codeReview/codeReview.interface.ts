@@ -35,3 +35,11 @@ export interface ISubmitCodeReviewInput {
   pullRequestUrl?: string;
   comments?: ICodeReviewCommentInput[];
 }
+
+export interface ICodeReviewQueryFilters {
+  tier?: CodeReviewTierType;
+  language?: string;
+  search?: string;
+  page?: number | string;
+  limit?: number | string;
+}
