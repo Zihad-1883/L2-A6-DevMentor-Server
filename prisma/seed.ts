@@ -5,7 +5,7 @@ import { auth } from "../src/lib/auth.js";
 async function main() {
   console.log("🌱 Seeding database...");
 
-  const adminEmail = "admin@kodex.dev";
+  const adminEmail = "admin@devmentor.com";
   const adminPassword = "Admin@123456";
 
   const existing = await prisma.user.findUnique({ where: { email: adminEmail } });

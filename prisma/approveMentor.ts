@@ -2,7 +2,7 @@ import "dotenv/config";
 import { prisma } from "../src/lib/prisma.js";
 
 async function main() {
-  const email = "mentor@kodex.dev";
+  const email = "mentor@devmentor.com";
 
   const user = await prisma.user.findUnique({
     where: { email },

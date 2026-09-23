@@ -15,7 +15,7 @@ interface IUploadResponse {
 
 const uploadFileToCloudinary = async (
   file: Express.Multer.File,
-  folderName = "kodex_uploads",
+  folderName = "devmentor_uploads",
 ): Promise<IUploadResponse> => {
   if (!file || !file.buffer) {
     throw new AppError("No file provided for upload", 400);
@@ -55,7 +55,7 @@ const uploadFileToCloudinary = async (
 
 const uploadMultipleFilesToCloudinary = async (
   files: Express.Multer.File[],
-  folderName = "kodex_uploads",
+  folderName = "devmentor_uploads",
 ): Promise<IUploadResponse[]> => {
   if (!files || files.length === 0) {
     throw new AppError("No files provided for upload", 400);
