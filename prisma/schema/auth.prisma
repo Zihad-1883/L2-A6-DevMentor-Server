@@ -19,6 +19,9 @@ model User {
     cohortSessionsJoined CohortSessionParticipant[] @relation("StudentCohortSessions")
     wallet               Wallet?
     payments             Payment[]
+    studentCodeReviews   CodeReviewRequest[]        @relation("StudentCodeReviews")
+    mentorCodeReviews    CodeReviewRequest[]        @relation("MentorCodeReviews")
+    mentorSubmissions    CodeReviewSubmission[]     @relation("MentorSubmissions")
 
     @@map("user")
 }
