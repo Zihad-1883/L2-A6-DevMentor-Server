@@ -66,3 +66,8 @@ export interface IBKashQueryPaymentResponse {
 export interface IInitiateTopUpInput {
   amount: number;
 }
+
+export interface IRequestWithdrawalInput {
+  amount: number;
+  bkashNumber: string;
+}

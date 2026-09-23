@@ -82,9 +82,20 @@ const getPaymentHistoryHandler = catchAsync(async (req: Request, res: Response) 
   sendSuccess(res, "Payment transaction history retrieved successfully", payments, 200);
 });
 
+/**
+ * 5. Request bKash Cash-Out Withdrawal (POST /api/v1/payments/withdraw)
+ */
+const requestWithdrawalHandler = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user!.id;
+  const result = await paymentService.requestWithdrawal(userId, req.body);
+
+  sendSuccess(res, "bKash withdrawal processed successfully", result, 200);
+});
+
 export const paymentController = {
   initiateTopUpHandler,
   bkashCallbackHandler,
   getWalletHandler,
   getPaymentHistoryHandler,
+  requestWithdrawalHandler,
 };

@@ -8,7 +8,7 @@ import { AppError } from "../../utils/apiError.js";
 import { bkashService } from "./bkash.service.js";
 import { generatePaymentReceiptPDF } from "../../lib/pdf.js";
 import { sendPaymentReceiptEmail } from "../../lib/email.js";
-import type { IInitiateTopUpInput } from "./payment.interface.js";
+import type { IInitiateTopUpInput, IRequestWithdrawalInput } from "./payment.interface.js";
 
 /**
  * ── Sub-Step 4.1: Initiate Top-Up Payment ────────────────────────────────────
@@ -186,7 +186,77 @@ const executePaymentAndTopUp = async (paymentID: string, status: string) => {
   };
 };
 
+/**
+ * ── Sub-Step 6.2: Mentor bKash Cash-Out Withdrawal ──────────────────────────
+ * - Verifies mentor's spendable wallet balance (min 1,000 BDT).
+ * - Decrements spendable balance, increments totalWithdrawn.
+ * - Records WITHDRAWAL in CreditTransaction audit trail and Payment history.
+ */
+const requestWithdrawal = async (userId: string, payload: IRequestWithdrawalInput) => {
+  const { amount, bkashNumber } = payload;
+
+  const wallet = await prisma.wallet.findUnique({
+    where: { userId },
+  });
+
+  if (!wallet || wallet.balance < amount) {
+    throw new AppError(
+      `Insufficient spendable wallet balance. Available balance: ${wallet?.balance || 0} BDT`,
+      400
+    );
+  }
+
+  const merchantInvoiceNumber = `WDW-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+  const { updatedWallet, payment } = await prisma.$transaction(async (tx) => {
+    // 1. Create completed payout Payment record
+    const payment = await tx.payment.create({
+      data: {
+        userId,
+        amount,
+        merchantInvoiceNumber,
+        status: "COMPLETED",
+        gatewayResponse: {
+          type: "WITHDRAWAL",
+          bkashNumber,
+          processedAt: new Date().toISOString(),
+        } as any,
+      },
+    });
+
+    // 2. Decrement wallet spendable balance and increment totalWithdrawn
+    const updatedWallet = await tx.wallet.update({
+      where: { userId },
+      data: {
+        balance: { decrement: amount },
+        totalWithdrawn: { increment: amount },
+      },
+    });
+
+    // 3. Create append-only CreditTransaction audit log
+    await tx.creditTransaction.create({
+      data: {
+        walletId: updatedWallet.id,
+        amount: -amount,
+        type: "WITHDRAWAL",
+        description: `bKash Cash-Out to ${bkashNumber}`,
+        referenceId: payment.id,
+      },
+    });
+
+    return { updatedWallet, payment };
+  });
+
+  return {
+    success: true,
+    message: `Successfully processed withdrawal of ${amount} BDT to bKash number ${bkashNumber}`,
+    wallet: updatedWallet,
+    payment,
+  };
+};
+
 export const paymentService = {
   initiateTopUp,
   executePaymentAndTopUp,
+  requestWithdrawal,
 };

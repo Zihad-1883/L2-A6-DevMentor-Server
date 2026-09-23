@@ -5,8 +5,9 @@
 
 import { Router } from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
+import { requireRole } from "../../middlewares/rbac.middleware.js";
 import { validate } from "../../middlewares/validate.middleware.js";
-import { initiateTopUpSchema } from "./payment.validation.js";
+import { initiateTopUpSchema, requestWithdrawalSchema } from "./payment.validation.js";
 import { paymentController } from "./payment.controller.js";
 
 const router = Router();
@@ -39,5 +40,17 @@ router.get("/wallet/me", requireAuth, paymentController.getWalletHandler);
  * GET /api/v1/payments/history
  */
 router.get("/history", requireAuth, paymentController.getPaymentHistoryHandler);
+
+/**
+ * ── 5. Mentor bKash Cash-Out Withdrawal (Protected: Mentor) ────────────────
+ * POST /api/v1/payments/withdraw
+ */
+router.post(
+  "/withdraw",
+  requireAuth,
+  requireRole("mentor"),
+  validate(requestWithdrawalSchema),
+  paymentController.requestWithdrawalHandler
+);
 
 export const paymentRoutes = router;
