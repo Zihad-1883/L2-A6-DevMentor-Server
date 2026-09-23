@@ -1,9 +1,8 @@
 # Dependencies
 node_modules/
 
-# Build output
-dist/
-build/
+# Build output (committed for Vercel deployment)
+# dist/ - intentionally NOT ignored so Vercel can serve the pre-built bundle
 
 # Environment variables
 .env
