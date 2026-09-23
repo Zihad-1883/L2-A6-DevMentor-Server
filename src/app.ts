@@ -22,6 +22,9 @@ import v1Router from "./routes/v1/index.js";
 
 const app = express();
 
+// Trust Vercel/proxy X-Forwarded-For header for accurate rate limiting
+app.set("trust proxy", 1);
+
 // ── Security headers ──────────────────────────────────────────────────────────
 app.use(helmet());
 

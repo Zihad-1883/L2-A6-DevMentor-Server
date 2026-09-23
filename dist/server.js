@@ -4469,6 +4469,7 @@ var v1_default = v1Router;
 
 // src/app.ts
 var app = express();
+app.set("trust proxy", 1);
 app.use(helmet());
 app.use(
   cors({
