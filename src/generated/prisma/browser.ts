@@ -63,6 +63,16 @@ export type CohortSessionParticipant = Prisma.CohortSessionParticipantModel
  */
 export type MentorProfile = Prisma.MentorProfileModel
 /**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
+ * Model PlatformSetting
+ * 
+ */
+export type PlatformSetting = Prisma.PlatformSettingModel
+/**
  * Model SprintRequest
  * 
  */
@@ -72,3 +82,13 @@ export type SprintRequest = Prisma.SprintRequestModel
  * 
  */
 export type SprintSession = Prisma.SprintSessionModel
+/**
+ * Model Wallet
+ * 
+ */
+export type Wallet = Prisma.WalletModel
+/**
+ * Model CreditTransaction
+ * 
+ */
+export type CreditTransaction = Prisma.CreditTransactionModel

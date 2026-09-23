@@ -60,8 +60,12 @@ export const ModelName = {
   CohortSession: 'CohortSession',
   CohortSessionParticipant: 'CohortSessionParticipant',
   MentorProfile: 'MentorProfile',
+  Payment: 'Payment',
+  PlatformSetting: 'PlatformSetting',
   SprintRequest: 'SprintRequest',
-  SprintSession: 'SprintSession'
+  SprintSession: 'SprintSession',
+  Wallet: 'Wallet',
+  CreditTransaction: 'CreditTransaction'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -219,6 +223,32 @@ export const MentorProfileScalarFieldEnum = {
 export type MentorProfileScalarFieldEnum = (typeof MentorProfileScalarFieldEnum)[keyof typeof MentorProfileScalarFieldEnum]
 
 
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  merchantInvoiceNumber: 'merchantInvoiceNumber',
+  paymentID: 'paymentID',
+  trxID: 'trxID',
+  amount: 'amount',
+  status: 'status',
+  gatewayResponse: 'gatewayResponse',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const PlatformSettingScalarFieldEnum = {
+  id: 'id',
+  sprintCreditPerSession: 'sprintCreditPerSession',
+  sessionCommissionPercent: 'sessionCommissionPercent',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlatformSettingScalarFieldEnum = (typeof PlatformSettingScalarFieldEnum)[keyof typeof PlatformSettingScalarFieldEnum]
+
+
 export const SprintRequestScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
@@ -253,6 +283,32 @@ export const SprintSessionScalarFieldEnum = {
 } as const
 
 export type SprintSessionScalarFieldEnum = (typeof SprintSessionScalarFieldEnum)[keyof typeof SprintSessionScalarFieldEnum]
+
+
+export const WalletScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  balance: 'balance',
+  totalEarned: 'totalEarned',
+  totalWithdrawn: 'totalWithdrawn',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WalletScalarFieldEnum = (typeof WalletScalarFieldEnum)[keyof typeof WalletScalarFieldEnum]
+
+
+export const CreditTransactionScalarFieldEnum = {
+  id: 'id',
+  walletId: 'walletId',
+  amount: 'amount',
+  type: 'type',
+  description: 'description',
+  referenceId: 'referenceId',
+  createdAt: 'createdAt'
+} as const
+
+export type CreditTransactionScalarFieldEnum = (typeof CreditTransactionScalarFieldEnum)[keyof typeof CreditTransactionScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -55,6 +55,17 @@ export const ApprovalStatus = {
 export type ApprovalStatus = (typeof ApprovalStatus)[keyof typeof ApprovalStatus]
 
 
+export const PaymentStatus = {
+  INITIATED: 'INITIATED',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
 export const SprintStatus = {
   PENDING_CLAIM: 'PENDING_CLAIM',
   CLAIMED: 'CLAIMED',
@@ -74,3 +85,16 @@ export const SprintSessionStatus = {
 } as const
 
 export type SprintSessionStatus = (typeof SprintSessionStatus)[keyof typeof SprintSessionStatus]
+
+
+export const CreditTransactionType = {
+  TOP_UP: 'TOP_UP',
+  SPRINT_ESCROW: 'SPRINT_ESCROW',
+  SPRINT_RELEASE: 'SPRINT_RELEASE',
+  SPRINT_REFUND: 'SPRINT_REFUND',
+  COHORT_FEE: 'COHORT_FEE',
+  COHORT_RELEASE: 'COHORT_RELEASE',
+  WITHDRAWAL: 'WITHDRAWAL'
+} as const
+
+export type CreditTransactionType = (typeof CreditTransactionType)[keyof typeof CreditTransactionType]
