@@ -10,8 +10,8 @@
 // - Define CommissionSetting, PlatformSetting, and AuditLog models.
 
 generator client {
-    provider      = "prisma-client" // v7 new provider name
-    output        = "../../src/generated/prisma" // where client gets generated
+    provider      = "prisma-client"
+    output        = "../../src/generated/prisma"
     binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
