@@ -54,8 +54,9 @@ const envSchema = z.object({
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-  console.error("❌ Invalid environment variables:\n", parsed.error.flatten().fieldErrors);
-  process.exit(1);
+  const formattedErrors = JSON.stringify(parsed.error.flatten().fieldErrors, null, 2);
+  console.error("❌ Invalid environment variables:\n", formattedErrors);
+  throw new Error(`Missing or invalid environment variables:\n${formattedErrors}`);
 }
 
 export const env = parsed.data;
