@@ -51,6 +51,7 @@ import uploadRouter from "../../modules/upload/upload.routes.js";
 import adminRouter from "../../modules/admin/admin.routes.js";
 import { paymentRoutes } from "../../modules/payment/payment.routes.js";
 import codeReviewRouter from "../../modules/codeReview/codeReview.routes.js";
+import { expireAbandonedPayments } from "../../jobs/cron.js";
 
 v1Router.use("/sprints", sprintRouter);
 v1Router.use("/sprint-sessions", sprintSessionRouter);
@@ -63,5 +64,14 @@ v1Router.use("/upload", uploadRouter);
 v1Router.use("/admin", adminRouter);
 v1Router.use("/payments", paymentRoutes);
 v1Router.use("/code-reviews", codeReviewRouter);
+
+// Vercel Cron Job Automated Endpoint
+v1Router.get(
+  "/cron/cleanup-payments",
+  catchAsync(async (req, res) => {
+    await expireAbandonedPayments();
+    sendSuccess(res, "Vercel Cron: Abandoned payments cleanup completed successfully");
+  })
+);
 
 export default v1Router;
