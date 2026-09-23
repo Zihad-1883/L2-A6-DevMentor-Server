@@ -42,6 +42,13 @@ const envSchema = z.object({
   BKASH_BASE_URL: z.string().url(),
   BKASH_CALLBACK_URL: z.string().url(),
 
+  // Email (Nodemailer SMTP)
+  SMTP_HOST: z.string().default("smtp.gmail.com"),
+  SMTP_PORT: z.coerce.number().default(587),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  SMTP_FROM: z.string().default("DevMentor Receipts <noreply@devmentor.com>"),
+
 });
 
 const parsed = envSchema.safeParse(process.env);

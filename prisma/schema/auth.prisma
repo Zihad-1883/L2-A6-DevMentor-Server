@@ -17,6 +17,8 @@ model User {
     cohortsCreated       CohortProgram[]            @relation("MentorCohorts")
     cohortEnrollments    CohortEnrollment[]         @relation("StudentCohortEnrollments")
     cohortSessionsJoined CohortSessionParticipant[] @relation("StudentCohortSessions")
+    wallet               Wallet?
+    payments             Payment[]
 
     @@map("user")
 }

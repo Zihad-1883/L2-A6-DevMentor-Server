@@ -1,7 +1,5 @@
-/**
- * @file src/modules/payment/payment.validation.ts
- * @description Payment Payload Validation Schemas
- * 
- * WHAT WILL BE DONE HERE:
- * - Zod schemas for credit purchase initiation (amount in BDT) and bKash callback params validation.
- */
+import { z } from "zod";
+
+export const initiateTopUpSchema = z.object({
+  amount: z.number().int().min(10, "Minimum top-up amount is 10 BDT").max(50000, "Maximum top-up amount is 50,000 BDT"),
+});

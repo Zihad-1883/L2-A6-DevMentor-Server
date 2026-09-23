@@ -17,6 +17,7 @@
     "@better-auth/prisma-adapter": "^1.7.5",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
+    "@types/node-cron": "^3.0.11",
     "@types/pg": "^8.23.1",
     "@upstash/redis": "^1.38.4",
     "better-auth": "^1.7.5",
@@ -27,6 +28,9 @@
     "express-rate-limit": "^8.7.0",
     "helmet": "^8.3.0",
     "multer": "^2.4.0",
+    "node-cron": "^4.6.0",
+    "nodemailer": "^10.0.10",
+    "pdfkit": "^0.20.2",
     "pg": "^8.23.0",
     "zod": "^4.6.5"
   },
@@ -35,6 +39,8 @@
     "@types/express": "^5.0.6",
     "@types/multer": "^2.2.0",
     "@types/node": "^22.20.3",
+    "@types/nodemailer": "^8.0.2",
+    "@types/pdfkit": "^0.17.6",
     "prisma": "^7.10.0",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"

@@ -1,0 +1,34 @@
+enum PaymentStatus {
+    INITIATED
+    COMPLETED
+    FAILED
+    CANCELLED
+    EXPIRED
+}
+
+model Payment {
+    id     String @id @default(cuid())
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    merchantInvoiceNumber String        @unique
+    paymentID             String?       @unique
+    trxID                 String?       @unique
+    amount                Int
+    status                PaymentStatus @default(INITIATED)
+    gatewayResponse       Json?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("payment")
+}
+
+model PlatformSetting {
+    id                       String   @id @default(cuid())
+    sprintCreditPerSession   Int      @default(50)
+    sessionCommissionPercent Int      @default(15)
+    updatedAt                DateTime @updatedAt
+
+    @@map("platform_setting")
+}
