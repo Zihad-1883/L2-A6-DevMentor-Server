@@ -1,13 +1,3 @@
-/**
- * @file src/lib/pdf.ts
- * @description In-memory PDF Payment Receipt Generator using PDFKit.
- * 
- * WHY IN-MEMORY BUFFER:
- * - Streaming PDF bytes directly to RAM (Buffer) avoids writing temporary files to server disk.
- * - Compatible with read-only serverless platforms (e.g. Vercel, Render).
- * - Instant attachment generation for email delivery.
- */
-
 import PDFDocument from "pdfkit";
 
 export interface IPaymentReceiptData {
@@ -19,9 +9,7 @@ export interface IPaymentReceiptData {
   studentEmail: string;
 }
 
-/**
- * Generates a branded payment receipt PDF as a Node.js Buffer array.
- */
+// Generates a branded payment receipt PDF as a Node.js Buffer array.
 export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Buffer> => {
   return new Promise((resolve, reject) => {
     try {
@@ -32,7 +20,6 @@ export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Bu
       doc.on("end", () => resolve(Buffer.concat(buffers)));
       doc.on("error", (err) => reject(err));
 
-      // Header Banner
       doc
         .fillColor("#4F46E5")
         .fontSize(24)
@@ -42,7 +29,6 @@ export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Bu
         .text("Official Payment Receipt", { align: "left" })
         .moveDown();
 
-      // Divider Line
       doc
         .strokeColor("#E5E7EB")
         .lineWidth(1)
@@ -51,7 +37,6 @@ export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Bu
         .stroke()
         .moveDown(1.5);
 
-      // Receipt Metadata Box
       doc
         .fillColor("#111827")
         .fontSize(14)
@@ -63,7 +48,6 @@ export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Bu
         .text(`Status: COMPLETED (PAID via bKash)`)
         .moveDown();
 
-      // Customer Details
       doc
         .fillColor("#111827")
         .fontSize(12)
@@ -74,7 +58,6 @@ export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Bu
         .text(`Email: ${data.studentEmail}`)
         .moveDown(1.5);
 
-      // Table Header
       const tableTop = doc.y;
       doc
         .fillColor("#374151")
@@ -88,7 +71,6 @@ export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Bu
         .lineTo(545, tableTop + 15)
         .stroke();
 
-      // Table Row
       const itemTop = tableTop + 25;
       doc
         .fillColor("#111827")
@@ -102,14 +84,12 @@ export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Bu
         .stroke()
         .moveDown(2);
 
-      // Total Paid
       doc
         .fillColor("#4F46E5")
         .fontSize(14)
         .text(`Total Credits Added: ${data.amount} Credits`, { align: "right" })
         .moveDown(2);
 
-      // Footer Note
       doc
         .fillColor("#9CA3AF")
         .fontSize(9)

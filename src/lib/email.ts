@@ -1,12 +1,3 @@
-/**
- * @file src/lib/email.ts
- * @description Automated Email Dispatcher using Nodemailer with PDF attachments.
- * 
- * WHY THIS APPROACH:
- * - Uses SMTP transport with fallback error handling so server never crashes if email is misconfigured.
- * - Accepts PDF Buffer directly from memory to attach official receipt without writing to disk.
- */
-
 import nodemailer from "nodemailer";
 import { env } from "../config/env.js";
 
@@ -18,9 +9,6 @@ export interface ISendReceiptEmailInput {
   pdfBuffer: Buffer;
 }
 
-/**
- * Creates Nodemailer SMTP transport instance.
- */
 const transporter = nodemailer.createTransport({
   host: env.SMTP_HOST,
   port: env.SMTP_PORT,
@@ -28,21 +16,18 @@ const transporter = nodemailer.createTransport({
   auth:
     env.SMTP_USER && env.SMTP_PASS
       ? {
-          user: env.SMTP_USER,
-          pass: env.SMTP_PASS,
-        }
+        user: env.SMTP_USER,
+        pass: env.SMTP_PASS,
+      }
       : undefined,
 });
 
-/**
- * Sends payment confirmation email with attached PDF receipt Buffer.
- */
+
 export const sendPaymentReceiptEmail = async (input: ISendReceiptEmailInput): Promise<boolean> => {
   const { toEmail, studentName, invoiceNumber, amount, pdfBuffer } = input;
 
-  // Skip sending if SMTP credentials are missing in local dev
   if (!env.SMTP_USER || !env.SMTP_PASS) {
-    console.warn("⚠️ SMTP credentials not fully set up in .env. Skipping receipt email send.");
+    console.warn("SMTP credentials not fully set up in .env. Skipping receipt email send.");
     return false;
   }
 

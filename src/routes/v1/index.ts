@@ -3,10 +3,18 @@ import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { requireRole } from "../../middlewares/rbac.middleware.js";
 import { sendSuccess } from "../../utils/apiResponse.js";
 import { catchAsync } from "../../utils/catchAsync.js";
+import { paymentController } from "../../modules/payment/payment.controller.js";
 
 const v1Router = Router();
 
-// Health check 
+// Root / Health check & bKash Fallback Callback (Supports GET & POST)
+v1Router.all("/", (req, res, next) => {
+  if (req.query.paymentID || req.body?.paymentID) {
+    return paymentController.bkashCallbackHandler(req, res, next);
+  }
+  res.json({ success: true, message: "Kōdex API v1 root endpoint", data: null });
+});
+
 v1Router.get("/health", (_req, res) => {
   res.json({ success: true, message: "Kōdex API v1 is up and running 🚀", data: null });
 });

@@ -9,7 +9,15 @@ export const auth = betterAuth({
     secret: env.BETTER_AUTH_SECRET,
     baseURL: env.BETTER_AUTH_URL,
     basePath: "/api/v1/auth",
-    trustedOrigins: [env.CLIENT_URL, env.BETTER_AUTH_URL, "http://localhost:5000", "http://localhost:3000"],
+    trustedOrigins: [
+        env.CLIENT_URL,
+        env.BETTER_AUTH_URL,
+        "http://localhost:5000",
+        "http://localhost:3000",
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+        "http://127.0.0.1:3000"
+    ],
 
     user: {
         additionalFields: {
@@ -31,6 +39,11 @@ export const auth = betterAuth({
     },
 
     advanced: {
-        database: { joins: true },  // 2-3x faster session queries
+        database: { joins: true },
+        disableCSRFCheck: true,
+        defaultCookieAttributes: {
+            sameSite: "lax",
+            secure: false,
+        },
     },
 });

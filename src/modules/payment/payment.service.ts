@@ -1,8 +1,3 @@
-/**
- * @file src/modules/payment/payment.service.ts
- * @description Business logic for Payment Top-Up initiation and bKash workflow.
- */
-
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/apiError.js";
 import { bkashService } from "./bkash.service.js";
@@ -10,14 +5,8 @@ import { generatePaymentReceiptPDF } from "../../lib/pdf.js";
 import { sendPaymentReceiptEmail } from "../../lib/email.js";
 import type { IInitiateTopUpInput, IRequestWithdrawalInput } from "./payment.interface.js";
 
-/**
- * ── Sub-Step 4.1: Initiate Top-Up Payment ────────────────────────────────────
- * - Validates student user status and minimum amount (minimum 10 BDT).
- * - Generates unique merchantInvoiceNumber (e.g. INV-1790027735-1234).
- * - Creates an INITIATED payment record in PostgreSQL database.
- * - Calls bKash PGW API to generate bKash payment URL.
- * - Updates payment record with bKash paymentID and returns checkout URL.
- */
+
+// Initiate Top-Up Payment
 const initiateTopUp = async (userId: string, payload: IInitiateTopUpInput) => {
   const { amount } = payload;
 
@@ -37,10 +26,12 @@ const initiateTopUp = async (userId: string, payload: IInitiateTopUpInput) => {
     throw new AppError("Your account is currently blocked by an administrator", 403);
   }
 
-  // Generate unique merchant invoice number
+  if (user.role !== "student") {
+    throw new AppError("Only student accounts are eligible for credit top-ups. Mentors and admins cannot top up balance.", 403);
+  }
+
   const merchantInvoiceNumber = `INV-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
-  // Create initial INITIATED payment record in DB
   const payment = await prisma.payment.create({
     data: {
       userId,
@@ -50,14 +41,12 @@ const initiateTopUp = async (userId: string, payload: IInitiateTopUpInput) => {
     },
   });
 
-  // Call bKash service to create payment intent
   const bkashResponse = await bkashService.createPayment({
     amount,
     merchantInvoiceNumber,
     payerReference: user.name,
   });
 
-  // Attach bKash paymentID to DB payment record
   const updatedPayment = await prisma.payment.update({
     where: { id: payment.id },
     data: {
@@ -74,16 +63,9 @@ const initiateTopUp = async (userId: string, payload: IInitiateTopUpInput) => {
   };
 };
 
-/**
- * ── Sub-Step 4.4: Execute Payment & Settlement ───────────────────────────────
- * 
- * Step 1: Pre-Execution Guards & Idempotency Check
- * - Checks if the payment record exists in the database.
- * - Idempotency Guard: Returns early if payment is already COMPLETED.
- * - Callback Guard: Updates DB status to CANCELLED/FAILED if user cancelled on bKash.
- */
+
+// Execute Payment & Settlement
 const executePaymentAndTopUp = async (paymentID: string, status: string) => {
-  // 1. Fetch Payment Intent record from Database
   const payment = await prisma.payment.findUnique({
     where: { paymentID },
     include: { user: true },
@@ -93,7 +75,6 @@ const executePaymentAndTopUp = async (paymentID: string, status: string) => {
     throw new AppError("Payment transaction record not found", 404);
   }
 
-  // Idempotency Guard: If already completed, return existing record
   if (payment.status === "COMPLETED") {
     return {
       success: true,
@@ -102,7 +83,6 @@ const executePaymentAndTopUp = async (paymentID: string, status: string) => {
     };
   }
 
-  // Callback Status Guard: Handle cancellation or failure on bKash modal
   if (status === "cancel" || status === "failure") {
     const updatedStatus = status === "cancel" ? "CANCELLED" : "FAILED";
     await prisma.payment.update({
@@ -113,42 +93,52 @@ const executePaymentAndTopUp = async (paymentID: string, status: string) => {
     throw new AppError(`Payment was ${updatedStatus.toLowerCase()} on bKash`, 400);
   }
 
-  // 2. Execute Payment Settlement via bKash PGW API
-  const bkashResult = await bkashService.executePayment(paymentID);
+  let bkashResult;
+  try {
+    bkashResult = await bkashService.executePayment(paymentID);
+  } catch (err: any) {
+    // If bKash execution failed (e.g., status 2056 Invalid Payment State), update record status to FAILED
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: { status: "FAILED" },
+    });
+    throw err;
+  }
 
-  // 3. Atomic Database Settlement via prisma.$transaction
+  const CREDIT_RATE = 4; // 4 BDT = 1 Credit
+  const creditsEarned = Math.floor(payment.amount / CREDIT_RATE);
+
   const { updatedPayment, wallet } = await prisma.$transaction(async (tx) => {
-    // 3A. Mark payment as COMPLETED and save trxID + raw gateway response
+    const transactionId = bkashResult.trxID || payment.trxID || paymentID;
+
     const updatedPayment = await tx.payment.update({
       where: { id: payment.id },
       data: {
         status: "COMPLETED",
-        trxID: bkashResult.trxID,
+        trxID: transactionId,
         gatewayResponse: bkashResult as any,
       },
     });
 
-    // 3B. Upsert student's Wallet (increment spendable balance)
     const wallet = await tx.wallet.upsert({
       where: { userId: payment.userId },
       create: {
         userId: payment.userId,
-        balance: payment.amount,
+        balance: creditsEarned,
         totalEarned: 0,
         totalWithdrawn: 0,
       },
       update: {
-        balance: { increment: payment.amount },
+        balance: { increment: creditsEarned },
       },
     });
 
-    // 3C. Create append-only CreditTransaction audit log
     await tx.creditTransaction.create({
       data: {
         walletId: wallet.id,
-        amount: payment.amount,
+        amount: creditsEarned,
         type: "TOP_UP",
-        description: `bKash Top-Up via TrxID ${bkashResult.trxID}`,
+        description: `bKash Top-Up: ${payment.amount} BDT → ${creditsEarned} Credits (TrxID: ${transactionId})`,
         referenceId: paymentID,
       },
     });
@@ -156,7 +146,6 @@ const executePaymentAndTopUp = async (paymentID: string, status: string) => {
     return { updatedPayment, wallet };
   });
 
-  // 4. Background PDF Receipt Generation & Email Dispatch (non-blocking)
   generatePaymentReceiptPDF({
     invoiceNumber: updatedPayment.merchantInvoiceNumber,
     trxID: bkashResult.trxID,
@@ -175,33 +164,39 @@ const executePaymentAndTopUp = async (paymentID: string, status: string) => {
       });
     })
     .catch((emailErr) => {
-      console.error("⚠️ Background receipt email dispatch error:", emailErr);
+      console.error("Background receipt email dispatch error:", emailErr);
     });
 
   return {
     success: true,
-    message: "Payment settled and credits topped up successfully",
+    message: `Payment settled successfully. Credited ${creditsEarned} Credits (${updatedPayment.amount} BDT).`,
     payment: updatedPayment,
     wallet,
   };
 };
 
-/**
- * ── Sub-Step 6.2: Mentor bKash Cash-Out Withdrawal ──────────────────────────
- * - Verifies mentor's spendable wallet balance (min 1,000 BDT).
- * - Decrements spendable balance, increments totalWithdrawn.
- * - Records WITHDRAWAL in CreditTransaction audit trail and Payment history.
- */
+
+// Mentor / Admin bKash Cash-Out Withdrawal
 const requestWithdrawal = async (userId: string, payload: IRequestWithdrawalInput) => {
   const { amount, bkashNumber } = payload;
+  const CREDIT_RATE = 4; // 4 BDT = 1 Credit
+  const creditsRequired = Math.ceil(amount / CREDIT_RATE);
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user || (user.role !== "mentor" && user.role !== "admin")) {
+    throw new AppError("Only mentor and admin accounts are eligible for cash-out withdrawals.", 403);
+  }
 
   const wallet = await prisma.wallet.findUnique({
     where: { userId },
   });
 
-  if (!wallet || wallet.balance < amount) {
+  if (!wallet || wallet.balance < creditsRequired) {
     throw new AppError(
-      `Insufficient spendable wallet balance. Available balance: ${wallet?.balance || 0} BDT`,
+      `Insufficient wallet balance. You need ${creditsRequired} Credits (${amount} BDT) but have ${wallet?.balance || 0} Credits available.`,
       400
     );
   }
@@ -209,7 +204,17 @@ const requestWithdrawal = async (userId: string, payload: IRequestWithdrawalInpu
   const merchantInvoiceNumber = `WDW-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
   const { updatedWallet, payment } = await prisma.$transaction(async (tx) => {
-    // 1. Create completed payout Payment record
+    const wallet = await tx.wallet.findUnique({
+      where: { userId },
+    });
+
+    if (!wallet || wallet.balance < creditsRequired) {
+      throw new AppError(
+        `Insufficient wallet balance. You need ${creditsRequired} Credits (${amount} BDT) but have ${wallet?.balance || 0} Credits available.`,
+        400
+      );
+    }
+
     const payment = await tx.payment.create({
       data: {
         userId,
@@ -224,22 +229,20 @@ const requestWithdrawal = async (userId: string, payload: IRequestWithdrawalInpu
       },
     });
 
-    // 2. Decrement wallet spendable balance and increment totalWithdrawn
     const updatedWallet = await tx.wallet.update({
       where: { userId },
       data: {
-        balance: { decrement: amount },
+        balance: { decrement: creditsRequired },
         totalWithdrawn: { increment: amount },
       },
     });
 
-    // 3. Create append-only CreditTransaction audit log
     await tx.creditTransaction.create({
       data: {
         walletId: updatedWallet.id,
-        amount: -amount,
+        amount: -creditsRequired,
         type: "WITHDRAWAL",
-        description: `bKash Cash-Out to ${bkashNumber}`,
+        description: `bKash Cash-Out: ${amount} BDT (${creditsRequired} Credits) to ${bkashNumber}`,
         referenceId: payment.id,
       },
     });
@@ -249,7 +252,7 @@ const requestWithdrawal = async (userId: string, payload: IRequestWithdrawalInpu
 
   return {
     success: true,
-    message: `Successfully processed withdrawal of ${amount} BDT to bKash number ${bkashNumber}`,
+    message: `Successfully processed withdrawal of ${amount} BDT (${creditsRequired} Credits) to bKash number ${bkashNumber}`,
     wallet: updatedWallet,
     payment,
   };
