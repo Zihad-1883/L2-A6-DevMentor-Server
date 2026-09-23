@@ -13,11 +13,11 @@ async function bootstrap(): Promise<void> {
 
   // 3. Start HTTP server
   const server = app.listen(env.PORT, () => {
-    console.log(`✅  Kōdex Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
+    console.log(`✅  DevMentor Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
     console.log(`🔗  http://localhost:${env.PORT}/api/v1/health`);
   });
 
-  // 3. Graceful shutdown 
+  // 4. Graceful shutdown 
   const shutdown = async (signal: string) => {
     console.log(`\n⚠️  ${signal} received — shutting down gracefully...`);
     server.close(async () => {
@@ -47,10 +47,13 @@ async function bootstrap(): Promise<void> {
   });
 }
 
-bootstrap().catch((error) => {
-  console.error("❌ Failed to start server:", error);
-  process.exit(1);
-});
+// Only start standalone HTTP server in non-Vercel environments
+if (!process.env.VERCEL) {
+  bootstrap().catch((error) => {
+    console.error("❌ Failed to start server:", error);
+    process.exit(1);
+  });
+}
 
 // Export for Vercel / serverless platforms
 export default app;
