@@ -19,16 +19,16 @@ async function bootstrap(): Promise<void> {
 
   // 4. Graceful shutdown 
   const shutdown = async (signal: string) => {
-    console.log(`\n⚠️  ${signal} received — shutting down gracefully...`);
+    console.log(`\n ${signal} received — shutting down gracefully...`);
     server.close(async () => {
       await disconnectDB();
-      console.log("👋  Server closed.");
+      console.log("Server closed.");
       process.exit(0);
     });
   };
 
   process.on("SIGTERM", () => shutdown("SIGTERM"));
-  process.on("SIGINT",  () => shutdown("SIGINT"));   // Ctrl+C
+  process.on("SIGINT", () => shutdown("SIGINT"));   // Ctrl+C
 
   process.on("unhandledRejection", (reason: unknown) => {
     console.error("💥 Unhandled Rejection:", reason);

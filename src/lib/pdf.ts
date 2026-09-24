@@ -24,7 +24,7 @@ export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Bu
       doc
         .fillColor("#4F46E5")
         .fontSize(24)
-        .text("Kodex / DevMentor", { align: "left" })
+        .text("DevMentor", { align: "left" })
         .fontSize(10)
         .fillColor("#6B7280")
         .text("Official Payment Receipt", { align: "left" })

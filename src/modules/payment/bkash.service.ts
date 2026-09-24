@@ -119,7 +119,7 @@ const createPayment = async (
     if (data.statusCode === "2001" || data.statusCode === "2002" || data.statusCode === "9999") {
       await bkashTokenCache.clear();
     }
-    console.error("❌ bKash Create Payment Raw Response:", { status: response.status, data });
+    console.error("bKash Create Payment Raw Response:", { status: response.status, data });
     throw new AppError(
       `bKash payment creation failed: ${data.statusMessage || "Unable to generate bKash checkout session"}`,
       400
@@ -150,7 +150,7 @@ const executePayment = async (
   const data = await parseBkashJSON<IBKashExecutePaymentResponse>(response);
 
   if (!response.ok || (data.statusCode !== "0000" && data.statusCode !== "2018" && data.statusCode !== "2029" && data.statusCode !== "2117")) {
-    console.error("❌ bKash Execute Payment Raw Response:", { status: response.status, data });
+    console.error("bKash Execute Payment Raw Response:", { status: response.status, data });
     throw new AppError(
       `bKash payment execution failed: ${data.statusMessage || "Payment execution declined"}`,
       400

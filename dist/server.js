@@ -826,7 +826,7 @@ var createPayment = async (payload) => {
     if (data.statusCode === "2001" || data.statusCode === "2002" || data.statusCode === "9999") {
       await bkashTokenCache.clear();
     }
-    console.error("\u274C bKash Create Payment Raw Response:", { status: response.status, data });
+    console.error("bKash Create Payment Raw Response:", { status: response.status, data });
     throw new AppError(
       `bKash payment creation failed: ${data.statusMessage || "Unable to generate bKash checkout session"}`,
       400
@@ -848,7 +848,7 @@ var executePayment = async (paymentID) => {
   });
   const data = await parseBkashJSON(response);
   if (!response.ok || data.statusCode !== "0000" && data.statusCode !== "2018" && data.statusCode !== "2029" && data.statusCode !== "2117") {
-    console.error("\u274C bKash Execute Payment Raw Response:", { status: response.status, data });
+    console.error("bKash Execute Payment Raw Response:", { status: response.status, data });
     throw new AppError(
       `bKash payment execution failed: ${data.statusMessage || "Payment execution declined"}`,
       400
@@ -888,7 +888,7 @@ var generatePaymentReceiptPDF = (data) => {
       doc.on("data", (chunk) => buffers.push(chunk));
       doc.on("end", () => resolve(Buffer.concat(buffers)));
       doc.on("error", (err) => reject(err));
-      doc.fillColor("#4F46E5").fontSize(24).text("Kodex / DevMentor", { align: "left" }).fontSize(10).fillColor("#6B7280").text("Official Payment Receipt", { align: "left" }).moveDown();
+      doc.fillColor("#4F46E5").fontSize(24).text("DevMentor", { align: "left" }).fontSize(10).fillColor("#6B7280").text("Official Payment Receipt", { align: "left" }).moveDown();
       doc.strokeColor("#E5E7EB").lineWidth(1).moveTo(50, doc.y).lineTo(545, doc.y).stroke().moveDown(1.5);
       doc.fillColor("#111827").fontSize(14).text(`Receipt #: ${data.invoiceNumber}`).fontSize(10).fillColor("#4B5563").text(`Transaction ID (TrxID): ${data.trxID}`).text(`Date: ${data.date.toLocaleString()}`).text(`Status: COMPLETED (PAID via bKash)`).moveDown();
       doc.fillColor("#111827").fontSize(12).text("Billed To:").fontSize(10).fillColor("#4B5563").text(`Student Name: ${data.studentName}`).text(`Email: ${data.studentEmail}`).moveDown(1.5);
@@ -945,7 +945,7 @@ var sendPaymentReceiptEmail = async (input) => {
           </div>
           <p>We have attached your official PDF payment receipt to this email.</p>
           <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
-          <p style="font-size: 12px; color: #6b7280; text-align: center;">Kodex DevMentor Platform \u2022 High-Impact Mentorship</p>
+          <p style="font-size: 12px; color: #6b7280; text-align: center;">DevMentor Platform \u2022 High-Impact Mentorship</p>
         </div>
       `,
       attachments: [
@@ -4572,10 +4572,10 @@ async function bootstrap() {
   });
   const shutdown = async (signal) => {
     console.log(`
-\u26A0\uFE0F  ${signal} received \u2014 shutting down gracefully...`);
+ ${signal} received \u2014 shutting down gracefully...`);
     server.close(async () => {
       await disconnectDB();
-      console.log("\u{1F44B}  Server closed.");
+      console.log("Server closed.");
       process.exit(0);
     });
   };

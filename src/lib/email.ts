@@ -49,7 +49,7 @@ export const sendPaymentReceiptEmail = async (input: ISendReceiptEmailInput): Pr
           </div>
           <p>We have attached your official PDF payment receipt to this email.</p>
           <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
-          <p style="font-size: 12px; color: #6b7280; text-align: center;">Kodex DevMentor Platform • High-Impact Mentorship</p>
+          <p style="font-size: 12px; color: #6b7280; text-align: center;">DevMentor Platform • High-Impact Mentorship</p>
         </div>
       `,
       attachments: [
