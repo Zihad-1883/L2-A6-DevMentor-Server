@@ -966,8 +966,11 @@ var sendPaymentReceiptEmail = async (input) => {
 // src/modules/payment/payment.service.ts
 var initiateTopUp = async (userId, payload) => {
   const { amount } = payload;
-  if (amount < 10) {
-    throw new AppError("Minimum top-up amount is 10 BDT", 400);
+  if (amount < 4) {
+    throw new AppError("Minimum top-up amount is 4 BDT (1 Credit)", 400);
+  }
+  if (amount % 4 !== 0) {
+    throw new AppError("Top-up amount must be divisible by 4 (1 Credit = 4 BDT). For example: 4, 8, 400, 500 BDT.", 400);
   }
   const user = await prisma.user.findUnique({
     where: { id: userId }
