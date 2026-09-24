@@ -158,6 +158,7 @@ const executePaymentAndTopUp = async (paymentID: string, status: string) => {
     invoiceNumber: updatedPayment.merchantInvoiceNumber,
     trxID: bkashResult.trxID || payment.trxID || paymentID,
     amount: updatedPayment.amount,
+    creditsEarned,
     date: updatedPayment.updatedAt,
     studentName: payment.user.name,
     studentEmail: payment.user.email,
@@ -168,6 +169,7 @@ const executePaymentAndTopUp = async (paymentID: string, status: string) => {
         studentName: payment.user.name,
         invoiceNumber: updatedPayment.merchantInvoiceNumber,
         amount: updatedPayment.amount,
+        creditsEarned,
         pdfBuffer,
       });
     })

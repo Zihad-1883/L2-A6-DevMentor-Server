@@ -888,7 +888,7 @@ var generatePaymentReceiptPDF = (data) => {
       doc.on("data", (chunk) => buffers.push(chunk));
       doc.on("end", () => resolve(Buffer.concat(buffers)));
       doc.on("error", (err) => reject(err));
-      doc.fillColor("#4F46E5").fontSize(24).text("K\u014Ddex / DevMentor", { align: "left" }).fontSize(10).fillColor("#6B7280").text("Official Payment Receipt", { align: "left" }).moveDown();
+      doc.fillColor("#4F46E5").fontSize(24).text("Kodex / DevMentor", { align: "left" }).fontSize(10).fillColor("#6B7280").text("Official Payment Receipt", { align: "left" }).moveDown();
       doc.strokeColor("#E5E7EB").lineWidth(1).moveTo(50, doc.y).lineTo(545, doc.y).stroke().moveDown(1.5);
       doc.fillColor("#111827").fontSize(14).text(`Receipt #: ${data.invoiceNumber}`).fontSize(10).fillColor("#4B5563").text(`Transaction ID (TrxID): ${data.trxID}`).text(`Date: ${data.date.toLocaleString()}`).text(`Status: COMPLETED (PAID via bKash)`).moveDown();
       doc.fillColor("#111827").fontSize(12).text("Billed To:").fontSize(10).fillColor("#4B5563").text(`Student Name: ${data.studentName}`).text(`Email: ${data.studentEmail}`).moveDown(1.5);
@@ -896,9 +896,9 @@ var generatePaymentReceiptPDF = (data) => {
       doc.fillColor("#374151").fontSize(10).text("Description", 50, tableTop).text("Payment Gateway", 300, tableTop).text("Amount (BDT)", 450, tableTop, { align: "right" });
       doc.moveTo(50, tableTop + 15).lineTo(545, tableTop + 15).stroke();
       const itemTop = tableTop + 25;
-      doc.fillColor("#111827").text("DevMentor Credit Top-Up", 50, itemTop).text("bKash PGW", 300, itemTop).text(`\u09F3${data.amount.toFixed(2)}`, 450, itemTop, { align: "right" });
+      doc.fillColor("#111827").text("DevMentor Credit Top-Up", 50, itemTop).text("bKash PGW", 300, itemTop).text(`BDT ${data.amount.toFixed(2)}`, 450, itemTop, { align: "right" });
       doc.moveTo(50, itemTop + 20).lineTo(545, itemTop + 20).stroke().moveDown(2);
-      doc.fillColor("#4F46E5").fontSize(14).text(`Total Credits Added: ${data.amount} Credits`, { align: "right" }).moveDown(2);
+      doc.fillColor("#4F46E5").fontSize(14).text(`Total Credits Added: ${data.creditsEarned} Credits`, { align: "right" }).moveDown(2);
       doc.fillColor("#9CA3AF").fontSize(9).text("Thank you for learning with DevMentor! If you have questions regarding this receipt, please contact support@devmentor.com.", 50, doc.y, {
         align: "center",
         width: 495
@@ -923,7 +923,7 @@ var transporter = nodemailer.createTransport({
   } : void 0
 });
 var sendPaymentReceiptEmail = async (input) => {
-  const { toEmail, studentName, invoiceNumber, amount, pdfBuffer } = input;
+  const { toEmail, studentName, invoiceNumber, amount, creditsEarned, pdfBuffer } = input;
   if (!env.SMTP_USER || !env.SMTP_PASS) {
     console.warn("SMTP credentials not fully set up in .env. Skipping receipt email send.");
     return false;
@@ -937,15 +937,15 @@ var sendPaymentReceiptEmail = async (input) => {
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
           <h2 style="color: #4f46e5; margin-top: 0;">Payment Received! \u{1F389}</h2>
           <p>Hi <strong>${studentName}</strong>,</p>
-          <p>Thank you for purchasing credits on DevMentor. Your top-up of <strong>${amount} BDT (${amount} Credits)</strong> was successfully processed via bKash.</p>
+          <p>Thank you for purchasing credits on DevMentor. Your top-up of <strong>${amount} BDT (${creditsEarned} Credits)</strong> was successfully processed via bKash.</p>
           <div style="background-color: #f9fafb; padding: 15px; border-radius: 6px; margin: 20px 0;">
             <p style="margin: 5px 0;"><strong>Invoice Number:</strong> ${invoiceNumber}</p>
-            <p style="margin: 5px 0;"><strong>Amount Paid:</strong> \u09F3${amount.toFixed(2)} BDT</p>
-            <p style="margin: 5px 0;"><strong>Credits Added:</strong> ${amount} Credits</p>
+            <p style="margin: 5px 0;"><strong>Amount Paid:</strong> BDT ${amount.toFixed(2)}</p>
+            <p style="margin: 5px 0;"><strong>Credits Added:</strong> ${creditsEarned} Credits</p>
           </div>
           <p>We have attached your official PDF payment receipt to this email.</p>
           <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
-          <p style="font-size: 12px; color: #6b7280; text-align: center;">K\u014Ddex DevMentor Platform \u2022 High-Impact Mentorship</p>
+          <p style="font-size: 12px; color: #6b7280; text-align: center;">Kodex DevMentor Platform \u2022 High-Impact Mentorship</p>
         </div>
       `,
       attachments: [
@@ -1089,6 +1089,7 @@ var executePaymentAndTopUp = async (paymentID, status) => {
     invoiceNumber: updatedPayment.merchantInvoiceNumber,
     trxID: bkashResult.trxID || payment.trxID || paymentID,
     amount: updatedPayment.amount,
+    creditsEarned,
     date: updatedPayment.updatedAt,
     studentName: payment.user.name,
     studentEmail: payment.user.email
@@ -1098,6 +1099,7 @@ var executePaymentAndTopUp = async (paymentID, status) => {
       studentName: payment.user.name,
       invoiceNumber: updatedPayment.merchantInvoiceNumber,
       amount: updatedPayment.amount,
+      creditsEarned,
       pdfBuffer
     });
   }).catch((emailErr) => {

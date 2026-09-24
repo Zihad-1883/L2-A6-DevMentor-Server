@@ -4,6 +4,7 @@ export interface IPaymentReceiptData {
   invoiceNumber: string;
   trxID: string;
   amount: number;
+  creditsEarned: number;
   date: Date;
   studentName: string;
   studentEmail: string;
@@ -23,7 +24,7 @@ export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Bu
       doc
         .fillColor("#4F46E5")
         .fontSize(24)
-        .text("Kōdex / DevMentor", { align: "left" })
+        .text("Kodex / DevMentor", { align: "left" })
         .fontSize(10)
         .fillColor("#6B7280")
         .text("Official Payment Receipt", { align: "left" })
@@ -76,7 +77,7 @@ export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Bu
         .fillColor("#111827")
         .text("DevMentor Credit Top-Up", 50, itemTop)
         .text("bKash PGW", 300, itemTop)
-        .text(`৳${data.amount.toFixed(2)}`, 450, itemTop, { align: "right" });
+        .text(`BDT ${data.amount.toFixed(2)}`, 450, itemTop, { align: "right" });
 
       doc
         .moveTo(50, itemTop + 20)
@@ -87,7 +88,7 @@ export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Bu
       doc
         .fillColor("#4F46E5")
         .fontSize(14)
-        .text(`Total Credits Added: ${data.amount} Credits`, { align: "right" })
+        .text(`Total Credits Added: ${data.creditsEarned} Credits`, { align: "right" })
         .moveDown(2);
 
       doc
