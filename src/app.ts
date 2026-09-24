@@ -18,6 +18,7 @@ import { notFoundHandler } from "./middlewares/notFound.middleware.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth.js";
+import { paymentController } from "./modules/payment/payment.controller.js";
 import v1Router from "./routes/v1/index.js";
 
 const app = express();
@@ -67,6 +68,21 @@ app.all("/api/v1/auth/*splat", (req, _res, next) => {
   }
   next();
 }, toNodeHandler(auth));
+
+// ── bKash Callback Fallback Aliases ──────────────────────────────────────────
+app.all(
+  [
+    "/payment/status",
+    "/payments/status",
+    "/api/v1/payment/status",
+    "/api/v1/payments/status",
+    "/api/v1/payment/callback",
+    "/api/v1/payment/bkash/callback",
+  ],
+  (req, res, next) => {
+    paymentController.bkashCallbackHandler(req, res, next);
+  }
+);
 
 // ── API routes ────────────────────────────────────────────────────────────────
 app.use("/api/v1", v1Router);

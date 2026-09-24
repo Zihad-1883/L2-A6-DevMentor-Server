@@ -17,9 +17,13 @@ router.post(
 );
 
 
-// 2. bKash Callback (Supports GET & POST)
+// 2. bKash Callback (Supports GET & POST with multiple route aliases)
 router.get("/bkash/callback", paymentController.bkashCallbackHandler);
 router.post("/bkash/callback", paymentController.bkashCallbackHandler);
+router.get("/status", paymentController.bkashCallbackHandler);
+router.post("/status", paymentController.bkashCallbackHandler);
+router.get("/callback", paymentController.bkashCallbackHandler);
+router.post("/callback", paymentController.bkashCallbackHandler);
 
 // 3. Get User Wallet & Transactions
 router.get("/wallet/me", requireAuth, paymentController.getWalletHandler);

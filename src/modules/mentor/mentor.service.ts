@@ -1,13 +1,8 @@
-/**
- * @file src/modules/mentor/mentor.service.ts
- * @description Domain logic for Mentor applications, public directory, and profile views.
- */
-
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/apiError.js";
 import type { IApplyMentorInput, IMentorQueryFilters } from "./mentor.interface.js";
 
-// ── 1. Apply for Mentor Role (Student Initiated) ─────────────────────────────
+// 1. Apply for Mentor Role (Student Initiated)
 const applyForMentor = async (userId: string, payload: IApplyMentorInput) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -70,7 +65,7 @@ const applyForMentor = async (userId: string, payload: IApplyMentorInput) => {
   };
 };
 
-// ── 2. Get Public Approved Mentors Directory ─────────────────────────────────
+// 2. Get Public Approved Mentors Directory
 const getApprovedMentors = async (filters: IMentorQueryFilters = {}) => {
   const page = Number(filters.page) || 1;
   const limit = Number(filters.limit) || 10;
@@ -131,7 +126,7 @@ const getApprovedMentors = async (filters: IMentorQueryFilters = {}) => {
   };
 };
 
-// ── 3. Get Single Mentor Profile Details ─────────────────────────────────────
+// 3. Get Single Mentor Profile Details
 const getMentorById = async (mentorIdOrUserId: string) => {
   const mentorProfile = await prisma.mentorProfile.findFirst({
     where: {
