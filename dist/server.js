@@ -4690,11 +4690,236 @@ var getMentorExams = async (mentorId, page = 1, limit = 10) => {
     data: exams
   };
 };
+var getAvailableExams = async (studentId, page = 1, limit = 10) => {
+  const skip = (page - 1) * limit;
+  const [cohortEnrollments, sprintRequests] = await Promise.all([
+    prisma.cohortEnrollment.findMany({
+      where: { studentId },
+      select: { cohortId: true }
+    }),
+    prisma.sprintRequest.findMany({
+      where: { studentId },
+      select: { id: true }
+    })
+  ]);
+  const cohortIds = cohortEnrollments.map((c) => c.cohortId);
+  const sprintIds = sprintRequests.map((s) => s.id);
+  const whereClause = {
+    status: "PUBLISHED",
+    OR: [
+      { isFree: true },
+      { cohortId: { in: cohortIds } },
+      { sprintId: { in: sprintIds } }
+    ]
+  };
+  const [exams, total] = await Promise.all([
+    prisma.exam.findMany({
+      where: whereClause,
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+      include: {
+        mentor: { select: { id: true, name: true, image: true } },
+        cohort: { select: { id: true, title: true } },
+        sprint: { select: { id: true, title: true } },
+        _count: { select: { questions: true } }
+      }
+    }),
+    prisma.exam.count({ where: whereClause })
+  ]);
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
+    },
+    data: exams
+  };
+};
+var startExamAttempt = async (studentId, examId) => {
+  const exam = await prisma.exam.findUnique({
+    where: { id: examId },
+    include: {
+      mentor: { select: { id: true, name: true } },
+      questions: {
+        select: {
+          id: true,
+          questionText: true,
+          options: true,
+          marks: true
+        }
+      }
+    }
+  });
+  if (!exam) {
+    throw new AppError("Exam not found", 404);
+  }
+  if (exam.status !== "PUBLISHED") {
+    throw new AppError("This exam is not currently active or published", 400);
+  }
+  if (!exam.isFree) {
+    let isEligible = false;
+    if (exam.cohortId) {
+      const enrollment = await prisma.cohortEnrollment.findUnique({
+        where: {
+          cohortId_studentId: { cohortId: exam.cohortId, studentId }
+        }
+      });
+      if (enrollment) isEligible = true;
+    }
+    if (exam.sprintId) {
+      const sprint = await prisma.sprintRequest.findFirst({
+        where: { id: exam.sprintId, studentId }
+      });
+      if (sprint) isEligible = true;
+    }
+    if (!isEligible) {
+      throw new AppError(
+        "You are not enrolled in the Cohort or Sprint required to take this exam",
+        403
+      );
+    }
+  }
+  const attempt = await prisma.examAttempt.create({
+    data: {
+      examId,
+      studentId,
+      startedAt: /* @__PURE__ */ new Date(),
+      answers: []
+    }
+  });
+  return {
+    attemptId: attempt.id,
+    startedAt: attempt.startedAt,
+    exam: {
+      id: exam.id,
+      title: exam.title,
+      description: exam.description,
+      durationMinutes: exam.durationMinutes,
+      totalMarks: exam.totalMarks,
+      passMark: exam.passMark,
+      mentor: exam.mentor,
+      questions: exam.questions
+      // Sanitized: correctOptionIndex & explanation are NOT included
+    }
+  };
+};
+var submitExamAttempt = async (studentId, examId, submittedAnswers) => {
+  const exam = await prisma.exam.findUnique({
+    where: { id: examId },
+    include: {
+      questions: true
+    }
+  });
+  if (!exam) {
+    throw new AppError("Exam not found", 404);
+  }
+  const attempt = await prisma.examAttempt.findFirst({
+    where: { examId, studentId, submittedAt: null },
+    orderBy: { startedAt: "desc" }
+  });
+  let totalEarnedScore = 0;
+  const answerBreakdown = exam.questions.map((q) => {
+    const studentAns = submittedAnswers.find((a) => a.questionId === q.id);
+    const selectedOption = studentAns ? studentAns.selectedOption : -1;
+    const isCorrect = selectedOption === q.correctOptionIndex;
+    if (isCorrect) {
+      totalEarnedScore += q.marks;
+    }
+    return {
+      questionId: q.id,
+      questionText: q.questionText,
+      options: q.options,
+      selectedOption,
+      correctOptionIndex: q.correctOptionIndex,
+      isCorrect,
+      marksEarned: isCorrect ? q.marks : 0,
+      totalMarks: q.marks,
+      explanation: q.explanation
+    };
+  });
+  const passMark = exam.passMark ?? 70;
+  const percentage = Math.round(totalEarnedScore / exam.totalMarks * 100 * 100) / 100;
+  const isPassed = percentage >= passMark;
+  let updatedAttempt;
+  if (attempt) {
+    updatedAttempt = await prisma.examAttempt.update({
+      where: { id: attempt.id },
+      data: {
+        score: totalEarnedScore,
+        percentage,
+        isPassed,
+        submittedAt: /* @__PURE__ */ new Date(),
+        answers: answerBreakdown
+      }
+    });
+  } else {
+    updatedAttempt = await prisma.examAttempt.create({
+      data: {
+        examId,
+        studentId,
+        score: totalEarnedScore,
+        percentage,
+        isPassed,
+        startedAt: /* @__PURE__ */ new Date(),
+        submittedAt: /* @__PURE__ */ new Date(),
+        answers: answerBreakdown
+      }
+    });
+  }
+  return {
+    attemptId: updatedAttempt.id,
+    score: totalEarnedScore,
+    totalMarks: exam.totalMarks,
+    percentage,
+    passMark: exam.passMark,
+    isPassed,
+    submittedAt: updatedAttempt.submittedAt,
+    breakdown: answerBreakdown
+  };
+};
+var getStudentAttempts = async (studentId, page = 1, limit = 10) => {
+  const skip = (page - 1) * limit;
+  const [attempts, total] = await Promise.all([
+    prisma.examAttempt.findMany({
+      where: { studentId },
+      orderBy: { startedAt: "desc" },
+      skip,
+      take: limit,
+      include: {
+        exam: {
+          select: {
+            id: true,
+            title: true,
+            totalMarks: true,
+            passMark: true,
+            mentor: { select: { name: true } }
+          }
+        }
+      }
+    }),
+    prisma.examAttempt.count({ where: { studentId } })
+  ]);
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
+    },
+    data: attempts
+  };
+};
 var examService = {
   createExam,
   addQuestionsToExam,
   publishExam,
-  getMentorExams
+  getMentorExams,
+  getAvailableExams,
+  startExamAttempt,
+  submitExamAttempt,
+  getStudentAttempts
 };
 
 // src/modules/exam/exam.controller.ts
@@ -4722,11 +4947,42 @@ var getMentorExamsController = catchAsync(async (req, res) => {
   const result = await examService.getMentorExams(mentorId, page, limit);
   sendSuccess(res, "Mentor exams fetched successfully", result);
 });
+var getAvailableExamsController = catchAsync(async (req, res) => {
+  const studentId = req.user.id;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const result = await examService.getAvailableExams(studentId, page, limit);
+  sendSuccess(res, "Available exams fetched successfully", result);
+});
+var startExamAttemptController = catchAsync(async (req, res) => {
+  const studentId = req.user.id;
+  const { examId } = req.params;
+  const result = await examService.startExamAttempt(studentId, examId);
+  sendSuccess(res, "Exam attempt started successfully. Good luck!", result);
+});
+var submitExamAttemptController = catchAsync(async (req, res) => {
+  const studentId = req.user.id;
+  const { examId } = req.params;
+  const { answers } = req.body;
+  const result = await examService.submitExamAttempt(studentId, examId, answers);
+  sendSuccess(res, "Exam submitted and evaluated successfully", result);
+});
+var getStudentAttemptsController = catchAsync(async (req, res) => {
+  const studentId = req.user.id;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const result = await examService.getStudentAttempts(studentId, page, limit);
+  sendSuccess(res, "Student exam attempts fetched successfully", result);
+});
 var examController = {
   createExamController,
   addQuestionsController,
   publishExamController,
-  getMentorExamsController
+  getMentorExamsController,
+  getAvailableExamsController,
+  startExamAttemptController,
+  submitExamAttemptController,
+  getStudentAttemptsController
 };
 
 // src/modules/exam/exam.routes.ts
@@ -4756,6 +5012,31 @@ router12.get(
   requireAuth,
   requireRole("mentor"),
   examController.getMentorExamsController
+);
+router12.get(
+  "/",
+  requireAuth,
+  requireRole("student"),
+  examController.getAvailableExamsController
+);
+router12.get(
+  "/me/attempts",
+  requireAuth,
+  requireRole("student"),
+  examController.getStudentAttemptsController
+);
+router12.get(
+  "/:examId/start",
+  requireAuth,
+  requireRole("student"),
+  examController.startExamAttemptController
+);
+router12.post(
+  "/:examId/submit",
+  requireAuth,
+  requireRole("student"),
+  validate(submitExamSchema),
+  examController.submitExamAttemptController
 );
 var examRoutes = router12;
 

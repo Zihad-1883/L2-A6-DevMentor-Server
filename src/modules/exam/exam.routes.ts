@@ -5,6 +5,7 @@ import { validate } from "../../middlewares/validate.middleware.js";
 import {
   createExamSchema,
   addQuestionsSchema,
+  submitExamSchema,
 } from "./exam.validation.js";
 import { examController } from "./exam.controller.js";
 
@@ -14,7 +15,7 @@ const router = Router();
 // 👨‍🏫 MENTOR EXAM MANAGEMENT ROUTES
 // ==========================================
 
-// 1. Create a new Exam (DRAFT mode)
+// 5. Create a new Exam (DRAFT mode)
 router.post(
   "/",
   requireAuth,
@@ -23,7 +24,7 @@ router.post(
   examController.createExamController
 );
 
-// 2. Add / Bulk Upload Questions to an Exam
+// 6. Add / Bulk Upload Questions to an Exam
 router.post(
   "/:examId/questions",
   requireAuth,
@@ -32,7 +33,7 @@ router.post(
   examController.addQuestionsController
 );
 
-// 3. Publish an Exam (Make active for students)
+// 7. Publish an Exam (Make active for students)
 router.patch(
   "/:examId/publish",
   requireAuth,
@@ -40,7 +41,7 @@ router.patch(
   examController.publishExamController
 );
 
-// 4. Get Mentor's Created Exams List
+// 8. Get Mentor's Created Exams List
 router.get(
   "/mentor/my-exams",
   requireAuth,
@@ -48,4 +49,42 @@ router.get(
   examController.getMentorExamsController
 );
 
+// ==========================================
+// 👨‍🎓 STUDENT EXAM PARTICIPATION ROUTES
+// ==========================================
+
+// 1. Browse Available Exams (Free public + enrolled cohort/sprint exams)
+router.get(
+  "/",
+  requireAuth,
+  requireRole("student"),
+  examController.getAvailableExamsController
+);
+
+// 2. View Past Exam Attempt History
+router.get(
+  "/me/attempts",
+  requireAuth,
+  requireRole("student"),
+  examController.getStudentAttemptsController
+);
+
+// 3. Start an Exam (Receives sanitized questions without correct answers)
+router.get(
+  "/:examId/start",
+  requireAuth,
+  requireRole("student"),
+  examController.startExamAttemptController
+);
+
+// 4. Submit Exam Answers & Get Auto-Graded Result
+router.post(
+  "/:examId/submit",
+  requireAuth,
+  requireRole("student"),
+  validate(submitExamSchema),
+  examController.submitExamAttemptController
+);
+
 export const examRoutes = router;
+

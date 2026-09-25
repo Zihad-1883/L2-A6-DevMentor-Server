@@ -40,9 +40,57 @@ const getMentorExamsController = catchAsync(async (req: Request, res: Response) 
   sendSuccess(res, "Mentor exams fetched successfully", result);
 });
 
+// 5. Get Available Exams Controller (Students)
+const getAvailableExamsController = catchAsync(async (req: Request, res: Response) => {
+  const studentId = req.user!.id;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+
+  const result = await examService.getAvailableExams(studentId, page, limit);
+
+  sendSuccess(res, "Available exams fetched successfully", result);
+});
+
+// 6. Start Exam Attempt Controller (Sanitized)
+const startExamAttemptController = catchAsync(async (req: Request, res: Response) => {
+  const studentId = req.user!.id;
+  const { examId } = req.params;
+
+  const result = await examService.startExamAttempt(studentId, examId as string);
+
+  sendSuccess(res, "Exam attempt started successfully. Good luck!", result);
+});
+
+// 7. Submit Exam Attempt & Auto-Evaluate Controller
+const submitExamAttemptController = catchAsync(async (req: Request, res: Response) => {
+  const studentId = req.user!.id;
+  const { examId } = req.params;
+  const { answers } = req.body;
+
+  const result = await examService.submitExamAttempt(studentId, examId as string, answers);
+
+  sendSuccess(res, "Exam submitted and evaluated successfully", result);
+});
+
+// 8. Get Student Attempts Controller
+const getStudentAttemptsController = catchAsync(async (req: Request, res: Response) => {
+  const studentId = req.user!.id;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+
+  const result = await examService.getStudentAttempts(studentId, page, limit);
+
+  sendSuccess(res, "Student exam attempts fetched successfully", result);
+});
+
 export const examController = {
   createExamController,
   addQuestionsController,
   publishExamController,
   getMentorExamsController,
+  getAvailableExamsController,
+  startExamAttemptController,
+  submitExamAttemptController,
+  getStudentAttemptsController,
 };
+
