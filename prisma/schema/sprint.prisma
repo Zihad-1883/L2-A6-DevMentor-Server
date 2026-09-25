@@ -35,6 +35,7 @@ model SprintRequest {
     deletedAt DateTime?
 
     sessions SprintSession[]
+    exams    Exam[]          @relation("SprintExams")
 
     @@map("sprint_request")
 }

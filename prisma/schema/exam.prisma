@@ -1,0 +1,66 @@
+enum ExamStatus {
+    DRAFT
+    PUBLISHED
+    ARCHIVED
+}
+
+model Exam {
+    id       String @id @default(cuid())
+    mentorId String
+    mentor   User   @relation("MentorExams", fields: [mentorId], references: [id], onDelete: Cascade)
+
+    cohortId String?
+    cohort   CohortProgram? @relation("CohortExams", fields: [cohortId], references: [id], onDelete: SetNull)
+
+    sprintId String?
+    sprint   SprintRequest? @relation("SprintExams", fields: [sprintId], references: [id], onDelete: SetNull)
+
+    isFree Boolean @default(true)
+
+    title           String
+    description     String?
+    durationMinutes Int        @default(30)
+    totalMarks      Int        @default(100)
+    passMark        Int?       @default(60)
+    status          ExamStatus @default(DRAFT)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    questions Question[]
+    attempts  ExamAttempt[]
+
+    @@map("exam")
+}
+
+model Question {
+    id     String @id @default(cuid())
+    examId String
+    exam   Exam   @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+    questionText       String
+    options            String[] // Array of strings e.g. ["Option A", "Option B", "Option C", "Option D"]
+    correctOptionIndex Int // Index of correct option (0-indexed)
+    explanation        String? // Explanation for student after submission
+    marks              Int      @default(5)
+
+    @@map("question")
+}
+
+model ExamAttempt {
+    id        String @id @default(cuid())
+    examId    String
+    exam      Exam   @relation(fields: [examId], references: [id], onDelete: Cascade)
+    studentId String
+    student   User   @relation("StudentExamAttempts", fields: [studentId], references: [id], onDelete: Cascade)
+
+    score       Int       @default(0)
+    percentage  Float     @default(0)
+    isPassed    Boolean   @default(false)
+    startedAt   DateTime  @default(now())
+    submittedAt DateTime?
+
+    answers Json // Array e.g. [{ questionId: "...", selectedOption: 1 }]
+
+    @@map("exam_attempt")
+}

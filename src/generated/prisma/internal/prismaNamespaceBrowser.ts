@@ -62,6 +62,9 @@ export const ModelName = {
   CohortEnrollment: 'CohortEnrollment',
   CohortSession: 'CohortSession',
   CohortSessionParticipant: 'CohortSessionParticipant',
+  Exam: 'Exam',
+  Question: 'Question',
+  ExamAttempt: 'ExamAttempt',
   MentorProfile: 'MentorProfile',
   Payment: 'Payment',
   PlatformSetting: 'PlatformSetting',
@@ -259,6 +262,53 @@ export const CohortSessionParticipantScalarFieldEnum = {
 export type CohortSessionParticipantScalarFieldEnum = (typeof CohortSessionParticipantScalarFieldEnum)[keyof typeof CohortSessionParticipantScalarFieldEnum]
 
 
+export const ExamScalarFieldEnum = {
+  id: 'id',
+  mentorId: 'mentorId',
+  cohortId: 'cohortId',
+  sprintId: 'sprintId',
+  isFree: 'isFree',
+  title: 'title',
+  description: 'description',
+  durationMinutes: 'durationMinutes',
+  totalMarks: 'totalMarks',
+  passMark: 'passMark',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExamScalarFieldEnum = (typeof ExamScalarFieldEnum)[keyof typeof ExamScalarFieldEnum]
+
+
+export const QuestionScalarFieldEnum = {
+  id: 'id',
+  examId: 'examId',
+  questionText: 'questionText',
+  options: 'options',
+  correctOptionIndex: 'correctOptionIndex',
+  explanation: 'explanation',
+  marks: 'marks'
+} as const
+
+export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
+
+
+export const ExamAttemptScalarFieldEnum = {
+  id: 'id',
+  examId: 'examId',
+  studentId: 'studentId',
+  score: 'score',
+  percentage: 'percentage',
+  isPassed: 'isPassed',
+  startedAt: 'startedAt',
+  submittedAt: 'submittedAt',
+  answers: 'answers'
+} as const
+
+export type ExamAttemptScalarFieldEnum = (typeof ExamAttemptScalarFieldEnum)[keyof typeof ExamAttemptScalarFieldEnum]
+
+
 export const MentorProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -379,6 +429,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

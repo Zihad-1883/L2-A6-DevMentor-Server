@@ -58,6 +58,15 @@ export const CohortSessionStatus = {
 export type CohortSessionStatus = (typeof CohortSessionStatus)[keyof typeof CohortSessionStatus]
 
 
+export const ExamStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ExamStatus = (typeof ExamStatus)[keyof typeof ExamStatus]
+
+
 export const ExperienceLevel = {
   JUNIOR: 'JUNIOR',
   MID: 'MID',

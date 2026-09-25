@@ -22,6 +22,8 @@ model User {
     studentCodeReviews   CodeReviewRequest[]        @relation("StudentCodeReviews")
     mentorCodeReviews    CodeReviewRequest[]        @relation("MentorCodeReviews")
     mentorSubmissions    CodeReviewSubmission[]     @relation("MentorSubmissions")
+    mentorExams          Exam[]                     @relation("MentorExams")
+    studentExamAttempts  ExamAttempt[]              @relation("StudentExamAttempts")
 
     @@map("user")
 }

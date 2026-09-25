@@ -287,6 +287,7 @@ export type SprintRequestWhereInput = {
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   claimedByMentor?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   sessions?: Prisma.SprintSessionListRelationFilter
+  exams?: Prisma.ExamListRelationFilter
 }
 
 export type SprintRequestOrderByWithRelationInput = {
@@ -307,6 +308,7 @@ export type SprintRequestOrderByWithRelationInput = {
   student?: Prisma.UserOrderByWithRelationInput
   claimedByMentor?: Prisma.UserOrderByWithRelationInput
   sessions?: Prisma.SprintSessionOrderByRelationAggregateInput
+  exams?: Prisma.ExamOrderByRelationAggregateInput
 }
 
 export type SprintRequestWhereUniqueInput = Prisma.AtLeast<{
@@ -330,6 +332,7 @@ export type SprintRequestWhereUniqueInput = Prisma.AtLeast<{
   student?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   claimedByMentor?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   sessions?: Prisma.SprintSessionListRelationFilter
+  exams?: Prisma.ExamListRelationFilter
 }, "id">
 
 export type SprintRequestOrderByWithAggregationInput = {
@@ -390,6 +393,7 @@ export type SprintRequestCreateInput = {
   student: Prisma.UserCreateNestedOneWithoutSprintsRequestedInput
   claimedByMentor?: Prisma.UserCreateNestedOneWithoutSprintsClaimedInput
   sessions?: Prisma.SprintSessionCreateNestedManyWithoutSprintRequestInput
+  exams?: Prisma.ExamCreateNestedManyWithoutSprintInput
 }
 
 export type SprintRequestUncheckedCreateInput = {
@@ -408,6 +412,7 @@ export type SprintRequestUncheckedCreateInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   sessions?: Prisma.SprintSessionUncheckedCreateNestedManyWithoutSprintRequestInput
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutSprintInput
 }
 
 export type SprintRequestUpdateInput = {
@@ -426,6 +431,7 @@ export type SprintRequestUpdateInput = {
   student?: Prisma.UserUpdateOneRequiredWithoutSprintsRequestedNestedInput
   claimedByMentor?: Prisma.UserUpdateOneWithoutSprintsClaimedNestedInput
   sessions?: Prisma.SprintSessionUpdateManyWithoutSprintRequestNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutSprintNestedInput
 }
 
 export type SprintRequestUncheckedUpdateInput = {
@@ -444,6 +450,7 @@ export type SprintRequestUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SprintSessionUncheckedUpdateManyWithoutSprintRequestNestedInput
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutSprintNestedInput
 }
 
 export type SprintRequestCreateManyInput = {
@@ -503,6 +510,11 @@ export type SprintRequestListRelationFilter = {
 
 export type SprintRequestOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type SprintRequestNullableScalarRelationFilter = {
+  is?: Prisma.SprintRequestWhereInput | null
+  isNot?: Prisma.SprintRequestWhereInput | null
 }
 
 export type IntNullableListFilter<$PrismaModel = never> = {
@@ -659,6 +671,22 @@ export type SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput = 
   deleteMany?: Prisma.SprintRequestScalarWhereInput | Prisma.SprintRequestScalarWhereInput[]
 }
 
+export type SprintRequestCreateNestedOneWithoutExamsInput = {
+  create?: Prisma.XOR<Prisma.SprintRequestCreateWithoutExamsInput, Prisma.SprintRequestUncheckedCreateWithoutExamsInput>
+  connectOrCreate?: Prisma.SprintRequestCreateOrConnectWithoutExamsInput
+  connect?: Prisma.SprintRequestWhereUniqueInput
+}
+
+export type SprintRequestUpdateOneWithoutExamsNestedInput = {
+  create?: Prisma.XOR<Prisma.SprintRequestCreateWithoutExamsInput, Prisma.SprintRequestUncheckedCreateWithoutExamsInput>
+  connectOrCreate?: Prisma.SprintRequestCreateOrConnectWithoutExamsInput
+  upsert?: Prisma.SprintRequestUpsertWithoutExamsInput
+  disconnect?: Prisma.SprintRequestWhereInput | boolean
+  delete?: Prisma.SprintRequestWhereInput | boolean
+  connect?: Prisma.SprintRequestWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SprintRequestUpdateToOneWithWhereWithoutExamsInput, Prisma.SprintRequestUpdateWithoutExamsInput>, Prisma.SprintRequestUncheckedUpdateWithoutExamsInput>
+}
+
 export type SprintRequestCreatetechStackTagsInput = {
   set: string[]
 }
@@ -710,6 +738,7 @@ export type SprintRequestCreateWithoutStudentInput = {
   deletedAt?: Date | string | null
   claimedByMentor?: Prisma.UserCreateNestedOneWithoutSprintsClaimedInput
   sessions?: Prisma.SprintSessionCreateNestedManyWithoutSprintRequestInput
+  exams?: Prisma.ExamCreateNestedManyWithoutSprintInput
 }
 
 export type SprintRequestUncheckedCreateWithoutStudentInput = {
@@ -727,6 +756,7 @@ export type SprintRequestUncheckedCreateWithoutStudentInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   sessions?: Prisma.SprintSessionUncheckedCreateNestedManyWithoutSprintRequestInput
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutSprintInput
 }
 
 export type SprintRequestCreateOrConnectWithoutStudentInput = {
@@ -754,6 +784,7 @@ export type SprintRequestCreateWithoutClaimedByMentorInput = {
   deletedAt?: Date | string | null
   student: Prisma.UserCreateNestedOneWithoutSprintsRequestedInput
   sessions?: Prisma.SprintSessionCreateNestedManyWithoutSprintRequestInput
+  exams?: Prisma.ExamCreateNestedManyWithoutSprintInput
 }
 
 export type SprintRequestUncheckedCreateWithoutClaimedByMentorInput = {
@@ -771,6 +802,7 @@ export type SprintRequestUncheckedCreateWithoutClaimedByMentorInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   sessions?: Prisma.SprintSessionUncheckedCreateNestedManyWithoutSprintRequestInput
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutSprintInput
 }
 
 export type SprintRequestCreateOrConnectWithoutClaimedByMentorInput = {
@@ -835,6 +867,94 @@ export type SprintRequestUpdateManyWithWhereWithoutClaimedByMentorInput = {
   data: Prisma.XOR<Prisma.SprintRequestUpdateManyMutationInput, Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorInput>
 }
 
+export type SprintRequestCreateWithoutExamsInput = {
+  id?: string
+  title: string
+  description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
+  startDate: Date | string
+  durationDays: number
+  selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
+  status?: $Enums.SprintStatus
+  claimedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  student: Prisma.UserCreateNestedOneWithoutSprintsRequestedInput
+  claimedByMentor?: Prisma.UserCreateNestedOneWithoutSprintsClaimedInput
+  sessions?: Prisma.SprintSessionCreateNestedManyWithoutSprintRequestInput
+}
+
+export type SprintRequestUncheckedCreateWithoutExamsInput = {
+  id?: string
+  studentId: string
+  title: string
+  description: string
+  techStackTags?: Prisma.SprintRequestCreatetechStackTagsInput | string[]
+  startDate: Date | string
+  durationDays: number
+  selectedDays?: Prisma.SprintRequestCreateselectedDaysInput | number[]
+  status?: $Enums.SprintStatus
+  claimedByMentorId?: string | null
+  claimedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SprintSessionUncheckedCreateNestedManyWithoutSprintRequestInput
+}
+
+export type SprintRequestCreateOrConnectWithoutExamsInput = {
+  where: Prisma.SprintRequestWhereUniqueInput
+  create: Prisma.XOR<Prisma.SprintRequestCreateWithoutExamsInput, Prisma.SprintRequestUncheckedCreateWithoutExamsInput>
+}
+
+export type SprintRequestUpsertWithoutExamsInput = {
+  update: Prisma.XOR<Prisma.SprintRequestUpdateWithoutExamsInput, Prisma.SprintRequestUncheckedUpdateWithoutExamsInput>
+  create: Prisma.XOR<Prisma.SprintRequestCreateWithoutExamsInput, Prisma.SprintRequestUncheckedCreateWithoutExamsInput>
+  where?: Prisma.SprintRequestWhereInput
+}
+
+export type SprintRequestUpdateToOneWithWhereWithoutExamsInput = {
+  where?: Prisma.SprintRequestWhereInput
+  data: Prisma.XOR<Prisma.SprintRequestUpdateWithoutExamsInput, Prisma.SprintRequestUncheckedUpdateWithoutExamsInput>
+}
+
+export type SprintRequestUpdateWithoutExamsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  durationDays?: Prisma.IntFieldUpdateOperationsInput | number
+  selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
+  status?: Prisma.EnumSprintStatusFieldUpdateOperationsInput | $Enums.SprintStatus
+  claimedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  student?: Prisma.UserUpdateOneRequiredWithoutSprintsRequestedNestedInput
+  claimedByMentor?: Prisma.UserUpdateOneWithoutSprintsClaimedNestedInput
+  sessions?: Prisma.SprintSessionUpdateManyWithoutSprintRequestNestedInput
+}
+
+export type SprintRequestUncheckedUpdateWithoutExamsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  studentId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStackTags?: Prisma.SprintRequestUpdatetechStackTagsInput | string[]
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  durationDays?: Prisma.IntFieldUpdateOperationsInput | number
+  selectedDays?: Prisma.SprintRequestUpdateselectedDaysInput | number[]
+  status?: Prisma.EnumSprintStatusFieldUpdateOperationsInput | $Enums.SprintStatus
+  claimedByMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  claimedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SprintSessionUncheckedUpdateManyWithoutSprintRequestNestedInput
+}
+
 export type SprintRequestCreateWithoutSessionsInput = {
   id?: string
   title: string
@@ -850,6 +970,7 @@ export type SprintRequestCreateWithoutSessionsInput = {
   deletedAt?: Date | string | null
   student: Prisma.UserCreateNestedOneWithoutSprintsRequestedInput
   claimedByMentor?: Prisma.UserCreateNestedOneWithoutSprintsClaimedInput
+  exams?: Prisma.ExamCreateNestedManyWithoutSprintInput
 }
 
 export type SprintRequestUncheckedCreateWithoutSessionsInput = {
@@ -867,6 +988,7 @@ export type SprintRequestUncheckedCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  exams?: Prisma.ExamUncheckedCreateNestedManyWithoutSprintInput
 }
 
 export type SprintRequestCreateOrConnectWithoutSessionsInput = {
@@ -900,6 +1022,7 @@ export type SprintRequestUpdateWithoutSessionsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   student?: Prisma.UserUpdateOneRequiredWithoutSprintsRequestedNestedInput
   claimedByMentor?: Prisma.UserUpdateOneWithoutSprintsClaimedNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutSprintNestedInput
 }
 
 export type SprintRequestUncheckedUpdateWithoutSessionsInput = {
@@ -917,6 +1040,7 @@ export type SprintRequestUncheckedUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutSprintNestedInput
 }
 
 export type SprintRequestCreateManyStudentInput = {
@@ -966,6 +1090,7 @@ export type SprintRequestUpdateWithoutStudentInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   claimedByMentor?: Prisma.UserUpdateOneWithoutSprintsClaimedNestedInput
   sessions?: Prisma.SprintSessionUpdateManyWithoutSprintRequestNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutSprintNestedInput
 }
 
 export type SprintRequestUncheckedUpdateWithoutStudentInput = {
@@ -983,6 +1108,7 @@ export type SprintRequestUncheckedUpdateWithoutStudentInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SprintSessionUncheckedUpdateManyWithoutSprintRequestNestedInput
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutSprintNestedInput
 }
 
 export type SprintRequestUncheckedUpdateManyWithoutStudentInput = {
@@ -1016,6 +1142,7 @@ export type SprintRequestUpdateWithoutClaimedByMentorInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   student?: Prisma.UserUpdateOneRequiredWithoutSprintsRequestedNestedInput
   sessions?: Prisma.SprintSessionUpdateManyWithoutSprintRequestNestedInput
+  exams?: Prisma.ExamUpdateManyWithoutSprintNestedInput
 }
 
 export type SprintRequestUncheckedUpdateWithoutClaimedByMentorInput = {
@@ -1033,6 +1160,7 @@ export type SprintRequestUncheckedUpdateWithoutClaimedByMentorInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SprintSessionUncheckedUpdateManyWithoutSprintRequestNestedInput
+  exams?: Prisma.ExamUncheckedUpdateManyWithoutSprintNestedInput
 }
 
 export type SprintRequestUncheckedUpdateManyWithoutClaimedByMentorInput = {
@@ -1058,10 +1186,12 @@ export type SprintRequestUncheckedUpdateManyWithoutClaimedByMentorInput = {
 
 export type SprintRequestCountOutputType = {
   sessions: number
+  exams: number
 }
 
 export type SprintRequestCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | SprintRequestCountOutputTypeCountSessionsArgs
+  exams?: boolean | SprintRequestCountOutputTypeCountExamsArgs
 }
 
 /**
@@ -1079,6 +1209,13 @@ export type SprintRequestCountOutputTypeDefaultArgs<ExtArgs extends runtime.Type
  */
 export type SprintRequestCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SprintSessionWhereInput
+}
+
+/**
+ * SprintRequestCountOutputType without action
+ */
+export type SprintRequestCountOutputTypeCountExamsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExamWhereInput
 }
 
 
@@ -1100,6 +1237,7 @@ export type SprintRequestSelect<ExtArgs extends runtime.Types.Extensions.Interna
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   claimedByMentor?: boolean | Prisma.SprintRequest$claimedByMentorArgs<ExtArgs>
   sessions?: boolean | Prisma.SprintRequest$sessionsArgs<ExtArgs>
+  exams?: boolean | Prisma.SprintRequest$examsArgs<ExtArgs>
   _count?: boolean | Prisma.SprintRequestCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["sprintRequest"]>
 
@@ -1163,6 +1301,7 @@ export type SprintRequestInclude<ExtArgs extends runtime.Types.Extensions.Intern
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   claimedByMentor?: boolean | Prisma.SprintRequest$claimedByMentorArgs<ExtArgs>
   sessions?: boolean | Prisma.SprintRequest$sessionsArgs<ExtArgs>
+  exams?: boolean | Prisma.SprintRequest$examsArgs<ExtArgs>
   _count?: boolean | Prisma.SprintRequestCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SprintRequestIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1180,6 +1319,7 @@ export type $SprintRequestPayload<ExtArgs extends runtime.Types.Extensions.Inter
     student: Prisma.$UserPayload<ExtArgs>
     claimedByMentor: Prisma.$UserPayload<ExtArgs> | null
     sessions: Prisma.$SprintSessionPayload<ExtArgs>[]
+    exams: Prisma.$ExamPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1593,6 +1733,7 @@ export interface Prisma__SprintRequestClient<T, Null = never, ExtArgs extends ru
   student<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   claimedByMentor<T extends Prisma.SprintRequest$claimedByMentorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SprintRequest$claimedByMentorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   sessions<T extends Prisma.SprintRequest$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SprintRequest$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SprintSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  exams<T extends Prisma.SprintRequest$examsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SprintRequest$examsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2077,6 +2218,30 @@ export type SprintRequest$sessionsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.SprintSessionScalarFieldEnum | Prisma.SprintSessionScalarFieldEnum[]
+}
+
+/**
+ * SprintRequest.exams
+ */
+export type SprintRequest$examsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Exam
+   */
+  select?: Prisma.ExamSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Exam
+   */
+  omit?: Prisma.ExamOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExamInclude<ExtArgs> | null
+  where?: Prisma.ExamWhereInput
+  orderBy?: Prisma.ExamOrderByWithRelationInput | Prisma.ExamOrderByWithRelationInput[]
+  cursor?: Prisma.ExamWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExamScalarFieldEnum | Prisma.ExamScalarFieldEnum[]
 }
 
 /**

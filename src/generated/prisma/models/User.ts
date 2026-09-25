@@ -227,6 +227,8 @@ export type UserWhereInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestListRelationFilter
   mentorCodeReviews?: Prisma.CodeReviewRequestListRelationFilter
   mentorSubmissions?: Prisma.CodeReviewSubmissionListRelationFilter
+  mentorExams?: Prisma.ExamListRelationFilter
+  studentExamAttempts?: Prisma.ExamAttemptListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -252,6 +254,8 @@ export type UserOrderByWithRelationInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestOrderByRelationAggregateInput
   mentorCodeReviews?: Prisma.CodeReviewRequestOrderByRelationAggregateInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionOrderByRelationAggregateInput
+  mentorExams?: Prisma.ExamOrderByRelationAggregateInput
+  studentExamAttempts?: Prisma.ExamAttemptOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -280,6 +284,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   studentCodeReviews?: Prisma.CodeReviewRequestListRelationFilter
   mentorCodeReviews?: Prisma.CodeReviewRequestListRelationFilter
   mentorSubmissions?: Prisma.CodeReviewSubmissionListRelationFilter
+  mentorExams?: Prisma.ExamListRelationFilter
+  studentExamAttempts?: Prisma.ExamAttemptListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -335,6 +341,8 @@ export type UserCreateInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -360,6 +368,8 @@ export type UserUncheckedCreateInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserUpdateInput = {
@@ -385,6 +395,8 @@ export type UserUpdateInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -410,6 +422,8 @@ export type UserUncheckedUpdateInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -624,6 +638,34 @@ export type UserUpdateOneRequiredWithoutCohortSessionsJoinedNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCohortSessionsJoinedInput, Prisma.UserUpdateWithoutCohortSessionsJoinedInput>, Prisma.UserUncheckedUpdateWithoutCohortSessionsJoinedInput>
 }
 
+export type UserCreateNestedOneWithoutMentorExamsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMentorExamsInput, Prisma.UserUncheckedCreateWithoutMentorExamsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMentorExamsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutMentorExamsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMentorExamsInput, Prisma.UserUncheckedCreateWithoutMentorExamsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMentorExamsInput
+  upsert?: Prisma.UserUpsertWithoutMentorExamsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMentorExamsInput, Prisma.UserUpdateWithoutMentorExamsInput>, Prisma.UserUncheckedUpdateWithoutMentorExamsInput>
+}
+
+export type UserCreateNestedOneWithoutStudentExamAttemptsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStudentExamAttemptsInput, Prisma.UserUncheckedCreateWithoutStudentExamAttemptsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStudentExamAttemptsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutStudentExamAttemptsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStudentExamAttemptsInput, Prisma.UserUncheckedCreateWithoutStudentExamAttemptsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStudentExamAttemptsInput
+  upsert?: Prisma.UserUpsertWithoutStudentExamAttemptsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStudentExamAttemptsInput, Prisma.UserUpdateWithoutStudentExamAttemptsInput>, Prisma.UserUncheckedUpdateWithoutStudentExamAttemptsInput>
+}
+
 export type UserCreateNestedOneWithoutMentorProfileInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutMentorProfileInput, Prisma.UserUncheckedCreateWithoutMentorProfileInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutMentorProfileInput
@@ -718,6 +760,8 @@ export type UserCreateWithoutSessionsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -742,6 +786,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -782,6 +828,8 @@ export type UserUpdateWithoutSessionsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -806,6 +854,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -830,6 +880,8 @@ export type UserCreateWithoutAccountsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -854,6 +906,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -894,6 +948,8 @@ export type UserUpdateWithoutAccountsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -918,6 +974,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutStudentCodeReviewsInput = {
@@ -942,6 +1000,8 @@ export type UserCreateWithoutStudentCodeReviewsInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutStudentCodeReviewsInput = {
@@ -966,6 +1026,8 @@ export type UserUncheckedCreateWithoutStudentCodeReviewsInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutStudentCodeReviewsInput = {
@@ -995,6 +1057,8 @@ export type UserCreateWithoutMentorCodeReviewsInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutMentorCodeReviewsInput = {
@@ -1019,6 +1083,8 @@ export type UserUncheckedCreateWithoutMentorCodeReviewsInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutMentorCodeReviewsInput = {
@@ -1059,6 +1125,8 @@ export type UserUpdateWithoutStudentCodeReviewsInput = {
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudentCodeReviewsInput = {
@@ -1083,6 +1151,8 @@ export type UserUncheckedUpdateWithoutStudentCodeReviewsInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUpsertWithoutMentorCodeReviewsInput = {
@@ -1118,6 +1188,8 @@ export type UserUpdateWithoutMentorCodeReviewsInput = {
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMentorCodeReviewsInput = {
@@ -1142,6 +1214,8 @@ export type UserUncheckedUpdateWithoutMentorCodeReviewsInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutMentorSubmissionsInput = {
@@ -1166,6 +1240,8 @@ export type UserCreateWithoutMentorSubmissionsInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutMentorSubmissionsInput = {
@@ -1190,6 +1266,8 @@ export type UserUncheckedCreateWithoutMentorSubmissionsInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutMentorSubmissionsInput = {
@@ -1230,6 +1308,8 @@ export type UserUpdateWithoutMentorSubmissionsInput = {
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMentorSubmissionsInput = {
@@ -1254,6 +1334,8 @@ export type UserUncheckedUpdateWithoutMentorSubmissionsInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutCohortsCreatedInput = {
@@ -1278,6 +1360,8 @@ export type UserCreateWithoutCohortsCreatedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutCohortsCreatedInput = {
@@ -1302,6 +1386,8 @@ export type UserUncheckedCreateWithoutCohortsCreatedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutCohortsCreatedInput = {
@@ -1342,6 +1428,8 @@ export type UserUpdateWithoutCohortsCreatedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCohortsCreatedInput = {
@@ -1366,6 +1454,8 @@ export type UserUncheckedUpdateWithoutCohortsCreatedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutCohortEnrollmentsInput = {
@@ -1390,6 +1480,8 @@ export type UserCreateWithoutCohortEnrollmentsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutCohortEnrollmentsInput = {
@@ -1414,6 +1506,8 @@ export type UserUncheckedCreateWithoutCohortEnrollmentsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutCohortEnrollmentsInput = {
@@ -1454,6 +1548,8 @@ export type UserUpdateWithoutCohortEnrollmentsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCohortEnrollmentsInput = {
@@ -1478,6 +1574,8 @@ export type UserUncheckedUpdateWithoutCohortEnrollmentsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutCohortSessionsJoinedInput = {
@@ -1502,6 +1600,8 @@ export type UserCreateWithoutCohortSessionsJoinedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutCohortSessionsJoinedInput = {
@@ -1526,6 +1626,8 @@ export type UserUncheckedCreateWithoutCohortSessionsJoinedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutCohortSessionsJoinedInput = {
@@ -1566,6 +1668,8 @@ export type UserUpdateWithoutCohortSessionsJoinedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCohortSessionsJoinedInput = {
@@ -1590,6 +1694,248 @@ export type UserUncheckedUpdateWithoutCohortSessionsJoinedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
+}
+
+export type UserCreateWithoutMentorExamsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  isBlocked?: boolean
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  sprintsRequested?: Prisma.SprintRequestCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantCreateNestedManyWithoutStudentInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
+  studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
+  mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
+  mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
+}
+
+export type UserUncheckedCreateWithoutMentorExamsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  isBlocked?: boolean
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedCreateNestedManyWithoutStudentInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
+  studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
+  mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
+}
+
+export type UserCreateOrConnectWithoutMentorExamsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMentorExamsInput, Prisma.UserUncheckedCreateWithoutMentorExamsInput>
+}
+
+export type UserUpsertWithoutMentorExamsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMentorExamsInput, Prisma.UserUncheckedUpdateWithoutMentorExamsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMentorExamsInput, Prisma.UserUncheckedCreateWithoutMentorExamsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMentorExamsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMentorExamsInput, Prisma.UserUncheckedUpdateWithoutMentorExamsInput>
+}
+
+export type UserUpdateWithoutMentorExamsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  sprintsRequested?: Prisma.SprintRequestUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUpdateManyWithoutStudentNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
+  studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
+  mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
+  mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMentorExamsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedUpdateManyWithoutStudentNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
+  studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
+  mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
+}
+
+export type UserCreateWithoutStudentExamAttemptsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  isBlocked?: boolean
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  sprintsRequested?: Prisma.SprintRequestCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantCreateNestedManyWithoutStudentInput
+  wallet?: Prisma.WalletCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
+  studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
+  mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
+  mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+}
+
+export type UserUncheckedCreateWithoutStudentExamAttemptsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role?: string
+  isBlocked?: boolean
+  createdAt: Date | string
+  updatedAt: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutStudentInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedCreateNestedManyWithoutClaimedByMentorInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedCreateNestedManyWithoutMentorInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedCreateNestedManyWithoutStudentInput
+  wallet?: Prisma.WalletUncheckedCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
+  studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
+  mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
+  mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+}
+
+export type UserCreateOrConnectWithoutStudentExamAttemptsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutStudentExamAttemptsInput, Prisma.UserUncheckedCreateWithoutStudentExamAttemptsInput>
+}
+
+export type UserUpsertWithoutStudentExamAttemptsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutStudentExamAttemptsInput, Prisma.UserUncheckedUpdateWithoutStudentExamAttemptsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutStudentExamAttemptsInput, Prisma.UserUncheckedCreateWithoutStudentExamAttemptsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutStudentExamAttemptsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutStudentExamAttemptsInput, Prisma.UserUncheckedUpdateWithoutStudentExamAttemptsInput>
+}
+
+export type UserUpdateWithoutStudentExamAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  sprintsRequested?: Prisma.SprintRequestUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUpdateManyWithoutStudentNestedInput
+  wallet?: Prisma.WalletUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
+  studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
+  mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
+  mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutStudentExamAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  sprintsRequested?: Prisma.SprintRequestUncheckedUpdateManyWithoutStudentNestedInput
+  sprintsClaimed?: Prisma.SprintRequestUncheckedUpdateManyWithoutClaimedByMentorNestedInput
+  cohortsCreated?: Prisma.CohortProgramUncheckedUpdateManyWithoutMentorNestedInput
+  cohortEnrollments?: Prisma.CohortEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+  cohortSessionsJoined?: Prisma.CohortSessionParticipantUncheckedUpdateManyWithoutStudentNestedInput
+  wallet?: Prisma.WalletUncheckedUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
+  studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
+  mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
+  mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
 }
 
 export type UserCreateWithoutMentorProfileInput = {
@@ -1614,6 +1960,8 @@ export type UserCreateWithoutMentorProfileInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutMentorProfileInput = {
@@ -1638,6 +1986,8 @@ export type UserUncheckedCreateWithoutMentorProfileInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutMentorProfileInput = {
@@ -1678,6 +2028,8 @@ export type UserUpdateWithoutMentorProfileInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMentorProfileInput = {
@@ -1702,6 +2054,8 @@ export type UserUncheckedUpdateWithoutMentorProfileInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutPaymentsInput = {
@@ -1726,6 +2080,8 @@ export type UserCreateWithoutPaymentsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutPaymentsInput = {
@@ -1750,6 +2106,8 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutPaymentsInput = {
@@ -1790,6 +2148,8 @@ export type UserUpdateWithoutPaymentsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPaymentsInput = {
@@ -1814,6 +2174,8 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutSprintsRequestedInput = {
@@ -1838,6 +2200,8 @@ export type UserCreateWithoutSprintsRequestedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutSprintsRequestedInput = {
@@ -1862,6 +2226,8 @@ export type UserUncheckedCreateWithoutSprintsRequestedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutSprintsRequestedInput = {
@@ -1891,6 +2257,8 @@ export type UserCreateWithoutSprintsClaimedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutSprintsClaimedInput = {
@@ -1915,6 +2283,8 @@ export type UserUncheckedCreateWithoutSprintsClaimedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutSprintsClaimedInput = {
@@ -1955,6 +2325,8 @@ export type UserUpdateWithoutSprintsRequestedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSprintsRequestedInput = {
@@ -1979,6 +2351,8 @@ export type UserUncheckedUpdateWithoutSprintsRequestedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUpsertWithoutSprintsClaimedInput = {
@@ -2014,6 +2388,8 @@ export type UserUpdateWithoutSprintsClaimedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSprintsClaimedInput = {
@@ -2038,6 +2414,8 @@ export type UserUncheckedUpdateWithoutSprintsClaimedInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 export type UserCreateWithoutWalletInput = {
@@ -2062,6 +2440,8 @@ export type UserCreateWithoutWalletInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptCreateNestedManyWithoutStudentInput
 }
 
 export type UserUncheckedCreateWithoutWalletInput = {
@@ -2086,6 +2466,8 @@ export type UserUncheckedCreateWithoutWalletInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutStudentInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedCreateNestedManyWithoutAssignedMentorInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedCreateNestedManyWithoutMentorInput
+  mentorExams?: Prisma.ExamUncheckedCreateNestedManyWithoutMentorInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedCreateNestedManyWithoutStudentInput
 }
 
 export type UserCreateOrConnectWithoutWalletInput = {
@@ -2126,6 +2508,8 @@ export type UserUpdateWithoutWalletInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUpdateManyWithoutStudentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWalletInput = {
@@ -2150,6 +2534,8 @@ export type UserUncheckedUpdateWithoutWalletInput = {
   studentCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutStudentNestedInput
   mentorCodeReviews?: Prisma.CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorNestedInput
   mentorSubmissions?: Prisma.CodeReviewSubmissionUncheckedUpdateManyWithoutMentorNestedInput
+  mentorExams?: Prisma.ExamUncheckedUpdateManyWithoutMentorNestedInput
+  studentExamAttempts?: Prisma.ExamAttemptUncheckedUpdateManyWithoutStudentNestedInput
 }
 
 
@@ -2169,6 +2555,8 @@ export type UserCountOutputType = {
   studentCodeReviews: number
   mentorCodeReviews: number
   mentorSubmissions: number
+  mentorExams: number
+  studentExamAttempts: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2183,6 +2571,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   studentCodeReviews?: boolean | UserCountOutputTypeCountStudentCodeReviewsArgs
   mentorCodeReviews?: boolean | UserCountOutputTypeCountMentorCodeReviewsArgs
   mentorSubmissions?: boolean | UserCountOutputTypeCountMentorSubmissionsArgs
+  mentorExams?: boolean | UserCountOutputTypeCountMentorExamsArgs
+  studentExamAttempts?: boolean | UserCountOutputTypeCountStudentExamAttemptsArgs
 }
 
 /**
@@ -2272,6 +2662,20 @@ export type UserCountOutputTypeCountMentorSubmissionsArgs<ExtArgs extends runtim
   where?: Prisma.CodeReviewSubmissionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountMentorExamsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExamWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountStudentExamAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExamAttemptWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2296,6 +2700,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   studentCodeReviews?: boolean | Prisma.User$studentCodeReviewsArgs<ExtArgs>
   mentorCodeReviews?: boolean | Prisma.User$mentorCodeReviewsArgs<ExtArgs>
   mentorSubmissions?: boolean | Prisma.User$mentorSubmissionsArgs<ExtArgs>
+  mentorExams?: boolean | Prisma.User$mentorExamsArgs<ExtArgs>
+  studentExamAttempts?: boolean | Prisma.User$studentExamAttemptsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2350,6 +2756,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   studentCodeReviews?: boolean | Prisma.User$studentCodeReviewsArgs<ExtArgs>
   mentorCodeReviews?: boolean | Prisma.User$mentorCodeReviewsArgs<ExtArgs>
   mentorSubmissions?: boolean | Prisma.User$mentorSubmissionsArgs<ExtArgs>
+  mentorExams?: boolean | Prisma.User$mentorExamsArgs<ExtArgs>
+  studentExamAttempts?: boolean | Prisma.User$studentExamAttemptsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2371,6 +2779,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     studentCodeReviews: Prisma.$CodeReviewRequestPayload<ExtArgs>[]
     mentorCodeReviews: Prisma.$CodeReviewRequestPayload<ExtArgs>[]
     mentorSubmissions: Prisma.$CodeReviewSubmissionPayload<ExtArgs>[]
+    mentorExams: Prisma.$ExamPayload<ExtArgs>[]
+    studentExamAttempts: Prisma.$ExamAttemptPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2789,6 +3199,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   studentCodeReviews<T extends Prisma.User$studentCodeReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$studentCodeReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CodeReviewRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mentorCodeReviews<T extends Prisma.User$mentorCodeReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mentorCodeReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CodeReviewRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mentorSubmissions<T extends Prisma.User$mentorSubmissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mentorSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CodeReviewSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  mentorExams<T extends Prisma.User$mentorExamsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mentorExamsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  studentExamAttempts<T extends Prisma.User$studentExamAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$studentExamAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExamAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3519,6 +3931,54 @@ export type User$mentorSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.CodeReviewSubmissionScalarFieldEnum | Prisma.CodeReviewSubmissionScalarFieldEnum[]
+}
+
+/**
+ * User.mentorExams
+ */
+export type User$mentorExamsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Exam
+   */
+  select?: Prisma.ExamSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Exam
+   */
+  omit?: Prisma.ExamOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExamInclude<ExtArgs> | null
+  where?: Prisma.ExamWhereInput
+  orderBy?: Prisma.ExamOrderByWithRelationInput | Prisma.ExamOrderByWithRelationInput[]
+  cursor?: Prisma.ExamWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExamScalarFieldEnum | Prisma.ExamScalarFieldEnum[]
+}
+
+/**
+ * User.studentExamAttempts
+ */
+export type User$studentExamAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ExamAttempt
+   */
+  select?: Prisma.ExamAttemptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ExamAttempt
+   */
+  omit?: Prisma.ExamAttemptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExamAttemptInclude<ExtArgs> | null
+  where?: Prisma.ExamAttemptWhereInput
+  orderBy?: Prisma.ExamAttemptOrderByWithRelationInput | Prisma.ExamAttemptOrderByWithRelationInput[]
+  cursor?: Prisma.ExamAttemptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExamAttemptScalarFieldEnum | Prisma.ExamAttemptScalarFieldEnum[]
 }
 
 /**

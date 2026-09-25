@@ -73,6 +73,21 @@ export type CohortSession = Prisma.CohortSessionModel
  */
 export type CohortSessionParticipant = Prisma.CohortSessionParticipantModel
 /**
+ * Model Exam
+ * 
+ */
+export type Exam = Prisma.ExamModel
+/**
+ * Model Question
+ * 
+ */
+export type Question = Prisma.QuestionModel
+/**
+ * Model ExamAttempt
+ * 
+ */
+export type ExamAttempt = Prisma.ExamAttemptModel
+/**
  * Model MentorProfile
  * 
  */
