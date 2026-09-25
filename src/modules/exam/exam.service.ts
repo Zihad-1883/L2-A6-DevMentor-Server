@@ -105,14 +105,28 @@ const addQuestionsToExam = async (
                     options: q.options,
                     correctOptionIndex: q.correctOptionIndex,
                     explanation: q.explanation || null,
-                    marks: q.marks || 5,
+                    marks: q.marks || 1,
                 },
             })
         )
     );
 
-    const updatedExam = await prisma.exam.findUnique({
+    // Fetch all questions to calculate total questions, total marks, and duration
+    const allQuestions = await prisma.question.findMany({
+        where: { examId },
+    });
+
+    const totalQuestionsCount = allQuestions.length;
+    const computedTotalMarks = allQuestions.reduce((sum, q) => sum + q.marks, 0);
+
+    // Update Exam summary metrics: 1 Question = 1 Mark = 1 Min rule
+    const updatedExam = await prisma.exam.update({
         where: { id: examId },
+        data: {
+            totalQuestions: totalQuestionsCount,
+            totalMarks: computedTotalMarks,
+            durationMinutes: totalQuestionsCount > 0 ? totalQuestionsCount : exam.durationMinutes,
+        },
         include: {
             questions: true,
             _count: { select: { questions: true } },
@@ -121,6 +135,9 @@ const addQuestionsToExam = async (
 
     return {
         addedCount: createdQuestions.length,
+        totalQuestions: totalQuestionsCount,
+        totalMarks: computedTotalMarks,
+        durationMinutes: updatedExam.durationMinutes,
         exam: updatedExam,
     };
 };

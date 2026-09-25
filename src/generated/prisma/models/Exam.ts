@@ -28,12 +28,14 @@ export type AggregateExam = {
 
 export type ExamAvgAggregateOutputType = {
   durationMinutes: number | null
+  totalQuestions: number | null
   totalMarks: number | null
   passMark: number | null
 }
 
 export type ExamSumAggregateOutputType = {
   durationMinutes: number | null
+  totalQuestions: number | null
   totalMarks: number | null
   passMark: number | null
 }
@@ -47,6 +49,7 @@ export type ExamMinAggregateOutputType = {
   title: string | null
   description: string | null
   durationMinutes: number | null
+  totalQuestions: number | null
   totalMarks: number | null
   passMark: number | null
   status: $Enums.ExamStatus | null
@@ -63,6 +66,7 @@ export type ExamMaxAggregateOutputType = {
   title: string | null
   description: string | null
   durationMinutes: number | null
+  totalQuestions: number | null
   totalMarks: number | null
   passMark: number | null
   status: $Enums.ExamStatus | null
@@ -79,6 +83,7 @@ export type ExamCountAggregateOutputType = {
   title: number
   description: number
   durationMinutes: number
+  totalQuestions: number
   totalMarks: number
   passMark: number
   status: number
@@ -90,12 +95,14 @@ export type ExamCountAggregateOutputType = {
 
 export type ExamAvgAggregateInputType = {
   durationMinutes?: true
+  totalQuestions?: true
   totalMarks?: true
   passMark?: true
 }
 
 export type ExamSumAggregateInputType = {
   durationMinutes?: true
+  totalQuestions?: true
   totalMarks?: true
   passMark?: true
 }
@@ -109,6 +116,7 @@ export type ExamMinAggregateInputType = {
   title?: true
   description?: true
   durationMinutes?: true
+  totalQuestions?: true
   totalMarks?: true
   passMark?: true
   status?: true
@@ -125,6 +133,7 @@ export type ExamMaxAggregateInputType = {
   title?: true
   description?: true
   durationMinutes?: true
+  totalQuestions?: true
   totalMarks?: true
   passMark?: true
   status?: true
@@ -141,6 +150,7 @@ export type ExamCountAggregateInputType = {
   title?: true
   description?: true
   durationMinutes?: true
+  totalQuestions?: true
   totalMarks?: true
   passMark?: true
   status?: true
@@ -244,6 +254,7 @@ export type ExamGroupByOutputType = {
   title: string
   description: string | null
   durationMinutes: number
+  totalQuestions: number
   totalMarks: number
   passMark: number | null
   status: $Enums.ExamStatus
@@ -283,6 +294,7 @@ export type ExamWhereInput = {
   title?: Prisma.StringFilter<"Exam"> | string
   description?: Prisma.StringNullableFilter<"Exam"> | string | null
   durationMinutes?: Prisma.IntFilter<"Exam"> | number
+  totalQuestions?: Prisma.IntFilter<"Exam"> | number
   totalMarks?: Prisma.IntFilter<"Exam"> | number
   passMark?: Prisma.IntNullableFilter<"Exam"> | number | null
   status?: Prisma.EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
@@ -304,6 +316,7 @@ export type ExamOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  totalQuestions?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   passMark?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -328,6 +341,7 @@ export type ExamWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Exam"> | string
   description?: Prisma.StringNullableFilter<"Exam"> | string | null
   durationMinutes?: Prisma.IntFilter<"Exam"> | number
+  totalQuestions?: Prisma.IntFilter<"Exam"> | number
   totalMarks?: Prisma.IntFilter<"Exam"> | number
   passMark?: Prisma.IntNullableFilter<"Exam"> | number | null
   status?: Prisma.EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
@@ -349,6 +363,7 @@ export type ExamOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  totalQuestions?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   passMark?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -373,6 +388,7 @@ export type ExamScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Exam"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Exam"> | string | null
   durationMinutes?: Prisma.IntWithAggregatesFilter<"Exam"> | number
+  totalQuestions?: Prisma.IntWithAggregatesFilter<"Exam"> | number
   totalMarks?: Prisma.IntWithAggregatesFilter<"Exam"> | number
   passMark?: Prisma.IntNullableWithAggregatesFilter<"Exam"> | number | null
   status?: Prisma.EnumExamStatusWithAggregatesFilter<"Exam"> | $Enums.ExamStatus
@@ -386,6 +402,7 @@ export type ExamCreateInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -407,6 +424,7 @@ export type ExamUncheckedCreateInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -422,6 +440,7 @@ export type ExamUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -443,6 +462,7 @@ export type ExamUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -461,6 +481,7 @@ export type ExamCreateManyInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -474,6 +495,7 @@ export type ExamUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -490,6 +512,7 @@ export type ExamUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -516,6 +539,7 @@ export type ExamCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  totalQuestions?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   passMark?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -525,6 +549,7 @@ export type ExamCountOrderByAggregateInput = {
 
 export type ExamAvgOrderByAggregateInput = {
   durationMinutes?: Prisma.SortOrder
+  totalQuestions?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   passMark?: Prisma.SortOrder
 }
@@ -538,6 +563,7 @@ export type ExamMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  totalQuestions?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   passMark?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -554,6 +580,7 @@ export type ExamMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   durationMinutes?: Prisma.SortOrder
+  totalQuestions?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   passMark?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -563,6 +590,7 @@ export type ExamMinOrderByAggregateInput = {
 
 export type ExamSumOrderByAggregateInput = {
   durationMinutes?: Prisma.SortOrder
+  totalQuestions?: Prisma.SortOrder
   totalMarks?: Prisma.SortOrder
   passMark?: Prisma.SortOrder
 }
@@ -744,6 +772,7 @@ export type ExamCreateWithoutMentorInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -763,6 +792,7 @@ export type ExamUncheckedCreateWithoutMentorInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -810,6 +840,7 @@ export type ExamScalarWhereInput = {
   title?: Prisma.StringFilter<"Exam"> | string
   description?: Prisma.StringNullableFilter<"Exam"> | string | null
   durationMinutes?: Prisma.IntFilter<"Exam"> | number
+  totalQuestions?: Prisma.IntFilter<"Exam"> | number
   totalMarks?: Prisma.IntFilter<"Exam"> | number
   passMark?: Prisma.IntNullableFilter<"Exam"> | number | null
   status?: Prisma.EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
@@ -823,6 +854,7 @@ export type ExamCreateWithoutCohortInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -842,6 +874,7 @@ export type ExamUncheckedCreateWithoutCohortInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -883,6 +916,7 @@ export type ExamCreateWithoutQuestionsInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -903,6 +937,7 @@ export type ExamUncheckedCreateWithoutQuestionsInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -933,6 +968,7 @@ export type ExamUpdateWithoutQuestionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -953,6 +989,7 @@ export type ExamUncheckedUpdateWithoutQuestionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -967,6 +1004,7 @@ export type ExamCreateWithoutAttemptsInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -987,6 +1025,7 @@ export type ExamUncheckedCreateWithoutAttemptsInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -1017,6 +1056,7 @@ export type ExamUpdateWithoutAttemptsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -1037,6 +1077,7 @@ export type ExamUncheckedUpdateWithoutAttemptsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -1051,6 +1092,7 @@ export type ExamCreateWithoutSprintInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -1070,6 +1112,7 @@ export type ExamUncheckedCreateWithoutSprintInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -1113,6 +1156,7 @@ export type ExamCreateManyMentorInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -1126,6 +1170,7 @@ export type ExamUpdateWithoutMentorInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -1145,6 +1190,7 @@ export type ExamUncheckedUpdateWithoutMentorInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -1162,6 +1208,7 @@ export type ExamUncheckedUpdateManyWithoutMentorInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -1177,6 +1224,7 @@ export type ExamCreateManyCohortInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -1190,6 +1238,7 @@ export type ExamUpdateWithoutCohortInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -1209,6 +1258,7 @@ export type ExamUncheckedUpdateWithoutCohortInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -1226,6 +1276,7 @@ export type ExamUncheckedUpdateManyWithoutCohortInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -1241,6 +1292,7 @@ export type ExamCreateManySprintInput = {
   title: string
   description?: string | null
   durationMinutes?: number
+  totalQuestions?: number
   totalMarks?: number
   passMark?: number | null
   status?: $Enums.ExamStatus
@@ -1254,6 +1306,7 @@ export type ExamUpdateWithoutSprintInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -1273,6 +1326,7 @@ export type ExamUncheckedUpdateWithoutSprintInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -1290,6 +1344,7 @@ export type ExamUncheckedUpdateManyWithoutSprintInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   totalMarks?: Prisma.IntFieldUpdateOperationsInput | number
   passMark?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
@@ -1346,6 +1401,7 @@ export type ExamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   title?: boolean
   description?: boolean
   durationMinutes?: boolean
+  totalQuestions?: boolean
   totalMarks?: boolean
   passMark?: boolean
   status?: boolean
@@ -1368,6 +1424,7 @@ export type ExamSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   title?: boolean
   description?: boolean
   durationMinutes?: boolean
+  totalQuestions?: boolean
   totalMarks?: boolean
   passMark?: boolean
   status?: boolean
@@ -1387,6 +1444,7 @@ export type ExamSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   title?: boolean
   description?: boolean
   durationMinutes?: boolean
+  totalQuestions?: boolean
   totalMarks?: boolean
   passMark?: boolean
   status?: boolean
@@ -1406,6 +1464,7 @@ export type ExamSelectScalar = {
   title?: boolean
   description?: boolean
   durationMinutes?: boolean
+  totalQuestions?: boolean
   totalMarks?: boolean
   passMark?: boolean
   status?: boolean
@@ -1413,7 +1472,7 @@ export type ExamSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ExamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "mentorId" | "cohortId" | "sprintId" | "isFree" | "title" | "description" | "durationMinutes" | "totalMarks" | "passMark" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["exam"]>
+export type ExamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "mentorId" | "cohortId" | "sprintId" | "isFree" | "title" | "description" | "durationMinutes" | "totalQuestions" | "totalMarks" | "passMark" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["exam"]>
 export type ExamInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   mentor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   cohort?: boolean | Prisma.Exam$cohortArgs<ExtArgs>
@@ -1451,6 +1510,7 @@ export type $ExamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     title: string
     description: string | null
     durationMinutes: number
+    totalQuestions: number
     totalMarks: number
     passMark: number | null
     status: $Enums.ExamStatus
@@ -1892,6 +1952,7 @@ export interface ExamFieldRefs {
   readonly title: Prisma.FieldRef<"Exam", 'String'>
   readonly description: Prisma.FieldRef<"Exam", 'String'>
   readonly durationMinutes: Prisma.FieldRef<"Exam", 'Int'>
+  readonly totalQuestions: Prisma.FieldRef<"Exam", 'Int'>
   readonly totalMarks: Prisma.FieldRef<"Exam", 'Int'>
   readonly passMark: Prisma.FieldRef<"Exam", 'Int'>
   readonly status: Prisma.FieldRef<"Exam", 'ExamStatus'>

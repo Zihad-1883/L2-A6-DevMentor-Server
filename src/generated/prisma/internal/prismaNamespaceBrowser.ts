@@ -271,6 +271,7 @@ export const ExamScalarFieldEnum = {
   title: 'title',
   description: 'description',
   durationMinutes: 'durationMinutes',
+  totalQuestions: 'totalQuestions',
   totalMarks: 'totalMarks',
   passMark: 'passMark',
   status: 'status',

@@ -20,6 +20,7 @@ model Exam {
     title           String
     description     String?
     durationMinutes Int        @default(30)
+    totalQuestions  Int        @default(0)
     totalMarks      Int        @default(100)
     passMark        Int?       @default(60)
     status          ExamStatus @default(DRAFT)
@@ -42,7 +43,7 @@ model Question {
     options            String[] // Array of strings e.g. ["Option A", "Option B", "Option C", "Option D"]
     correctOptionIndex Int // Index of correct option (0-indexed)
     explanation        String? // Explanation for student after submission
-    marks              Int      @default(5)
+    marks              Int      @default(1)
 
     @@map("question")
 }
