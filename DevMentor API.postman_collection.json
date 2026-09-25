@@ -1236,6 +1236,185 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "📝 Exam & Quiz Module",
+      "description": "Endpoints for mentors to build/publish exams and for students to attempt & auto-grade quiz submissions.",
+      "item": [
+        {
+          "name": "[Mentor] Create Free or Cohort/Sprint Exam",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.id) {",
+                  "  pm.collectionVariables.set('examId', res.data.id);",
+                  "  console.log('✅ Exam ID saved:', res.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Full-Stack React & Node.js Assessment\",\n  \"description\": \"Comprehensive MCQ exam covering React hooks, Node.js event loop, and Prisma ORM.\",\n  \"durationMinutes\": 30,\n  \"totalMarks\": 100,\n  \"passMark\": 70,\n  \"isFree\": true\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/exams",
+              "host": ["{{baseUrl}}"],
+              "path": ["exams"]
+            },
+            "description": "Mentor creates a new exam in DRAFT status. Can set isFree: true or provide cohortId / sprintId."
+          },
+          "response": []
+        },
+        {
+          "name": "[Mentor] Add Questions / MCQs to Exam",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"questions\": [\n    {\n      \"questionText\": \"Which React hook is used to perform side effects in functional components?\",\n      \"options\": [\"useState\", \"useEffect\", \"useContext\", \"useReducer\"],\n      \"correctOptionIndex\": 1,\n      \"explanation\": \"useEffect allows you to perform side effects like fetching data or updating the DOM.\",\n      \"marks\": 50\n    },\n    {\n      \"questionText\": \"In Node.js, which thread handles non-blocking I/O operations by default?\",\n      \"options\": [\"Main Thread / Event Loop\", \"Worker Thread\", \"Cluster Master\", \"Prisma Thread\"],\n      \"correctOptionIndex\": 0,\n      \"explanation\": \"Node.js uses a single-threaded Event Loop to handle non-blocking asynchronous I/O operations.\",\n      \"marks\": 50\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/exams/{{examId}}/questions",
+              "host": ["{{baseUrl}}"],
+              "path": ["exams", "{{examId}}", "questions"]
+            },
+            "description": "Mentor bulk-uploads multiple choice questions with option arrays, correct answer indices, and explanations."
+          },
+          "response": []
+        },
+        {
+          "name": "[Mentor] Publish Exam",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/exams/{{examId}}/publish",
+              "host": ["{{baseUrl}}"],
+              "path": ["exams", "{{examId}}", "publish"]
+            },
+            "description": "Mentor publishes the exam (changes status from DRAFT to PUBLISHED). Requires at least 1 question."
+          },
+          "response": []
+        },
+        {
+          "name": "[Mentor] Get My Created Exams",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/exams/mentor/my-exams?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["exams", "mentor", "my-exams"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            },
+            "description": "Mentor views list of created exams with total questions and attempt statistics."
+          },
+          "response": []
+        },
+        {
+          "name": "[Student] Browse Available Exams",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/exams?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["exams"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            },
+            "description": "Student lists all published exams they are eligible to take (Free public exams + enrolled cohort/sprint exams)."
+          },
+          "response": []
+        },
+        {
+          "name": "[Student] Start Exam (Sanitized Questions)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/exams/{{examId}}/start",
+              "host": ["{{baseUrl}}"],
+              "path": ["exams", "{{examId}}", "start"]
+            },
+            "description": "Student starts exam. Returns questions sanitized without correct option indices or explanations to prevent cheating."
+          },
+          "response": []
+        },
+        {
+          "name": "[Student] Submit Exam Answers (Auto-Graded)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answers\": [\n    {\n      \"questionId\": \"QUESTION_ID_HERE\",\n      \"selectedOption\": 1\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/exams/{{examId}}/submit",
+              "host": ["{{baseUrl}}"],
+              "path": ["exams", "{{examId}}", "submit"]
+            },
+            "description": "Student submits answers. Backend auto-grades response, calculates score & percentage, and returns question breakdown with explanations."
+          },
+          "response": []
+        },
+        {
+          "name": "[Student] Get My Past Exam Attempts",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/exams/me/attempts?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["exams", "me", "attempts"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            },
+            "description": "Student views historical attempts, scores, percentage results, and pass/fail statuses."
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "variable": [
@@ -1248,6 +1427,11 @@
       "key": "token",
       "value": "",
       "description": "Paste your Bearer token here after login (or use the Login request — it auto-saves)"
+    },
+    {
+      "key": "examId",
+      "value": "",
+      "description": "ID of a created exam"
     },
     {
       "key": "sprintId",
