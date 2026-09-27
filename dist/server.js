@@ -703,9 +703,44 @@ var PrismaClient = getPrismaClientClass();
 var adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 var prisma = new PrismaClient({ adapter });
 
+// src/lib/redis.ts
+import { Redis } from "@upstash/redis";
+var redis = new Redis({
+  url: env.UPSTASH_REDIS_REST_URL,
+  token: env.UPSTASH_REDIS_REST_TOKEN
+});
+
 // src/lib/auth.ts
 var auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
+  // Upstash Redis Secondary Storage for OTPs, Rate-Limiting & Session Caching
+  secondaryStorage: {
+    get: async (key) => {
+      const value = await redis.get(key);
+      return value ? typeof value === "string" ? value : JSON.stringify(value) : null;
+    },
+    set: async (key, value, ttl) => {
+      if (ttl) {
+        await redis.set(key, value, { ex: ttl });
+      } else {
+        await redis.set(key, value);
+      }
+    },
+    delete: async (key) => {
+      await redis.del(key);
+    },
+    getAndDelete: async (key) => {
+      const value = await redis.get(key);
+      if (value !== null && value !== void 0) {
+        await redis.del(key);
+        return typeof value === "string" ? value : JSON.stringify(value);
+      }
+      return null;
+    },
+    increment: async (key, amount = 1) => {
+      return await redis.incrby(key, amount);
+    }
+  },
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
   basePath: "/api/v1/auth",
@@ -782,8 +817,8 @@ var AppError = class extends Error {
 };
 
 // src/config/redis.ts
-import { Redis } from "@upstash/redis";
-var redis = new Redis({
+import { Redis as Redis2 } from "@upstash/redis";
+var redis2 = new Redis2({
   url: env.UPSTASH_REDIS_REST_URL,
   token: env.UPSTASH_REDIS_REST_TOKEN
 });
@@ -791,21 +826,21 @@ var BKASH_TOKEN_KEY = "bkash:id_token";
 var bkashTokenCache = {
   get: async () => {
     try {
-      return await redis.get(BKASH_TOKEN_KEY);
+      return await redis2.get(BKASH_TOKEN_KEY);
     } catch {
       return null;
     }
   },
   set: async (token) => {
     try {
-      await redis.set(BKASH_TOKEN_KEY, token, { ex: 3540 });
+      await redis2.set(BKASH_TOKEN_KEY, token, { ex: 3540 });
     } catch (err) {
       console.warn("Upstash Redis token set warning:", err);
     }
   },
   clear: async () => {
     try {
-      await redis.del(BKASH_TOKEN_KEY);
+      await redis2.del(BKASH_TOKEN_KEY);
     } catch {
     }
   }

@@ -19,9 +19,9 @@ model Exam {
 
     title           String
     description     String?
-    durationMinutes Int        @default(30)
+    durationMinutes Int        @default(0)
     totalQuestions  Int        @default(0)
-    totalMarks      Int        @default(100)
+    totalMarks      Int        @default(0)
     passMark        Int?       @default(60)
     status          ExamStatus @default(DRAFT)
 

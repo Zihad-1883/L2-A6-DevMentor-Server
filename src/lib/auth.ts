@@ -1,10 +1,40 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma.js";
+import { redis } from "./redis.js";
 import { env } from "../config/env.js";
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, { provider: "postgresql" }),
+
+    // Upstash Redis Secondary Storage for OTPs, Rate-Limiting & Session Caching
+    secondaryStorage: {
+        get: async (key: string) => {
+            const value = await redis.get<string>(key);
+            return value ? (typeof value === "string" ? value : JSON.stringify(value)) : null;
+        },
+        set: async (key: string, value: string, ttl?: number) => {
+            if (ttl) {
+                await redis.set(key, value, { ex: ttl });
+            } else {
+                await redis.set(key, value);
+            }
+        },
+        delete: async (key: string) => {
+            await redis.del(key);
+        },
+        getAndDelete: async (key: string) => {
+            const value = await redis.get<string>(key);
+            if (value !== null && value !== undefined) {
+                await redis.del(key);
+                return typeof value === "string" ? value : JSON.stringify(value);
+            }
+            return null;
+        },
+        increment: async (key: string, amount: number = 1) => {
+            return await redis.incrby(key, amount);
+        },
+    },
 
     secret: env.BETTER_AUTH_SECRET,
     baseURL: env.BETTER_AUTH_URL,

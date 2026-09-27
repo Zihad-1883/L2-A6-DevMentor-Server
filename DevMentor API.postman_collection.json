@@ -19,7 +19,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Zihad Ahmed\",\n  \"email\": \"student@devmentor.com\",\n  \"password\": \"Student@123456\"\n}",
+              "raw": "{\n  // API Purpose: Register a new user account on DevMentor. Default role assigned is student.\n  \"name\": \"Zihad Ahmed\",\n  \"email\": \"student@devmentor.com\",\n  \"password\": \"Student@123456\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -27,7 +27,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["auth", "sign-up", "email"]
             },
-            "description": "Register a new user account. Default role is `student`. Returns session token."
+            "description": "API Purpose: Registers a new user account on DevMentor platform. Default role assigned is student. Returns user details and session token."
           },
           "response": []
         },
@@ -56,7 +56,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@devmentor.com\",\n  \"password\": \"Admin@123456\"\n}",
+              "raw": "{\n  // ==========================================\n  // 🔑 ROLE 1: ADMIN LOGIN (Active by default)\n  // ==========================================\n  \"email\": \"admin@devmentor.com\",\n  \"password\": \"Admin@123456\"\n\n  // ==========================================\n  // 🔑 ROLE 2: MENTOR LOGIN (Uncomment to use)\n  // ==========================================\n  // \"email\": \"mentor@devmentor.com\",\n  // \"password\": \"Mentor@123456\"\n\n  // ==========================================\n  // 🔑 ROLE 3: STUDENT LOGIN (Uncomment to use)\n  // ==========================================\n  // \"email\": \"student@devmentor.com\",\n  // \"password\": \"Student@123456\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -64,7 +64,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["auth", "sign-in", "email"]
             },
-            "description": "Login with email and password. The test script auto-saves the token to the `token` collection variable."
+            "description": "API Purpose: Authenticates credentials for any of the 3 platform roles (Admin, Mentor, Student) and auto-saves the session token to the {{token}} collection variable. Swap/uncomment desired role credentials in body."
           },
           "response": []
         },
@@ -116,7 +116,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Zihad Ahmed Updated\",\n  \"bio\": \"Full-stack engineer specializing in Node.js, Prisma, and React. Passionate about mentorship.\"\n}",
+              "raw": "{\n  // API Purpose: Update logged-in user profile details (name, mentor bio, avatar image URL).\n  \"name\": \"Zihad Ahmed Updated\",\n  \"bio\": \"Full-stack engineer specializing in Node.js, Prisma, and React. Passionate about mentorship.\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -124,7 +124,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["users", "me"]
             },
-            "description": "Update user name, avatar image URL, or mentor bio."
+            "description": "API Purpose: Updates logged-in user's name, avatar image URL, or mentor bio."
           },
           "response": []
         },
@@ -194,7 +194,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"bio\": \"Senior full-stack engineer with 5 years of experience building production Node.js backends and React frontends.\",\n  \"techStackTags\": [\"Node.js\", \"TypeScript\", \"React\", \"PostgreSQL\", \"Prisma\"],\n  \"experienceLevel\": \"SENIOR\",\n  \"githubUrl\": \"https://github.com/zihad-dev\",\n  \"resumeUrl\": \"https://res.cloudinary.com/bddbmggs/raw/upload/resume.pdf\"\n}",
+              "raw": "{\n  // API Purpose: Student submits a formal application to become an approved mentor on DevMentor.\n  \"bio\": \"Senior full-stack engineer with 5 years of experience building production Node.js backends and React frontends.\",\n  \"techStackTags\": [\"Node.js\", \"TypeScript\", \"React\", \"PostgreSQL\", \"Prisma\"],\n  \"experienceLevel\": \"SENIOR\",\n  \"githubUrl\": \"https://github.com/zihad-dev\",\n  \"resumeUrl\": \"https://res.cloudinary.com/bddbmggs/raw/upload/resume.pdf\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -202,7 +202,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["mentors", "apply"]
             },
-            "description": "Submit a mentor application. Admin must approve before role is upgraded."
+            "description": "API Purpose: Student submits a mentor application. Admin must approve before user role is upgraded to mentor."
           },
           "response": []
         }
@@ -222,7 +222,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Fullstack Next.js 15 & PostgreSQL 1-on-1 Guidance\",\n  \"description\": \"I need 2 weeks of intensive guidance to build a production-grade backend using Prisma ORM and Next.js 15 App Router. Struggling with server actions and database transactions.\",\n  \"techStackTags\": [\"Next.js\", \"TypeScript\", \"PostgreSQL\", \"Prisma\"],\n  \"startDate\": \"2026-10-01T00:00:00.000Z\",\n  \"durationDays\": 14,\n  \"selectedDays\": [1, 3, 5, 7, 9, 11, 13]\n}",
+              "raw": "{\n  // API Purpose: Student creates a 1-on-1 sprint mentorship request with start date, duration, and selected days.\n  \"title\": \"Fullstack Next.js 15 & PostgreSQL 1-on-1 Guidance\",\n  \"description\": \"I need 2 weeks of intensive guidance to build a production-grade backend using Prisma ORM and Next.js 15 App Router. Struggling with server actions and database transactions.\",\n  \"techStackTags\": [\"Next.js\", \"TypeScript\", \"PostgreSQL\", \"Prisma\"],\n  \"startDate\": \"2026-10-01T00:00:00.000Z\",\n  \"durationDays\": 14,\n  \"selectedDays\": [1, 3, 5, 7, 9, 11, 13]\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -230,7 +230,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["sprints"]
             },
-            "description": "Creates a new 1-on-1 sprint request. Auto-generates session slots for each selected day."
+            "description": "API Purpose: Creates a new 1-on-1 sprint request in PENDING_CLAIM status and auto-generates session slots for each selected day."
           },
           "response": []
         },
@@ -358,7 +358,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"scheduledAt\": \"2026-10-03T15:00:00.000Z\",\n  \"durationMinutes\": 60,\n  \"joinLink\": \"https://meet.google.com/abc-defg-hij\"\n}",
+              "raw": "{\n  // API Purpose: Mentor proposes a scheduled date, time, and Google Meet join link for a sprint session slot.\n  \"scheduledAt\": \"2026-10-03T15:00:00.000Z\",\n  \"durationMinutes\": 60,\n  \"joinLink\": \"https://meet.google.com/abc-defg-hij\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -366,7 +366,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["sprint-sessions", "{{sessionId}}", "propose"]
             },
-            "description": "Mentor proposes a date/time for a specific session slot. Includes conflict check across all sessions."
+            "description": "API Purpose: Mentor proposes a date/time and Google Meet join link for a specific session slot with schedule conflict checking."
           },
           "response": []
         },
@@ -484,7 +484,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Backend Engineering with Node.js & Prisma\",\n  \"description\": \"Learn to design scalable PostgreSQL databases, write clean Express 5 microservices, and integrate payment gateways. From zero to production-ready.\",\n  \"durationWeeks\": 6,\n  \"capacity\": 30,\n  \"techStackTags\": [\"Node.js\", \"TypeScript\", \"Express\", \"PostgreSQL\", \"Prisma\"]\n}",
+              "raw": "{\n  // API Purpose: Mentor creates a group cohort program requiring admin approval before publishing to students.\n  \"title\": \"Backend Engineering with Node.js & Prisma\",\n  \"description\": \"Learn to design scalable PostgreSQL databases, write clean Express 5 microservices, and integrate payment gateways. From zero to production-ready.\",\n  \"durationWeeks\": 6,\n  \"capacity\": 30,\n  \"techStackTags\": [\"Node.js\", \"TypeScript\", \"Express\", \"PostgreSQL\", \"Prisma\"]\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -492,7 +492,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["cohorts"]
             },
-            "description": "Create a new cohort program. Status starts at PENDING_APPROVAL. Admin must approve before publishing."
+            "description": "API Purpose: Creates a new cohort program in PENDING_APPROVAL status. Admin must approve before publishing."
           },
           "response": []
         },
@@ -696,7 +696,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"tier\": \"QUICK\",\n  \"title\": \"Fix JWT Authorization Middleware Bug\",\n  \"description\": \"Tokens generated by Better Auth are throwing 401 Unauthorized in my custom Express middleware. The issue is with Bearer prefix stripping.\",\n  \"codeSnippet\": \"export const verifyToken = (req, res, next) => {\\n  const token = req.headers.authorization;\\n  if (!token) return res.status(401).send('No token');\\n  next();\\n};\",\n  \"language\": \"typescript\",\n  \"specificFiles\": \"src/middlewares/auth.middleware.ts\"\n}",
+              "raw": "{\n  // API Purpose: Student submits a QUICK code snippet review request (10 Credits / 2-hour SLA).\n  \"tier\": \"QUICK\",\n  \"title\": \"Fix JWT Authorization Middleware Bug\",\n  \"description\": \"Tokens generated by Better Auth are throwing 401 Unauthorized in my custom Express middleware. The issue is with Bearer prefix stripping.\",\n  \"codeSnippet\": \"export const verifyToken = (req, res, next) => {\\n  const token = req.headers.authorization;\\n  if (!token) return res.status(401).send('No token');\\n  next();\\n};\",\n  \"language\": \"typescript\",\n  \"specificFiles\": \"src/middlewares/auth.middleware.ts\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -704,7 +704,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["code-reviews"]
             },
-            "description": "Student creates a QUICK review request. 10 Credits are atomically escrowed from their wallet."
+            "description": "API Purpose: Student creates a QUICK code review request. 10 Credits are atomically escrowed from wallet."
           },
           "response": []
         },
@@ -718,7 +718,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"tier\": \"DEEP\",\n  \"title\": \"Architecture & Security Review — bKash Payment Microservice\",\n  \"description\": \"Please do a deep review of my bKash payment execution flow for race conditions, transaction atomicity, and security vulnerabilities.\",\n  \"githubRepoUrl\": \"https://github.com/Zihad-1883/L2-A6-DevMentor-Server\",\n  \"branchName\": \"main\",\n  \"specificFiles\": \"src/modules/payment/payment.service.ts, src/modules/payment/bkash.service.ts\",\n  \"language\": \"typescript\"\n}",
+              "raw": "{\n  // API Purpose: Student submits a DEEP repository code review request (50 Credits / 24-hour SLA).\n  \"tier\": \"DEEP\",\n  \"title\": \"Architecture & Security Review — bKash Payment Microservice\",\n  \"description\": \"Please do a deep review of my bKash payment execution flow for race conditions, transaction atomicity, and security vulnerabilities.\",\n  \"githubRepoUrl\": \"https://github.com/Zihad-1883/L2-A6-DevMentor-Server\",\n  \"branchName\": \"main\",\n  \"specificFiles\": \"src/modules/payment/payment.service.ts, src/modules/payment/bkash.service.ts\",\n  \"language\": \"typescript\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -726,7 +726,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["code-reviews"]
             },
-            "description": "Student creates a DEEP review request. 50 Credits are escrowed. 24-hour delivery SLA."
+            "description": "API Purpose: Student creates a DEEP code review request. 50 Credits are escrowed from wallet. 24-hour delivery SLA."
           },
           "response": []
         },
@@ -915,7 +915,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"amount\": 500\n}",
+              "raw": "{\n  // API Purpose: Initiates bKash Tokenized Checkout payment to purchase wallet credits (500 BDT = 125 Credits).\n  \"amount\": 500\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -923,7 +923,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["payments", "top-up"]
             },
-            "description": "Initiates a bKash payment session. Returns `bkashURL` to redirect user for payment. 500 BDT = 125 Credits."
+            "description": "API Purpose: Initiates bKash payment checkout for wallet credit top-up (500 BDT = 125 Credits). Returns bkashURL redirect URL."
           },
           "response": []
         },
@@ -941,7 +941,7 @@
                 { "key": "status", "value": "success" }
               ]
             },
-            "description": "bKash calls this URL after payment. Executes the payment, credits the user's wallet atomically, and emails a PDF receipt."
+            "description": "API Purpose: bKash calls this URL after payment completion. Executes payment, credits wallet atomically, and emails PDF invoice."
           },
           "response": []
         },
@@ -957,7 +957,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["payments", "wallet", "me"]
             },
-            "description": "Returns wallet balance, totalEarned, totalWithdrawn, and full credit transaction history."
+            "description": "API Purpose: Returns wallet credit balance, total earned, total withdrawn, and transaction ledger history."
           },
           "response": []
         },
@@ -973,7 +973,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["payments", "history"]
             },
-            "description": "Returns all bKash payment records (top-ups and withdrawals) for the logged-in user."
+            "description": "API Purpose: Returns all bKash payment records (top-ups and withdrawals) for the logged-in user."
           },
           "response": []
         },
@@ -987,7 +987,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"amount\": 1000,\n  \"bkashNumber\": \"01770618575\"\n}",
+              "raw": "{\n  // API Purpose: Mentor requests payout cash-out of earned credits to their personal bKash account number (Min 1000 BDT).\n  \"amount\": 1000,\n  \"bkashNumber\": \"01770618575\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -995,7 +995,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["payments", "withdraw"]
             },
-            "description": "Mentor requests a bKash cash-out. Minimum 1000 BDT. Deducts credits and logs a WITHDRAWAL transaction."
+            "description": "API Purpose: Mentor requests bKash cash-out withdrawal. Minimum 1000 BDT. Deducts credits and logs WITHDRAWAL transaction."
           },
           "response": []
         }
@@ -1266,7 +1266,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Full-Stack React & Node.js Assessment\",\n  \"description\": \"Comprehensive MCQ exam covering React hooks, Node.js event loop, and Prisma ORM.\",\n  \"durationMinutes\": 30,\n  \"totalMarks\": 100,\n  \"passMark\": 70,\n  \"isFree\": true\n}",
+              "raw": "{\n  // API Purpose: Mentor creates a new MCQ assessment exam in DRAFT status (Can be free public, or linked to cohort/sprint).\n  \"title\": \"Full-Stack React & Node.js Assessment\",\n  \"description\": \"Comprehensive MCQ exam covering React hooks, Node.js event loop, and Prisma ORM.\",\n  \"durationMinutes\": 30,\n  \"totalMarks\": 100,\n  \"passMark\": 70,\n  \"isFree\": true\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -1274,7 +1274,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["exams"]
             },
-            "description": "Mentor creates a new exam in DRAFT status. Can set isFree: true or provide cohortId / sprintId."
+            "description": "API Purpose: Mentor creates a new exam in DRAFT status. Can set isFree: true or provide cohortId / sprintId."
           },
           "response": []
         },
@@ -1288,7 +1288,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"questions\": [\n    {\n      \"questionText\": \"Which React hook is used to perform side effects in functional components?\",\n      \"options\": [\"useState\", \"useEffect\", \"useContext\", \"useReducer\"],\n      \"correctOptionIndex\": 1,\n      \"explanation\": \"useEffect allows you to perform side effects like fetching data or updating the DOM.\",\n      \"marks\": 1\n    },\n    {\n      \"questionText\": \"In Node.js, which thread handles non-blocking I/O operations by default?\",\n      \"options\": [\"Main Thread / Event Loop\", \"Worker Thread\", \"Cluster Master\", \"Prisma Thread\"],\n      \"correctOptionIndex\": 0,\n      \"explanation\": \"Node.js uses a single-threaded Event Loop to handle non-blocking asynchronous I/O operations.\",\n      \"marks\": 1\n    }\n  ]\n}",
+              "raw": "{\n  // API Purpose: Mentor bulk-uploads multiple choice questions (MCQs) with 4 options, correct answer index, and explanation.\n  \"questions\": [\n    {\n      \"questionText\": \"Which React hook is used to perform side effects in functional components?\",\n      \"options\": [\"useState\", \"useEffect\", \"useContext\", \"useReducer\"],\n      \"correctOptionIndex\": 1,\n      \"explanation\": \"useEffect allows you to perform side effects like fetching data or updating the DOM.\",\n      \"marks\": 1\n    },\n    {\n      \"questionText\": \"In Node.js, which thread handles non-blocking I/O operations by default?\",\n      \"options\": [\"Main Thread / Event Loop\", \"Worker Thread\", \"Cluster Master\", \"Prisma Thread\"],\n      \"correctOptionIndex\": 0,\n      \"explanation\": \"Node.js uses a single-threaded Event Loop to handle non-blocking asynchronous I/O operations.\",\n      \"marks\": 1\n    }\n  ]\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -1296,7 +1296,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["exams", "{{examId}}", "questions"]
             },
-            "description": "Mentor bulk-uploads multiple choice questions with option arrays, correct answer indices, and explanations."
+            "description": "API Purpose: Mentor bulk-uploads multiple choice questions with options, correct answer indices, and explanations. Auto-calculates totalQuestions, totalMarks, and durationMinutes."
           },
           "response": []
         },
@@ -1312,7 +1312,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["exams", "{{examId}}", "publish"]
             },
-            "description": "Mentor publishes the exam (changes status from DRAFT to PUBLISHED). Requires at least 1 question."
+            "description": "API Purpose: Mentor publishes the exam (status DRAFT → PUBLISHED). Requires at least 1 question."
           },
           "response": []
         },
@@ -1332,7 +1332,7 @@
                 { "key": "limit", "value": "10" }
               ]
             },
-            "description": "Mentor views list of created exams with total questions and attempt statistics."
+            "description": "API Purpose: Mentor views list of created exams with question counts and attempt statistics."
           },
           "response": []
         },
@@ -1352,7 +1352,7 @@
                 { "key": "limit", "value": "10" }
               ]
             },
-            "description": "Student lists all published exams they are eligible to take (Free public exams + enrolled cohort/sprint exams)."
+            "description": "API Purpose: Student lists all published exams they are eligible to take (Free public exams + enrolled cohort/sprint exams)."
           },
           "response": []
         },
@@ -1368,7 +1368,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["exams", "{{examId}}", "start"]
             },
-            "description": "Student starts exam. Returns questions sanitized without correct option indices or explanations to prevent cheating."
+            "description": "API Purpose: Student starts exam. Returns questions sanitized without correct option indices or explanations to prevent cheating."
           },
           "response": []
         },
@@ -1382,7 +1382,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"answers\": [\n    {\n      \"questionId\": \"QUESTION_ID_HERE\",\n      \"selectedOption\": 1\n    }\n  ]\n}",
+              "raw": "{\n  // API Purpose: Student submits array of selected option answers for an active exam.\n  \"answers\": [\n    {\n      \"questionId\": \"QUESTION_ID_HERE\",\n      \"selectedOption\": 1\n    }\n  ]\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -1390,7 +1390,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["exams", "{{examId}}", "submit"]
             },
-            "description": "Student submits answers. Backend auto-grades response, calculates score & percentage, and returns question breakdown with explanations."
+            "description": "API Purpose: Student submits answers. Backend auto-grades response, calculates score & percentage, and returns question breakdown with explanations."
           },
           "response": []
         },
@@ -1410,7 +1410,7 @@
                 { "key": "limit", "value": "10" }
               ]
             },
-            "description": "Student views historical attempts, scores, percentage results, and pass/fail statuses."
+            "description": "API Purpose: Student views historical attempts, scores, percentage results, and pass/fail statuses."
           },
           "response": []
         }

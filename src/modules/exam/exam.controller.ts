@@ -45,9 +45,7 @@ const getAvailableExamsController = catchAsync(async (req: Request, res: Respons
   const studentId = req.user!.id;
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
-
   const result = await examService.getAvailableExams(studentId, page, limit);
-
   sendSuccess(res, "Available exams fetched successfully", result);
 });
 
@@ -55,9 +53,7 @@ const getAvailableExamsController = catchAsync(async (req: Request, res: Respons
 const startExamAttemptController = catchAsync(async (req: Request, res: Response) => {
   const studentId = req.user!.id;
   const { examId } = req.params;
-
   const result = await examService.startExamAttempt(studentId, examId as string);
-
   sendSuccess(res, "Exam attempt started successfully. Good luck!", result);
 });
 
@@ -66,9 +62,7 @@ const submitExamAttemptController = catchAsync(async (req: Request, res: Respons
   const studentId = req.user!.id;
   const { examId } = req.params;
   const { answers } = req.body;
-
   const result = await examService.submitExamAttempt(studentId, examId as string, answers);
-
   sendSuccess(res, "Exam submitted and evaluated successfully", result);
 });
 
@@ -77,9 +71,7 @@ const getStudentAttemptsController = catchAsync(async (req: Request, res: Respon
   const studentId = req.user!.id;
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
-
   const result = await examService.getStudentAttempts(studentId, page, limit);
-
   sendSuccess(res, "Student exam attempts fetched successfully", result);
 });
 
