@@ -139,9 +139,9 @@
               "options": { "raw": { "language": "json" } }
             },
             "url": {
-              "raw": "{{baseUrl}}/auth/email-otp/send-forget-password-otp",
+              "raw": "{{baseUrl}}/auth/email-otp/request-password-reset",
               "host": ["{{baseUrl}}"],
-              "path": ["auth", "email-otp", "send-forget-password-otp"]
+              "path": ["auth", "email-otp", "request-password-reset"]
             },
             "description": "API Purpose: Sends a 6-digit password reset OTP code to user email (expires in 5 minutes)."
           },

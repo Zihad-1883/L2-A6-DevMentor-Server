@@ -9,7 +9,6 @@ import { env } from "../config/env.js";
 export const auth = betterAuth({
     database: prismaAdapter(prisma, { provider: "postgresql" }),
 
-    // Upstash Redis Secondary Storage for OTPs, Rate-Limiting & Session Caching
     secondaryStorage: {
         get: async (key: string) => {
             const value = await redis.get<string>(key);
@@ -54,7 +53,7 @@ export const auth = betterAuth({
             "/sign-up/email": { window: 60, max: 100 },
             "/email-otp/send-verification-otp": { window: 60, max: 100 },
             "/email-otp/verify-email": { window: 60, max: 100 },
-            "/email-otp/send-forget-password-otp": { window: 60, max: 100 },
+            "/email-otp/request-password-reset": { window: 60, max: 100 },
             "/email-otp/reset-password": { window: 60, max: 100 },
         },
         storage: "secondary-storage",
@@ -87,7 +86,7 @@ export const auth = betterAuth({
     plugins: [
         emailOTP({
             otpLength: 6,
-            expiresIn: 300, // 5 minutes TTL in Redis
+            expiresIn: 300,
             sendVerificationOnSignUp: true,
             async sendVerificationOTP({ email, otp, type }) {
                 if (type === "forget-password") {
