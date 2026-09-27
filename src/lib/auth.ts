@@ -34,7 +34,11 @@ export const auth = betterAuth({
             return null;
         },
         increment: async (key: string, amount: number = 1) => {
-            return await redis.incrby(key, amount);
+            const count = await redis.incrby(key, amount);
+            if (count === amount) {
+                await redis.expire(key, 60);
+            }
+            return count;
         },
     },
 
@@ -45,6 +49,14 @@ export const auth = betterAuth({
     rateLimit: {
         window: 60,
         max: 100,
+        customRules: {
+            "/sign-in/email": { window: 60, max: 100 },
+            "/sign-up/email": { window: 60, max: 100 },
+            "/email-otp/send-verification-otp": { window: 60, max: 100 },
+            "/email-otp/verify-email": { window: 60, max: 100 },
+            "/email-otp/send-forget-password-otp": { window: 60, max: 100 },
+            "/email-otp/reset-password": { window: 60, max: 100 },
+        },
         storage: "secondary-storage",
     },
     trustedOrigins: [
