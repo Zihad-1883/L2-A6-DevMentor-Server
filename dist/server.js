@@ -835,6 +835,11 @@ var auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
   basePath: "/api/v1/auth",
+  rateLimit: {
+    window: 60,
+    max: 100,
+    storage: "secondary-storage"
+  },
   trustedOrigins: [
     env.CLIENT_URL,
     env.BETTER_AUTH_URL,
