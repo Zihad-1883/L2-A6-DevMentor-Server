@@ -83,6 +83,90 @@
             "description": "Invalidates the current session token."
           },
           "response": []
+        },
+        {
+          "name": "Send Email Verification OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  // API Purpose: Sends a 6-digit email verification OTP code stored in Upstash Redis (5-min TTL).\n  \"email\": \"student@devmentor.com\",\n  \"type\": \"email-verification\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/email-otp/send-verification-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "email-otp", "send-verification-otp"]
+            },
+            "description": "API Purpose: Sends a 6-digit email verification OTP code to user email (expires in 5 minutes)."
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Email OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  // API Purpose: Verifies submitted 6-digit OTP code against Upstash Redis and sets emailVerified: true.\n  \"email\": \"student@devmentor.com\",\n  \"otp\": \"123456\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/email-otp/verify-email",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "email-otp", "verify-email"]
+            },
+            "description": "API Purpose: Verifies 6-digit OTP code stored in Redis and updates user emailVerified status in database."
+          },
+          "response": []
+        },
+        {
+          "name": "Send Forget Password OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  // API Purpose: Sends a 6-digit password reset OTP code stored in Upstash Redis (5-min TTL).\n  \"email\": \"student@devmentor.com\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/email-otp/send-forget-password-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "email-otp", "send-forget-password-otp"]
+            },
+            "description": "API Purpose: Sends a 6-digit password reset OTP code to user email (expires in 5 minutes)."
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password with OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  // API Purpose: Validates 6-digit reset password OTP code from Redis and updates account password hash.\n  \"email\": \"student@devmentor.com\",\n  \"otp\": \"123456\",\n  \"password\": \"NewStudentPassword@123456\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/email-otp/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "email-otp", "reset-password"]
+            },
+            "description": "API Purpose: Verifies reset password OTP code from Redis and sets new password."
+          },
+          "response": []
         }
       ]
     },

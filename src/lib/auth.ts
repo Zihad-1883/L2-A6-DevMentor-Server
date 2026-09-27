@@ -1,7 +1,9 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { emailOTP } from "better-auth/plugins";
 import { prisma } from "./prisma.js";
 import { redis } from "./redis.js";
+import { sendOTPEmail } from "./email.js";
 import { env } from "../config/env.js";
 
 export const auth = betterAuth({
@@ -59,7 +61,37 @@ export const auth = betterAuth({
         },
     },
 
-    emailAndPassword: { enabled: true },
+    emailAndPassword: {
+        enabled: true,
+        requireEmailVerification: true,
+    },
+
+    plugins: [
+        emailOTP({
+            otpLength: 6,
+            expiresIn: 300, // 5 minutes TTL in Redis
+            sendVerificationOnSignUp: true,
+            async sendVerificationOTP({ email, otp, type }) {
+                if (type === "forget-password") {
+                    await sendOTPEmail({
+                        toEmail: email,
+                        subject: "Reset Your DevMentor Password 🔑",
+                        title: "Password Reset OTP",
+                        otp,
+                        description: "You requested to reset your DevMentor account password. Use the 6-digit code below to set a new password. If you didn't request this, please ignore this email.",
+                    });
+                } else {
+                    await sendOTPEmail({
+                        toEmail: email,
+                        subject: "Verify Your DevMentor Account 🔐",
+                        title: "Email Verification OTP",
+                        otp,
+                        description: "Use the 6-digit code below to complete your registration on DevMentor. This code is valid for 5 minutes.",
+                    });
+                }
+            },
+        }),
+    ],
 
     socialProviders: {
         google: {

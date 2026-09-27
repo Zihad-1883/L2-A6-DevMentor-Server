@@ -121,6 +121,7 @@ import { toNodeHandler } from "better-auth/node";
 // src/lib/auth.ts
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { emailOTP } from "better-auth/plugins";
 
 // src/lib/prisma.ts
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -710,6 +711,96 @@ var redis = new Redis({
   token: env.UPSTASH_REDIS_REST_TOKEN
 });
 
+// src/lib/email.ts
+import nodemailer from "nodemailer";
+var transporter = nodemailer.createTransport({
+  host: env.SMTP_HOST,
+  port: env.SMTP_PORT,
+  secure: env.SMTP_PORT === 465,
+  // true for 465, false for 587
+  auth: env.SMTP_USER && env.SMTP_PASS ? {
+    user: env.SMTP_USER,
+    pass: env.SMTP_PASS
+  } : void 0
+});
+var sendOTPEmail = async (input) => {
+  const { toEmail, subject, title, otp, description } = input;
+  if (!env.SMTP_USER || !env.SMTP_PASS) {
+    console.log(`
+========================================
+\u{1F4E7} [DEV OTP LOG] ${title}
+To: ${toEmail}
+OTP Code: ${otp}
+Subject: ${subject}
+========================================
+`);
+    return false;
+  }
+  try {
+    await transporter.sendMail({
+      from: env.SMTP_FROM,
+      to: toEmail,
+      subject,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 24px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #ffffff;">
+          <h2 style="color: #4f46e5; margin-top: 0; text-align: center;">${title}</h2>
+          <p style="color: #374151; font-size: 14px; line-height: 1.5;">${description}</p>
+          <div style="background-color: #f3f4f6; padding: 18px; border-radius: 8px; margin: 24px 0; text-align: center; letter-spacing: 6px;">
+            <span style="font-size: 32px; font-weight: bold; color: #111827;">${otp}</span>
+          </div>
+          <p style="font-size: 12px; color: #6b7280; text-align: center;">This code will expire in 5 minutes. Please do not share it with anyone.</p>
+          <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
+          <p style="font-size: 11px; color: #9ca3af; text-align: center;">DevMentor Platform \u2022 Credit-Based Mentorship & Learning</p>
+        </div>
+      `
+    });
+    return true;
+  } catch (err) {
+    console.error("\u274C Failed to send OTP email via Nodemailer:", err);
+    return false;
+  }
+};
+var sendPaymentReceiptEmail = async (input) => {
+  const { toEmail, studentName, invoiceNumber, amount, creditsEarned, pdfBuffer } = input;
+  if (!env.SMTP_USER || !env.SMTP_PASS) {
+    console.warn("SMTP credentials not fully set up in .env. Skipping receipt email send.");
+    return false;
+  }
+  try {
+    await transporter.sendMail({
+      from: env.SMTP_FROM,
+      to: toEmail,
+      subject: `Payment Receipt: ${invoiceNumber} - DevMentor`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+          <h2 style="color: #4f46e5; margin-top: 0;">Payment Received! \u{1F389}</h2>
+          <p>Hi <strong>${studentName}</strong>,</p>
+          <p>Thank you for purchasing credits on DevMentor. Your top-up of <strong>${amount} BDT (${creditsEarned} Credits)</strong> was successfully processed via bKash.</p>
+          <div style="background-color: #f9fafb; padding: 15px; border-radius: 6px; margin: 20px 0;">
+            <p style="margin: 5px 0;"><strong>Invoice Number:</strong> ${invoiceNumber}</p>
+            <p style="margin: 5px 0;"><strong>Amount Paid:</strong> BDT ${amount.toFixed(2)}</p>
+            <p style="margin: 5px 0;"><strong>Credits Added:</strong> ${creditsEarned} Credits</p>
+          </div>
+          <p>We have attached your official PDF payment receipt to this email.</p>
+          <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
+          <p style="font-size: 12px; color: #6b7280; text-align: center;">DevMentor Platform \u2022 High-Impact Mentorship</p>
+        </div>
+      `,
+      attachments: [
+        {
+          filename: `Receipt-${invoiceNumber}.pdf`,
+          content: pdfBuffer,
+          contentType: "application/pdf"
+        }
+      ]
+    });
+    return true;
+  } catch (err) {
+    console.error("\u274C Failed to send receipt email via Nodemailer:", err);
+    return false;
+  }
+};
+
 // src/lib/auth.ts
 var auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
@@ -762,7 +853,37 @@ var auth = betterAuth({
       }
     }
   },
-  emailAndPassword: { enabled: true },
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: true
+  },
+  plugins: [
+    emailOTP({
+      otpLength: 6,
+      expiresIn: 300,
+      // 5 minutes TTL in Redis
+      sendVerificationOnSignUp: true,
+      async sendVerificationOTP({ email, otp, type }) {
+        if (type === "forget-password") {
+          await sendOTPEmail({
+            toEmail: email,
+            subject: "Reset Your DevMentor Password \u{1F511}",
+            title: "Password Reset OTP",
+            otp,
+            description: "You requested to reset your DevMentor account password. Use the 6-digit code below to set a new password. If you didn't request this, please ignore this email."
+          });
+        } else {
+          await sendOTPEmail({
+            toEmail: email,
+            subject: "Verify Your DevMentor Account \u{1F510}",
+            title: "Email Verification OTP",
+            otp,
+            description: "Use the 6-digit code below to complete your registration on DevMentor. This code is valid for 5 minutes."
+          });
+        }
+      }
+    })
+  ],
   socialProviders: {
     google: {
       clientId: env.GOOGLE_CLIENT_ID,
@@ -1015,59 +1136,6 @@ var generatePaymentReceiptPDF = (data) => {
       reject(err);
     }
   });
-};
-
-// src/lib/email.ts
-import nodemailer from "nodemailer";
-var transporter = nodemailer.createTransport({
-  host: env.SMTP_HOST,
-  port: env.SMTP_PORT,
-  secure: env.SMTP_PORT === 465,
-  // true for 465, false for 587
-  auth: env.SMTP_USER && env.SMTP_PASS ? {
-    user: env.SMTP_USER,
-    pass: env.SMTP_PASS
-  } : void 0
-});
-var sendPaymentReceiptEmail = async (input) => {
-  const { toEmail, studentName, invoiceNumber, amount, creditsEarned, pdfBuffer } = input;
-  if (!env.SMTP_USER || !env.SMTP_PASS) {
-    console.warn("SMTP credentials not fully set up in .env. Skipping receipt email send.");
-    return false;
-  }
-  try {
-    await transporter.sendMail({
-      from: env.SMTP_FROM,
-      to: toEmail,
-      subject: `Payment Receipt: ${invoiceNumber} - DevMentor`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-          <h2 style="color: #4f46e5; margin-top: 0;">Payment Received! \u{1F389}</h2>
-          <p>Hi <strong>${studentName}</strong>,</p>
-          <p>Thank you for purchasing credits on DevMentor. Your top-up of <strong>${amount} BDT (${creditsEarned} Credits)</strong> was successfully processed via bKash.</p>
-          <div style="background-color: #f9fafb; padding: 15px; border-radius: 6px; margin: 20px 0;">
-            <p style="margin: 5px 0;"><strong>Invoice Number:</strong> ${invoiceNumber}</p>
-            <p style="margin: 5px 0;"><strong>Amount Paid:</strong> BDT ${amount.toFixed(2)}</p>
-            <p style="margin: 5px 0;"><strong>Credits Added:</strong> ${creditsEarned} Credits</p>
-          </div>
-          <p>We have attached your official PDF payment receipt to this email.</p>
-          <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
-          <p style="font-size: 12px; color: #6b7280; text-align: center;">DevMentor Platform \u2022 High-Impact Mentorship</p>
-        </div>
-      `,
-      attachments: [
-        {
-          filename: `Receipt-${invoiceNumber}.pdf`,
-          content: pdfBuffer,
-          contentType: "application/pdf"
-        }
-      ]
-    });
-    return true;
-  } catch (err) {
-    console.error("\u274C Failed to send receipt email via Nodemailer:", err);
-    return false;
-  }
 };
 
 // src/modules/payment/payment.service.ts
