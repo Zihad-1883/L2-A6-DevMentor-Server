@@ -13,11 +13,13 @@ async function bootstrap(): Promise<void> {
 
   // 3. Start HTTP server
   const server = app.listen(env.PORT, () => {
-    console.log(`✅  DevMentor Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
+    console.log(
+      `✅  DevMentor Server running in ${env.NODE_ENV} mode on port ${env.PORT}`,
+    );
     console.log(`🔗  http://localhost:${env.PORT}/api/v1/health`);
   });
 
-  // 4. Graceful shutdown 
+  // 4. Graceful shutdown
   const shutdown = async (signal: string) => {
     console.log(`\n ${signal} received — shutting down gracefully...`);
     server.close(async () => {
@@ -28,7 +30,7 @@ async function bootstrap(): Promise<void> {
   };
 
   process.on("SIGTERM", () => shutdown("SIGTERM"));
-  process.on("SIGINT", () => shutdown("SIGINT"));   // Ctrl+C
+  process.on("SIGINT", () => shutdown("SIGINT")); // Ctrl+C
 
   process.on("unhandledRejection", (reason: unknown) => {
     console.error("💥 Unhandled Rejection:", reason);

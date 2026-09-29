@@ -15,17 +15,30 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Register a new user account on DevMentor. Default role assigned is student.\n  \"name\": \"Zihad Ahmed\",\n  \"email\": \"student@devmentor.com\",\n  \"password\": \"Student@123456\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"name\": \"Zihad Ahmed\",\n  \"email\": \"student@devmentor.com\",\n  \"password\": \"Student@123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/auth/sign-up/email",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "sign-up", "email"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "sign-up",
+                "email"
+              ]
             },
             "description": "API Purpose: Registers a new user account on DevMentor platform. Default role assigned is student. Returns user details and session token."
           },
@@ -51,18 +64,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Origin", "value": "https://dev-mentor-server.vercel.app" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Origin",
+                "value": "https://dev-mentor-server.vercel.app"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // ==========================================\n  // 🔑 ROLE 1: ADMIN LOGIN (Active by default)\n  // ==========================================\n  \"email\": \"admin@devmentor.com\",\n  \"password\": \"Admin@123456\"\n\n  // ==========================================\n  // 🔑 ROLE 2: MENTOR LOGIN (Uncomment to use)\n  // ==========================================\n  // \"email\": \"mentor@devmentor.com\",\n  // \"password\": \"Mentor@123456\"\n\n  // ==========================================\n  // 🔑 ROLE 3: STUDENT LOGIN (Uncomment to use)\n  // ==========================================\n  // \"email\": \"student@devmentor.com\",\n  // \"password\": \"Student@123456\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"email\": \"admin@devmentor.com\",\n  \"password\": \"Admin@123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/auth/sign-in/email",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "sign-in", "email"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "sign-in",
+                "email"
+              ]
             },
             "description": "API Purpose: Authenticates credentials for any of the 3 platform roles (Admin, Mentor, Student) and auto-saves the session token to the {{token}} collection variable. Swap/uncomment desired role credentials in body."
           },
@@ -73,12 +102,20 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/auth/sign-out",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "sign-out"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "sign-out"
+              ]
             },
             "description": "Invalidates the current session token."
           },
@@ -89,17 +126,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Sends a 6-digit email verification OTP code stored in Upstash Redis (5-min TTL).\n  \"email\": \"student@devmentor.com\",\n  \"type\": \"email-verification\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"email\": \"student@devmentor.com\",\n  \"type\": \"email-verification\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/auth/email-otp/send-verification-otp",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "email-otp", "send-verification-otp"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "email-otp",
+                "send-verification-otp"
+              ]
             },
             "description": "API Purpose: Sends a 6-digit email verification OTP code to user email (expires in 5 minutes)."
           },
@@ -110,17 +164,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Verifies submitted 6-digit OTP code against Upstash Redis and sets emailVerified: true.\n  \"email\": \"student@devmentor.com\",\n  \"otp\": \"123456\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"email\": \"student@devmentor.com\",\n  \"otp\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/auth/email-otp/verify-email",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "email-otp", "verify-email"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "email-otp",
+                "verify-email"
+              ]
             },
             "description": "API Purpose: Verifies 6-digit OTP code stored in Redis and updates user emailVerified status in database."
           },
@@ -131,17 +202,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Sends a 6-digit password reset OTP code stored in Upstash Redis (5-min TTL).\n  \"email\": \"student@devmentor.com\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"email\": \"student@devmentor.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/auth/email-otp/request-password-reset",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "email-otp", "request-password-reset"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "email-otp",
+                "request-password-reset"
+              ]
             },
             "description": "API Purpose: Sends a 6-digit password reset OTP code to user email (expires in 5 minutes)."
           },
@@ -152,17 +240,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Validates 6-digit reset password OTP code from Redis and updates account password hash.\n  \"email\": \"student@devmentor.com\",\n  \"otp\": \"123456\",\n  \"password\": \"NewStudentPassword@123456\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"email\": \"student@devmentor.com\",\n  \"otp\": \"123456\",\n  \"password\": \"NewStudentPassword@123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/auth/email-otp/reset-password",
-              "host": ["{{baseUrl}}"],
-              "path": ["auth", "email-otp", "reset-password"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "email-otp",
+                "reset-password"
+              ]
             },
             "description": "API Purpose: Verifies reset password OTP code from Redis and sets new password."
           },
@@ -179,12 +284,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/users/me",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "me"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
             },
             "description": "Returns the current user's profile, role, wallet balance, and mentor profile if applicable."
           },
@@ -195,18 +308,33 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Update logged-in user profile details (name, mentor bio, avatar image URL).\n  \"name\": \"Zihad Ahmed Updated\",\n  \"bio\": \"Full-stack engineer specializing in Node.js, Prisma, and React. Passionate about mentorship.\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"name\": \"Zihad Ahmed Updated\",\n  \"bio\": \"Full-stack engineer specializing in Node.js, Prisma, and React. Passionate about mentorship.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/users/me",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "me"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
             },
             "description": "API Purpose: Updates logged-in user's name, avatar image URL, or mentor bio."
           },
@@ -217,12 +345,21 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/users/me/dashboard",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "me", "dashboard"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "dashboard"
+              ]
             },
             "description": "Returns role-separated summary: Students see enrollments & sprint stats. Mentors see created/claimed stats."
           },
@@ -241,13 +378,29 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/mentors?search=nodejs&tag=TypeScript&page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["mentors"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mentors"
+              ],
               "query": [
-                { "key": "search", "value": "nodejs" },
-                { "key": "tag", "value": "TypeScript" },
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" }
+                {
+                  "key": "search",
+                  "value": "nodejs"
+                },
+                {
+                  "key": "tag",
+                  "value": "TypeScript"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
               ]
             },
             "description": "Public searchable mentor directory filtered by tech stack tag and paginated."
@@ -258,11 +411,21 @@
           "name": "Get Single Mentor Profile",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/mentors/{{mentorId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["mentors", "{{mentorId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mentors",
+                "{{mentorId}}"
+              ]
             },
             "description": "Public mentor profile with their active cohorts and claimed sprints."
           },
@@ -273,18 +436,33 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Student submits a formal application to become an approved mentor on DevMentor.\n  \"bio\": \"Senior full-stack engineer with 5 years of experience building production Node.js backends and React frontends.\",\n  \"techStackTags\": [\"Node.js\", \"TypeScript\", \"React\", \"PostgreSQL\", \"Prisma\"],\n  \"experienceLevel\": \"SENIOR\",\n  \"githubUrl\": \"https://github.com/zihad-dev\",\n  \"resumeUrl\": \"https://res.cloudinary.com/bddbmggs/raw/upload/resume.pdf\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"bio\": \"Senior full-stack engineer with 5 years of experience building production Node.js backends and React frontends.\",\n  \"techStackTags\": [\n    \"Node.js\",\n    \"TypeScript\",\n    \"React\",\n    \"PostgreSQL\",\n    \"Prisma\"\n  ],\n  \"experienceLevel\": \"SENIOR\",\n  \"githubUrl\": \"https://github.com/zihad-dev\",\n  \"resumeUrl\": \"https://res.cloudinary.com/demo/raw/upload/v12345/resume.pdf\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/mentors/apply",
-              "host": ["{{baseUrl}}"],
-              "path": ["mentors", "apply"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mentors",
+                "apply"
+              ]
             },
             "description": "API Purpose: Student submits a mentor application. Admin must approve before user role is upgraded to mentor."
           },
@@ -301,18 +479,32 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Student creates a 1-on-1 sprint mentorship request with start date, duration, and selected days.\n  \"title\": \"Fullstack Next.js 15 & PostgreSQL 1-on-1 Guidance\",\n  \"description\": \"I need 2 weeks of intensive guidance to build a production-grade backend using Prisma ORM and Next.js 15 App Router. Struggling with server actions and database transactions.\",\n  \"techStackTags\": [\"Next.js\", \"TypeScript\", \"PostgreSQL\", \"Prisma\"],\n  \"startDate\": \"2026-10-01T00:00:00.000Z\",\n  \"durationDays\": 14,\n  \"selectedDays\": [1, 3, 5, 7, 9, 11, 13]\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"title\": \"Fullstack Next.js 15 & PostgreSQL 1-on-1 Guidance\",\n  \"description\": \"I need 2 weeks of intensive guidance to build a production-grade backend using Prisma ORM and Next.js 15 App Router.\",\n  \"techStackTags\": [\n    \"Next.js\",\n    \"TypeScript\",\n    \"PostgreSQL\",\n    \"Prisma\"\n  ],\n  \"startDate\": \"2026-10-01T00:00:00.000Z\",\n  \"durationDays\": 14,\n  \"selectedDays\": [\n    1,\n    3,\n    5,\n    7,\n    9,\n    11,\n    13\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/sprints",
-              "host": ["{{baseUrl}}"],
-              "path": ["sprints"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sprints"
+              ]
             },
             "description": "API Purpose: Creates a new 1-on-1 sprint request in PENDING_CLAIM status and auto-generates session slots for each selected day."
           },
@@ -323,17 +515,37 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/sprints/open-pool?search=next.js&tag=TypeScript&page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["sprints", "open-pool"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sprints",
+                "open-pool"
+              ],
               "query": [
-                { "key": "search", "value": "next.js" },
-                { "key": "tag", "value": "TypeScript" },
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" }
+                {
+                  "key": "search",
+                  "value": "next.js"
+                },
+                {
+                  "key": "tag",
+                  "value": "TypeScript"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
               ]
             },
             "description": "Mentors browse all PENDING_CLAIM sprint requests with keyword and tag filtering."
@@ -345,12 +557,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/sprints/my-sprints",
-              "host": ["{{baseUrl}}"],
-              "path": ["sprints", "my-sprints"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sprints",
+                "my-sprints"
+              ]
             },
             "description": "Returns all sprint requests associated with the logged-in user."
           },
@@ -361,12 +581,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/sprints/{{sprintId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["sprints", "{{sprintId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sprints",
+                "{{sprintId}}"
+              ]
             },
             "description": "Get full details of a single sprint request including session slots."
           },
@@ -377,18 +605,33 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Updated: Next.js 15 App Router & Prisma v7 Deep Dive\",\n  \"techStackTags\": [\"Next.js\", \"TypeScript\", \"Prisma\", \"Express\"]\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"title\": \"Updated: Next.js 15 App Router & Prisma v7 Deep Dive\",\n  \"techStackTags\": [\n    \"Next.js\",\n    \"TypeScript\",\n    \"Prisma\",\n    \"Express\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/sprints/{{sprintId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["sprints", "{{sprintId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sprints",
+                "{{sprintId}}"
+              ]
             },
             "description": "Update sprint details while still in PENDING_CLAIM status."
           },
@@ -399,12 +642,21 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/sprints/{{sprintId}}/claim",
-              "host": ["{{baseUrl}}"],
-              "path": ["sprints", "{{sprintId}}", "claim"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sprints",
+                "{{sprintId}}",
+                "claim"
+              ]
             },
             "description": "Mentor officially claims a PENDING_CLAIM sprint. Status → CLAIMED. Only approved mentors can claim."
           },
@@ -415,12 +667,20 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/sprints/{{sprintId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["sprints", "{{sprintId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sprints",
+                "{{sprintId}}"
+              ]
             },
             "description": "Soft-deletes the sprint request if it hasn't been claimed yet."
           },
@@ -437,18 +697,34 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Mentor proposes a scheduled date, time, and Google Meet join link for a sprint session slot.\n  \"scheduledAt\": \"2026-10-03T15:00:00.000Z\",\n  \"durationMinutes\": 60,\n  \"joinLink\": \"https://meet.google.com/abc-defg-hij\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"proposedTime\": \"2026-10-02T10:00:00.000Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/sprint-sessions/{{sessionId}}/propose",
-              "host": ["{{baseUrl}}"],
-              "path": ["sprint-sessions", "{{sessionId}}", "propose"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sprint-sessions",
+                "{{sessionId}}",
+                "propose"
+              ]
             },
             "description": "API Purpose: Mentor proposes a date/time and Google Meet join link for a specific session slot with schedule conflict checking."
           },
@@ -459,12 +735,21 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/sprint-sessions/{{sessionId}}/confirm",
-              "host": ["{{baseUrl}}"],
-              "path": ["sprint-sessions", "{{sessionId}}", "confirm"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sprint-sessions",
+                "{{sessionId}}",
+                "confirm"
+              ]
             },
             "description": "Student confirms the proposed slot. Credits are deducted and held in SPRINT_ESCROW."
           },
@@ -475,12 +760,21 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/sprint-sessions/{{sessionId}}/complete",
-              "host": ["{{baseUrl}}"],
-              "path": ["sprint-sessions", "{{sessionId}}", "complete"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sprint-sessions",
+                "{{sessionId}}",
+                "complete"
+              ]
             },
             "description": "Marks session COMPLETED. Releases escrowed credits to mentor's wallet."
           },
@@ -491,12 +785,21 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/sprint-sessions/{{sessionId}}/cancel",
-              "host": ["{{baseUrl}}"],
-              "path": ["sprint-sessions", "{{sessionId}}", "cancel"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sprint-sessions",
+                "{{sessionId}}",
+                "cancel"
+              ]
             },
             "description": "Cancel a session. If cancelled >1 hour before start, full refund. If <1 hour, no refund."
           },
@@ -507,12 +810,21 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/sprint-sessions/sprint/{{sprintId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["sprint-sessions", "sprint", "{{sprintId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sprint-sessions",
+                "sprint",
+                "{{sprintId}}"
+              ]
             },
             "description": "Retrieve all scheduled session slots for a given sprint request."
           },
@@ -531,13 +843,29 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/cohorts?search=backend&tag=Node.js&page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohorts"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohorts"
+              ],
               "query": [
-                { "key": "search", "value": "backend" },
-                { "key": "tag", "value": "Node.js" },
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" }
+                {
+                  "key": "search",
+                  "value": "backend"
+                },
+                {
+                  "key": "tag",
+                  "value": "Node.js"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
               ]
             },
             "description": "Public paginated directory of all PUBLISHED cohort programs."
@@ -548,11 +876,21 @@
           "name": "Get Single Cohort by ID",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/cohorts/{{cohortId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohorts", "{{cohortId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohorts",
+                "{{cohortId}}"
+              ]
             },
             "description": "Full cohort details including sessions, mentor info, and enrollment count."
           },
@@ -563,18 +901,32 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Mentor creates a group cohort program requiring admin approval before publishing to students.\n  \"title\": \"Backend Engineering with Node.js & Prisma\",\n  \"description\": \"Learn to design scalable PostgreSQL databases, write clean Express 5 microservices, and integrate payment gateways. From zero to production-ready.\",\n  \"durationWeeks\": 6,\n  \"capacity\": 30,\n  \"techStackTags\": [\"Node.js\", \"TypeScript\", \"Express\", \"PostgreSQL\", \"Prisma\"]\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"title\": \"Backend Engineering with Node.js & Prisma\",\n  \"description\": \"Learn to design scalable PostgreSQL databases, write clean Express 5 microservices, and integrate payment gateways. From zero to production-ready.\",\n  \"durationWeeks\": 6,\n  \"capacity\": 30,\n  \"totalCost\": 400,\n  \"techStackTags\": [\n    \"Node.js\",\n    \"TypeScript\",\n    \"Express\",\n    \"PostgreSQL\",\n    \"Prisma\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/cohorts",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohorts"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohorts"
+              ]
             },
             "description": "API Purpose: Creates a new cohort program in PENDING_APPROVAL status. Admin must approve before publishing."
           },
@@ -585,12 +937,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/cohorts/my-created",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohorts", "my-created"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohorts",
+                "my-created"
+              ]
             },
             "description": "Returns all cohorts created by the logged-in mentor."
           },
@@ -601,18 +961,33 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"title\": \"Advanced Backend Engineering & System Architecture\",\n  \"capacity\": 35,\n  \"status\": \"PUBLISHED\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/cohorts/{{cohortId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohorts", "{{cohortId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohorts",
+                "{{cohortId}}"
+              ]
             },
             "description": "Update cohort details or publish it (requires admin approval first)."
           },
@@ -623,12 +998,21 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/cohorts/{{cohortId}}/register",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohorts", "{{cohortId}}", "register"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohorts",
+                "{{cohortId}}",
+                "register"
+              ]
             },
             "description": "Student enrolls in a published cohort. Checks for duplicate enrollment and capacity."
           },
@@ -639,12 +1023,20 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/cohorts/{{cohortId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohorts", "{{cohortId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohorts",
+                "{{cohortId}}"
+              ]
             },
             "description": "Soft-deletes the cohort by setting deletedAt timestamp."
           },
@@ -661,18 +1053,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"title\": \"Module 1: Express 5 & Middleware Architecture\",\n  \"description\": \"Deep dive into Express 5 routing, custom middleware, error handling, and request lifecycle.\",\n  \"scheduledAt\": \"2026-10-10T15:00:00.000Z\",\n  \"durationMinutes\": 90,\n  \"creditPrice\": 5,\n  \"joinLink\": \"https://meet.google.com/xyz-cohort-01\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/cohort-sessions/cohort/{{cohortId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohort-sessions", "cohort", "{{cohortId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohort-sessions",
+                "cohort",
+                "{{cohortId}}"
+              ]
             },
             "description": "Add a new group session to the cohort with a credit price for joining."
           },
@@ -683,12 +1091,21 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/cohort-sessions/cohort/{{cohortId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohort-sessions", "cohort", "{{cohortId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohort-sessions",
+                "cohort",
+                "{{cohortId}}"
+              ]
             },
             "description": "Get all sessions for a cohort. Non-enrolled students cannot see join links or resources."
           },
@@ -699,18 +1116,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"title\": \"GitHub Starter Repository\",\n  \"type\": \"LINK\",\n  \"url\": \"https://github.com/devmentor/express-typescript-starter\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/cohort-sessions/{{sessionId}}/resources",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohort-sessions", "{{sessionId}}", "resources"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohort-sessions",
+                "{{sessionId}}",
+                "resources"
+              ]
             },
             "description": "Attach a resource (LINK, VIDEO, PDF) to a session. Visible only to enrolled participants."
           },
@@ -721,12 +1154,21 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/cohort-sessions/{{sessionId}}/join",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohort-sessions", "{{sessionId}}", "join"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohort-sessions",
+                "{{sessionId}}",
+                "join"
+              ]
             },
             "description": "Student joins a session. Credits are held in escrow until session completes."
           },
@@ -737,12 +1179,21 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/cohort-sessions/{{sessionId}}/complete",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohort-sessions", "{{sessionId}}", "complete"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohort-sessions",
+                "{{sessionId}}",
+                "complete"
+              ]
             },
             "description": "Mark session complete (only after scheduled end time). Releases escrow to mentor wallet."
           },
@@ -753,12 +1204,21 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/cohort-sessions/{{sessionId}}/cancel",
-              "host": ["{{baseUrl}}"],
-              "path": ["cohort-sessions", "{{sessionId}}", "cancel"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cohort-sessions",
+                "{{sessionId}}",
+                "cancel"
+              ]
             },
             "description": "Cancel session. All participant escrow credits are refunded automatically."
           },
@@ -775,18 +1235,32 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Student submits a QUICK code snippet review request (10 Credits / 2-hour SLA).\n  \"tier\": \"QUICK\",\n  \"title\": \"Fix JWT Authorization Middleware Bug\",\n  \"description\": \"Tokens generated by Better Auth are throwing 401 Unauthorized in my custom Express middleware. The issue is with Bearer prefix stripping.\",\n  \"codeSnippet\": \"export const verifyToken = (req, res, next) => {\\n  const token = req.headers.authorization;\\n  if (!token) return res.status(401).send('No token');\\n  next();\\n};\",\n  \"language\": \"typescript\",\n  \"specificFiles\": \"src/middlewares/auth.middleware.ts\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"tier\": \"QUICK\",\n  \"title\": \"Review Express 5 Async Error Handler & Prisma Transactions\",\n  \"description\": \"Please check if my error middleware properly catches async Prisma errors and if escrow lock is safe.\",\n  \"codeSnippet\": \"export const createEscrow = async (userId: string, amount: number) => {\\n  return await prisma.$transaction(async (tx) => {\\n    const wallet = await tx.wallet.update({ where: { userId }, data: { creditBalance: { decrement: amount }, escrowBalance: { increment: amount } } });\\n    return wallet;\\n  });\\n};\",\n  \"language\": \"typescript\",\n  \"githubRepoUrl\": \"https://github.com/zihad-dev/kodex-server\",\n  \"branchName\": \"main\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/code-reviews",
-              "host": ["{{baseUrl}}"],
-              "path": ["code-reviews"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "code-reviews"
+              ]
             },
             "description": "API Purpose: Student creates a QUICK code review request. 10 Credits are atomically escrowed from wallet."
           },
@@ -797,18 +1271,32 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Student submits a DEEP repository code review request (50 Credits / 24-hour SLA).\n  \"tier\": \"DEEP\",\n  \"title\": \"Architecture & Security Review — bKash Payment Microservice\",\n  \"description\": \"Please do a deep review of my bKash payment execution flow for race conditions, transaction atomicity, and security vulnerabilities.\",\n  \"githubRepoUrl\": \"https://github.com/Zihad-1883/L2-A6-DevMentor-Server\",\n  \"branchName\": \"main\",\n  \"specificFiles\": \"src/modules/payment/payment.service.ts, src/modules/payment/bkash.service.ts\",\n  \"language\": \"typescript\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"tier\": \"DEEP\",\n  \"title\": \"Full Architectural Audit of Better Auth & Upstash Redis Integration\",\n  \"description\": \"Need deep review on rate limiting, session TTL caching, and Nodemailer transaction receipts.\",\n  \"codeSnippet\": \"export const auth = betterAuth({ database: prismaAdapter(prisma, { provider: 'postgresql' }), secondaryStorage: { ... } });\",\n  \"language\": \"typescript\",\n  \"githubRepoUrl\": \"https://github.com/zihad-dev/kodex-server\",\n  \"branchName\": \"main\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/code-reviews",
-              "host": ["{{baseUrl}}"],
-              "path": ["code-reviews"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "code-reviews"
+              ]
             },
             "description": "API Purpose: Student creates a DEEP code review request. 50 Credits are escrowed from wallet. 24-hour delivery SLA."
           },
@@ -819,18 +1307,34 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"codeSnippet\": \"export const verifyToken = async (req, res, next) => {\\n  const authHeader = req.headers.authorization;\\n  const token = authHeader && authHeader.split(' ')[1];\\n  if (!token) return res.status(401).json({ message: 'Unauthorized' });\\n  next();\\n};\",\n  \"language\": \"typescript\",\n  \"description\": \"Updated with Bearer prefix splitting logic — still getting 401.\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"codeSnippet\": \"export const verifyToken = async (req, res, next) => {\\n  const authHeader = req.headers.authorization;\\n  const token = authHeader && authHeader.split(' ')[1];\\n  if (!token) return res.status(401).json({ message: 'Unauthorized' });\\n  next();\\n};\",\n  \"language\": \"typescript\",\n  \"description\": \"Updated with Bearer prefix splitting logic \\u2014 still getting 401.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/code-reviews/{{reviewId}}/snippet",
-              "host": ["{{baseUrl}}"],
-              "path": ["code-reviews", "{{reviewId}}", "snippet"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "code-reviews",
+                "{{reviewId}}",
+                "snippet"
+              ]
             },
             "description": "Update the code snippet or description while the request is still in OPEN status."
           },
@@ -841,18 +1345,41 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/code-reviews/pool?tier=QUICK&language=typescript&search=JWT&page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["code-reviews", "pool"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "code-reviews",
+                "pool"
+              ],
               "query": [
-                { "key": "tier", "value": "QUICK" },
-                { "key": "language", "value": "typescript" },
-                { "key": "search", "value": "JWT" },
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" }
+                {
+                  "key": "tier",
+                  "value": "QUICK"
+                },
+                {
+                  "key": "language",
+                  "value": "typescript"
+                },
+                {
+                  "key": "search",
+                  "value": "JWT"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
               ]
             },
             "description": "Mentors browse OPEN requests (and expired PREVIEW_LOCKED ones) with tier, language, and keyword filters."
@@ -864,12 +1391,21 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/code-reviews/{{reviewId}}/preview",
-              "host": ["{{baseUrl}}"],
-              "path": ["code-reviews", "{{reviewId}}", "preview"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "code-reviews",
+                "{{reviewId}}",
+                "preview"
+              ]
             },
             "description": "Mentor acquires a 10-minute exclusive lock. No other mentor can preview or claim during this window."
           },
@@ -880,12 +1416,21 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/code-reviews/{{reviewId}}/claim",
-              "host": ["{{baseUrl}}"],
-              "path": ["code-reviews", "{{reviewId}}", "claim"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "code-reviews",
+                "{{reviewId}}",
+                "claim"
+              ]
             },
             "description": "Mentor officially claims the request. Delivery deadline is calculated: QUICK = +2hrs, DEEP = +24hrs."
           },
@@ -896,18 +1441,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"summary\": \"Great foundation! The core bug was caused by missing Bearer prefix stripping and lack of async exception catching. I've refactored the middleware to follow production-ready patterns.\",\n  \"reviewedCodeSnippet\": \"import { Request, Response, NextFunction } from 'express';\\n\\nexport const verifyToken = (req: Request, res: Response, next: NextFunction) => {\\n  const authHeader = req.headers.authorization;\\n  if (!authHeader || !authHeader.startsWith('Bearer ')) {\\n    return res.status(401).json({ success: false, message: 'Unauthorized: Missing or malformed token' });\\n  }\\n  const token = authHeader.split(' ')[1];\\n  // TODO: Verify token with your auth library\\n  next();\\n};\",\n  \"videoUrl\": \"https://loom.com/share/demo-review-123\",\n  \"pullRequestUrl\": \"https://github.com/devmentor/example/pull/1\",\n  \"comments\": [\n    {\n      \"filePath\": \"src/middlewares/auth.middleware.ts\",\n      \"lineNumber\": 4,\n      \"commentText\": \"Always validate the 'Bearer ' scheme prefix before splitting to avoid index errors.\",\n      \"severity\": \"SECURITY\"\n    },\n    {\n      \"filePath\": \"src/middlewares/auth.middleware.ts\",\n      \"lineNumber\": 5,\n      \"commentText\": \"Return JSON error responses instead of plain string send() for consistent API format.\",\n      \"severity\": \"SUGGESTION\"\n    }\n  ]\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"summary\": \"Comprehensive review completed. Code structure is clean, Prisma transaction handling is safe.\",\n  \"reviewedCodeSnippet\": \"// Optimized version\\nexport const createEscrow = async (userId: string, amount: number) => { ... }\",\n  \"videoUrl\": \"https://loom.com/share/demo-review-video\",\n  \"comments\": [\n    {\n      \"filePath\": \"src/lib/auth.ts\",\n      \"lineNumber\": 37,\n      \"commentText\": \"Good call adding 60s expiration on redis.incrby!\",\n      \"severity\": \"SUGGESTION\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/code-reviews/{{reviewId}}/submit",
-              "host": ["{{baseUrl}}"],
-              "path": ["code-reviews", "{{reviewId}}", "submit"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "code-reviews",
+                "{{reviewId}}",
+                "submit"
+              ]
             },
             "description": "Mentor delivers feedback. Status → DELIVERED. Includes inline comments, refactored code, video & PR links."
           },
@@ -918,12 +1479,21 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/code-reviews/{{reviewId}}/approve",
-              "host": ["{{baseUrl}}"],
-              "path": ["code-reviews", "{{reviewId}}", "approve"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "code-reviews",
+                "{{reviewId}}",
+                "approve"
+              ]
             },
             "description": "Student approves the DELIVERED review. 100% of escrowed credits are released to the mentor's wallet. Status → COMPLETED."
           },
@@ -934,12 +1504,21 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/code-reviews/{{reviewId}}/cancel",
-              "host": ["{{baseUrl}}"],
-              "path": ["code-reviews", "{{reviewId}}", "cancel"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "code-reviews",
+                "{{reviewId}}",
+                "cancel"
+              ]
             },
             "description": "Student cancels an unclaimed request. 100% of escrowed credits refunded. Status → CANCELLED."
           },
@@ -956,12 +1535,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/enrollments/my-cohorts",
-              "host": ["{{baseUrl}}"],
-              "path": ["enrollments", "my-cohorts"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "enrollments",
+                "my-cohorts"
+              ]
             },
             "description": "Returns all cohort programs the logged-in student is enrolled in."
           },
@@ -972,12 +1559,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/enrollments/my-sprints",
-              "host": ["{{baseUrl}}"],
-              "path": ["enrollments", "my-sprints"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "enrollments",
+                "my-sprints"
+              ]
             },
             "description": "Returns all sprint requests submitted by the logged-in student."
           },
@@ -994,18 +1589,33 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Initiates bKash Tokenized Checkout payment to purchase wallet credits (500 BDT = 125 Credits).\n  \"amount\": 500\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"amount\": 500\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/payments/top-up",
-              "host": ["{{baseUrl}}"],
-              "path": ["payments", "top-up"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "top-up"
+              ]
             },
             "description": "API Purpose: Initiates bKash payment checkout for wallet credit top-up (500 BDT = 125 Credits). Returns bkashURL redirect URL."
           },
@@ -1015,14 +1625,31 @@
           "name": "bKash Payment Callback (Execute & Credit Wallet)",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/payments/bkash/callback?paymentID=TR001&status=success",
-              "host": ["{{baseUrl}}"],
-              "path": ["payments", "bkash", "callback"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "bkash",
+                "callback"
+              ],
               "query": [
-                { "key": "paymentID", "value": "TR001" },
-                { "key": "status", "value": "success" }
+                {
+                  "key": "paymentID",
+                  "value": "TR001"
+                },
+                {
+                  "key": "status",
+                  "value": "success"
+                }
               ]
             },
             "description": "API Purpose: bKash calls this URL after payment completion. Executes payment, credits wallet atomically, and emails PDF invoice."
@@ -1034,12 +1661,21 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/payments/wallet/me",
-              "host": ["{{baseUrl}}"],
-              "path": ["payments", "wallet", "me"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "wallet",
+                "me"
+              ]
             },
             "description": "API Purpose: Returns wallet credit balance, total earned, total withdrawn, and transaction ledger history."
           },
@@ -1050,12 +1686,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/payments/history",
-              "host": ["{{baseUrl}}"],
-              "path": ["payments", "history"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "history"
+              ]
             },
             "description": "API Purpose: Returns all bKash payment records (top-ups and withdrawals) for the logged-in user."
           },
@@ -1066,18 +1710,33 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Mentor requests payout cash-out of earned credits to their personal bKash account number (Min 1000 BDT).\n  \"amount\": 1000,\n  \"bkashNumber\": \"01770618575\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"amount\": 1000,\n  \"bkashNumber\": \"01712345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/payments/withdraw",
-              "host": ["{{baseUrl}}"],
-              "path": ["payments", "withdraw"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "withdraw"
+              ]
             },
             "description": "API Purpose: Mentor requests bKash cash-out withdrawal. Minimum 1000 BDT. Deducts credits and logs WITHDRAWAL transaction."
           },
@@ -1094,7 +1753,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "body": {
               "mode": "formdata",
@@ -1109,8 +1771,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/upload",
-              "host": ["{{baseUrl}}"],
-              "path": ["upload"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "upload"
+              ]
             },
             "description": "Upload a single file to Cloudinary. Returns secure_url for use in profile or resource fields. Max 10MB. Allowed: images, PDF, DOC."
           },
@@ -1127,18 +1793,41 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/admin/users?search=zihad&role=mentor&isBlocked=false&page=1&limit=20",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "users"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ],
               "query": [
-                { "key": "search", "value": "zihad" },
-                { "key": "role", "value": "mentor" },
-                { "key": "isBlocked", "value": "false" },
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "20" }
+                {
+                  "key": "search",
+                  "value": "zihad"
+                },
+                {
+                  "key": "role",
+                  "value": "mentor"
+                },
+                {
+                  "key": "isBlocked",
+                  "value": "false"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
               ]
             },
             "description": "Paginated user directory with name/email search, role filter, and block status filter."
@@ -1150,18 +1839,35 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"status\": \"APPROVED\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/admin/mentors/{{mentorProfileId}}/approve",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "mentors", "{{mentorProfileId}}", "approve"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "mentors",
+                "{{mentorProfileId}}",
+                "approve"
+              ]
             },
             "description": "Approve or reject a pending mentor application. Approving upgrades user.role to 'mentor'. Use status: 'REJECTED' with rejectionReason to reject."
           },
@@ -1172,18 +1878,35 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"status\": \"REJECTED\",\n  \"rejectionReason\": \"Incomplete GitHub portfolio. Please add at least 3 production projects.\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/admin/mentors/{{mentorProfileId}}/approve",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "mentors", "{{mentorProfileId}}", "approve"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "mentors",
+                "{{mentorProfileId}}",
+                "approve"
+              ]
             },
             "description": "Reject a pending mentor application with a reason."
           },
@@ -1194,18 +1917,35 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"isBlocked\": true\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/admin/users/{{userId}}/block",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "users", "{{userId}}", "block"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "{{userId}}",
+                "block"
+              ]
             },
             "description": "Toggle user account block status. Set `isBlocked: false` to unblock. Admin cannot block themselves."
           },
@@ -1216,18 +1956,35 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"status\": \"APPROVED\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/admin/cohorts/{{cohortId}}/approve",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "cohorts", "{{cohortId}}", "approve"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "cohorts",
+                "{{cohortId}}",
+                "approve"
+              ]
             },
             "description": "Admin approves a PENDING_APPROVAL cohort. Mentor can then publish it. Use 'REJECTED' to reject."
           },
@@ -1243,11 +2000,20 @@
           "name": "Health Check (Public)",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/health",
-              "host": ["{{baseUrl}}"],
-              "path": ["health"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
             },
             "description": "Returns server health status, uptime, and version info."
           },
@@ -1260,8 +2026,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/me",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "me"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
             },
             "description": "Demonstrates 401 Unauthorized when no Bearer token is provided."
           },
@@ -1272,12 +2043,20 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/admin/users",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "users"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ]
             },
             "description": "Demonstrates 403 Forbidden when a student or mentor token tries to access an admin-only endpoint."
           },
@@ -1288,18 +2067,32 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"tier\": \"INVALID_TIER\",\n  \"title\": \"\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/code-reviews",
-              "host": ["{{baseUrl}}"],
-              "path": ["code-reviews"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "code-reviews"
+              ]
             },
             "description": "Demonstrates Zod validation error with structured field-level errors when invalid body is sent."
           },
@@ -1309,11 +2102,20 @@
           "name": "🔴 Demo: 404 Not Found — Invalid Route",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/this-route-does-not-exist",
-              "host": ["{{baseUrl}}"],
-              "path": ["this-route-does-not-exist"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "this-route-does-not-exist"
+              ]
             },
             "description": "Demonstrates the global 404 Not Found handler for unmatched routes."
           },
@@ -1345,18 +2147,32 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Mentor creates a new MCQ assessment exam in DRAFT status (Can be free public, or linked to cohort/sprint).\n  \"title\": \"Full-Stack React & Node.js Assessment\",\n  \"description\": \"Comprehensive MCQ exam covering React hooks, Node.js event loop, and Prisma ORM.\",\n  \"durationMinutes\": 30,\n  \"totalMarks\": 100,\n  \"passMark\": 70,\n  \"isFree\": true\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"title\": \"Full-Stack React & Node.js Technical Assessment\",\n  \"description\": \"Comprehensive MCQ exam covering React hooks, Node.js event loop, and Prisma ORM.\",\n  \"durationMinutes\": 30,\n  \"totalMarks\": 100,\n  \"passMark\": 70,\n  \"isFree\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/exams",
-              "host": ["{{baseUrl}}"],
-              "path": ["exams"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams"
+              ]
             },
             "description": "API Purpose: Mentor creates a new exam in DRAFT status. Can set isFree: true or provide cohortId / sprintId."
           },
@@ -1367,18 +2183,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Mentor bulk-uploads multiple choice questions (MCQs) with 4 options, correct answer index, and explanation.\n  \"questions\": [\n    {\n      \"questionText\": \"Which React hook is used to perform side effects in functional components?\",\n      \"options\": [\"useState\", \"useEffect\", \"useContext\", \"useReducer\"],\n      \"correctOptionIndex\": 1,\n      \"explanation\": \"useEffect allows you to perform side effects like fetching data or updating the DOM.\",\n      \"marks\": 1\n    },\n    {\n      \"questionText\": \"In Node.js, which thread handles non-blocking I/O operations by default?\",\n      \"options\": [\"Main Thread / Event Loop\", \"Worker Thread\", \"Cluster Master\", \"Prisma Thread\"],\n      \"correctOptionIndex\": 0,\n      \"explanation\": \"Node.js uses a single-threaded Event Loop to handle non-blocking asynchronous I/O operations.\",\n      \"marks\": 1\n    }\n  ]\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"questions\": [\n    {\n      \"questionText\": \"What is the primary role of the event loop in Node.js?\",\n      \"options\": [\n        \"To execute synchronous CPU-intensive tasks on multiple threads\",\n        \"To handle asynchronous I/O operations non-blockingly on a single thread\",\n        \"To compile TypeScript code to native machine code\",\n        \"To manage PostgreSQL database connection pooling\"\n      ],\n      \"correctOptionIndex\": 1,\n      \"explanation\": \"Node.js uses a single-threaded event loop to offload asynchronous I/O tasks.\",\n      \"marks\": 50\n    },\n    {\n      \"questionText\": \"Which Prisma method is best for executing atomic multi-table updates?\",\n      \"options\": [\n        \"prisma.$queryRaw\",\n        \"prisma.$transaction\",\n        \"prisma.$executeRaw\",\n        \"prisma.user.updateMany\"\n      ],\n      \"correctOptionIndex\": 1,\n      \"explanation\": \"prisma.$transaction ensures interactive database queries execute atomically.\",\n      \"marks\": 50\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/exams/{{examId}}/questions",
-              "host": ["{{baseUrl}}"],
-              "path": ["exams", "{{examId}}", "questions"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams",
+                "{{examId}}",
+                "questions"
+              ]
             },
             "description": "API Purpose: Mentor bulk-uploads multiple choice questions with options, correct answer indices, and explanations. Auto-calculates totalQuestions, totalMarks, and durationMinutes."
           },
@@ -1389,12 +2221,21 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/exams/{{examId}}/publish",
-              "host": ["{{baseUrl}}"],
-              "path": ["exams", "{{examId}}", "publish"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams",
+                "{{examId}}",
+                "publish"
+              ]
             },
             "description": "API Purpose: Mentor publishes the exam (status DRAFT → PUBLISHED). Requires at least 1 question."
           },
@@ -1405,15 +2246,30 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mentorToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/exams/mentor/my-exams?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["exams", "mentor", "my-exams"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams",
+                "mentor",
+                "my-exams"
+              ],
               "query": [
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
               ]
             },
             "description": "API Purpose: Mentor views list of created exams with question counts and attempt statistics."
@@ -1425,15 +2281,28 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/exams?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["exams"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams"
+              ],
               "query": [
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
               ]
             },
             "description": "API Purpose: Student lists all published exams they are eligible to take (Free public exams + enrolled cohort/sprint exams)."
@@ -1445,12 +2314,21 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/exams/{{examId}}/start",
-              "host": ["{{baseUrl}}"],
-              "path": ["exams", "{{examId}}", "start"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams",
+                "{{examId}}",
+                "start"
+              ]
             },
             "description": "API Purpose: Student starts exam. Returns questions sanitized without correct option indices or explanations to prevent cheating."
           },
@@ -1461,18 +2339,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  // API Purpose: Student submits array of selected option answers for an active exam.\n  \"answers\": [\n    {\n      \"questionId\": \"QUESTION_ID_HERE\",\n      \"selectedOption\": 1\n    }\n  ]\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"answers\": [\n    {\n      \"questionId\": \"{{question1Id}}\",\n      \"selectedOption\": 1\n    },\n    {\n      \"questionId\": \"{{question2Id}}\",\n      \"selectedOption\": 1\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/exams/{{examId}}/submit",
-              "host": ["{{baseUrl}}"],
-              "path": ["exams", "{{examId}}", "submit"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams",
+                "{{examId}}",
+                "submit"
+              ]
             },
             "description": "API Purpose: Student submits answers. Backend auto-grades response, calculates score & percentage, and returns question breakdown with explanations."
           },
@@ -1483,15 +2377,30 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/exams/me/attempts?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["exams", "me", "attempts"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams",
+                "me",
+                "attempts"
+              ],
               "query": [
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
               ]
             },
             "description": "API Purpose: Student views historical attempts, scores, percentage results, and pass/fail statuses."
@@ -1509,7 +2418,7 @@
     },
     {
       "key": "token",
-      "value": "",
+      "value": "xFce6eucFhP11vbuX636WHgE6sy8oYco",
       "description": "Paste your Bearer token here after login (or use the Login request — it auto-saves)"
     },
     {
@@ -1551,6 +2460,21 @@
       "key": "userId",
       "value": "",
       "description": "ID of any user (for admin operations)"
+    },
+    {
+      "key": "adminToken",
+      "value": "FgG6yEJ2N5qrB98QLVFeX4VXCTk0vnWf",
+      "description": "adminToken token"
+    },
+    {
+      "key": "mentorToken",
+      "value": "bw8J2L2hHl0QiKqPJE2iW2mg8ZpRrlSK",
+      "description": "mentorToken token"
+    },
+    {
+      "key": "studentToken",
+      "value": "xFce6eucFhP11vbuX636WHgE6sy8oYco",
+      "description": "studentToken token"
     }
   ]
 }

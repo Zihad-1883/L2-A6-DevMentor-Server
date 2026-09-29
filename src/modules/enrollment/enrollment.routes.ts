@@ -1,8 +1,3 @@
-/**
- * @file src/modules/enrollment/enrollment.routes.ts
- * @description Express routes for student cohort and sprint enrollment queries.
- */
-
 import { Router } from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { enrollmentController } from "./enrollment.controller.js";

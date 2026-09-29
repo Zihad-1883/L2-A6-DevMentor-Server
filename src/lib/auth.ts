@@ -47,14 +47,14 @@ export const auth = betterAuth({
 
     rateLimit: {
         window: 60,
-        max: 100,
+        max: 10000,
         customRules: {
-            "/sign-in/email": { window: 60, max: 100 },
-            "/sign-up/email": { window: 60, max: 100 },
-            "/email-otp/send-verification-otp": { window: 60, max: 100 },
-            "/email-otp/verify-email": { window: 60, max: 100 },
-            "/email-otp/request-password-reset": { window: 60, max: 100 },
-            "/email-otp/reset-password": { window: 60, max: 100 },
+            "/sign-in/email": { window: 60, max: 10000 },
+            "/sign-up/email": { window: 60, max: 10000 },
+            "/email-otp/send-verification-otp": { window: 60, max: 10000 },
+            "/email-otp/verify-email": { window: 60, max: 10000 },
+            "/email-otp/request-password-reset": { window: 60, max: 10000 },
+            "/email-otp/reset-password": { window: 60, max: 10000 },
         },
         storage: "secondary-storage",
     },

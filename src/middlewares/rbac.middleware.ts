@@ -12,7 +12,10 @@ export const requireRole = (...roles: Role[]) => {
             return next(new AppError("Unauthorized: not authenticated", 401));
         }
 
-        if (roles.length && !roles.includes(req.user.role as Role)) {
+        const userRole = (req.user.role || "").toLowerCase();
+        const allowedRoles = roles.map((r) => r.toLowerCase());
+
+        if (roles.length && !allowedRoles.includes(userRole)) {
             return next(
                 new AppError(
                     `Forbidden: requires role ${roles.join(" or ")}`,

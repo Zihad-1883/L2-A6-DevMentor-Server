@@ -61,7 +61,7 @@ import rateLimit from "express-rate-limit";
 var generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1e3,
   // 15 minutes
-  max: 100,
+  max: 1e4,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -71,7 +71,7 @@ var generalLimiter = rateLimit({
 });
 var authLimiter = rateLimit({
   windowMs: 15 * 60 * 1e3,
-  max: 20,
+  max: 1e4,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -840,14 +840,14 @@ var auth = betterAuth({
   basePath: "/api/v1/auth",
   rateLimit: {
     window: 60,
-    max: 100,
+    max: 1e4,
     customRules: {
-      "/sign-in/email": { window: 60, max: 100 },
-      "/sign-up/email": { window: 60, max: 100 },
-      "/email-otp/send-verification-otp": { window: 60, max: 100 },
-      "/email-otp/verify-email": { window: 60, max: 100 },
-      "/email-otp/request-password-reset": { window: 60, max: 100 },
-      "/email-otp/reset-password": { window: 60, max: 100 }
+      "/sign-in/email": { window: 60, max: 1e4 },
+      "/sign-up/email": { window: 60, max: 1e4 },
+      "/email-otp/send-verification-otp": { window: 60, max: 1e4 },
+      "/email-otp/verify-email": { window: 60, max: 1e4 },
+      "/email-otp/request-password-reset": { window: 60, max: 1e4 },
+      "/email-otp/reset-password": { window: 60, max: 1e4 }
     },
     storage: "secondary-storage"
   },
@@ -1513,7 +1513,9 @@ var requireRole = (...roles) => {
     if (!req.user) {
       return next(new AppError("Unauthorized: not authenticated", 401));
     }
-    if (roles.length && !roles.includes(req.user.role)) {
+    const userRole = (req.user.role || "").toLowerCase();
+    const allowedRoles = roles.map((r) => r.toLowerCase());
+    if (roles.length && !allowedRoles.includes(userRole)) {
       return next(
         new AppError(
           `Forbidden: requires role ${roles.join(" or ")}`,
@@ -5314,7 +5316,9 @@ async function bootstrap() {
   await connectDB();
   initCronJobs();
   const server = app_default.listen(env.PORT, () => {
-    console.log(`\u2705  DevMentor Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
+    console.log(
+      `\u2705  DevMentor Server running in ${env.NODE_ENV} mode on port ${env.PORT}`
+    );
     console.log(`\u{1F517}  http://localhost:${env.PORT}/api/v1/health`);
   });
   const shutdown = async (signal) => {
