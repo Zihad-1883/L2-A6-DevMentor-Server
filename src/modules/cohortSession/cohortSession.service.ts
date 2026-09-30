@@ -33,9 +33,13 @@ const addCohortSession = async (
     throw new AppError("You are not authorized to add sessions to this cohort program", 403);
   }
 
+  // Auto-generate sessionNumber & dayNumber if not provided
+  const existingCount = await prisma.cohortSession.count({ where: { cohortId } });
+  const nextNumber = existingCount + 1;
+
   const {
-    sessionNumber,
-    dayNumber,
+    sessionNumber = nextNumber,
+    dayNumber = nextNumber,
     title,
     scheduledAt,
     durationMinutes,
@@ -66,7 +70,7 @@ const addCohortSession = async (
       title,
       scheduledAt: new Date(scheduledAt),
       durationMinutes: durationMinutes || 60,
-      creditCost,
+      creditCost: creditCost ?? 0,
       joinLink: joinLink || null,
       resources: formattedResources,
       status: "PENDING",
