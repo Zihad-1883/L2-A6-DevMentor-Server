@@ -27,8 +27,13 @@ export const requireAuth = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
+    const requestHeaders = { ...req.headers };
+    if (requestHeaders.authorization) {
+      delete requestHeaders.cookie;
+    }
+
     const session = await auth.api.getSession({
-      headers: req.headers as unknown as Headers,
+      headers: requestHeaders as unknown as Headers,
     });
 
     if (!session?.user) {

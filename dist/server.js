@@ -61,7 +61,7 @@ import rateLimit from "express-rate-limit";
 var generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1e3,
   // 15 minutes
-  max: 1e4,
+  max: 100,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -71,7 +71,7 @@ var generalLimiter = rateLimit({
 });
 var authLimiter = rateLimit({
   windowMs: 15 * 60 * 1e3,
-  max: 1e4,
+  max: 20,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -840,14 +840,14 @@ var auth = betterAuth({
   basePath: "/api/v1/auth",
   rateLimit: {
     window: 60,
-    max: 1e4,
+    max: 100,
     customRules: {
-      "/sign-in/email": { window: 60, max: 1e4 },
-      "/sign-up/email": { window: 60, max: 1e4 },
-      "/email-otp/send-verification-otp": { window: 60, max: 1e4 },
-      "/email-otp/verify-email": { window: 60, max: 1e4 },
-      "/email-otp/request-password-reset": { window: 60, max: 1e4 },
-      "/email-otp/reset-password": { window: 60, max: 1e4 }
+      "/sign-in/email": { window: 60, max: 100 },
+      "/sign-up/email": { window: 60, max: 100 },
+      "/email-otp/send-verification-otp": { window: 60, max: 100 },
+      "/email-otp/verify-email": { window: 60, max: 100 },
+      "/email-otp/request-password-reset": { window: 60, max: 100 },
+      "/email-otp/reset-password": { window: 60, max: 100 }
     },
     storage: "secondary-storage"
   },
@@ -1468,8 +1468,12 @@ import { Router as Router13 } from "express";
 // src/middlewares/auth.middleware.ts
 var requireAuth = async (req, res, next) => {
   try {
+    const requestHeaders = { ...req.headers };
+    if (requestHeaders.authorization) {
+      delete requestHeaders.cookie;
+    }
     const session = await auth.api.getSession({
-      headers: req.headers
+      headers: requestHeaders
     });
     if (!session?.user) {
       res.status(401).json({

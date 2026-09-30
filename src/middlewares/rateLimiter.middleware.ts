@@ -1,16 +1,8 @@
-/**
- * @file src/middlewares/rateLimiter.middleware.ts
- * @description Express Rate Limiting Middleware
- *
- * General rate limiter: 100 requests / 15 min per IP.
- * A stricter limiter (authLimiter) is exported for sensitive routes.
- */
-
 import rateLimit from "express-rate-limit";
 
 export const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10000,
+  max: 100,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -21,7 +13,7 @@ export const generalLimiter = rateLimit({
 
 export const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10000,
+  max: 20,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
