@@ -16,7 +16,7 @@ async function bootstrap(): Promise<void> {
     console.log(
       `✅  DevMentor Server running in ${env.NODE_ENV} mode on port ${env.PORT}`,
     );
-    console.log(`🔗  http://localhost:${env.PORT}/api/v1/health`);
+    console.log(`🔗  ${env.BETTER_AUTH_URL}/api/v1/health`);
   });
 
   // 4. Graceful shutdown

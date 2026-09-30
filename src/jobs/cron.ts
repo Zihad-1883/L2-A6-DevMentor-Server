@@ -28,5 +28,5 @@ export const initCronJobs = () => {
     await expireAbandonedPayments();
   });
 
-  console.log("⏰ Background Cron Worker initialized (Running cleanup every 5 minutes).");
+  console.log("⏰ackground Cron Worker initialized (Running cleanup every 5 minutes).");
 };

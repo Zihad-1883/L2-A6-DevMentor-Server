@@ -1,14 +1,9 @@
-/**
- * @file src/modules/cohortSession/cohortSession.controller.ts
- * @description HTTP Controllers for Cohort Group Session management and resources.
- */
-
 import type { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync.js";
 import { sendSuccess } from "../../utils/apiResponse.js";
 import { cohortSessionService } from "./cohortSession.service.js";
 
-// ── 1. Add Session to Cohort (Mentor Only) ───────────────────────────────────
+// 1. Add Session to Cohort
 const addCohortSession = catchAsync(async (req: Request, res: Response) => {
   const mentorId = req.user!.id;
   const { cohortId } = req.params;
@@ -16,7 +11,7 @@ const addCohortSession = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Cohort session created successfully", result, 201);
 });
 
-// ── 2. Get Cohort Sessions (Gated Access for Unpaid vs Mentor/Paid) ───────────
+// 2. Get Cohort Sessions
 const getCohortSessions = catchAsync(async (req: Request, res: Response) => {
   const { cohortId } = req.params;
   const userId = req.user?.id;
@@ -24,7 +19,7 @@ const getCohortSessions = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Cohort sessions fetched successfully", result);
 });
 
-// ── 3. Update Cohort Session (Mentor Only) ───────────────────────────────────
+// 3. Update Cohort Session
 const updateCohortSession = catchAsync(async (req: Request, res: Response) => {
   const mentorId = req.user!.id;
   const { sessionId } = req.params;
@@ -32,7 +27,7 @@ const updateCohortSession = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Cohort session updated successfully", result);
 });
 
-// ── 4. Delete Cohort Session (Mentor Only) ───────────────────────────────────
+// 4. Delete Cohort Session
 const deleteCohortSession = catchAsync(async (req: Request, res: Response) => {
   const mentorId = req.user!.id;
   const { sessionId } = req.params;
@@ -40,7 +35,7 @@ const deleteCohortSession = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, result.message, result);
 });
 
-// ── 5. Add Single Resource to Session (Mentor Only) ──────────────────────────
+// 5. Add Single Resource to Session
 const addSessionResource = catchAsync(async (req: Request, res: Response) => {
   const mentorId = req.user!.id;
   const { sessionId } = req.params;
@@ -48,7 +43,7 @@ const addSessionResource = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Resource added to session successfully", result, 201);
 });
 
-// ── 6. Remove Single Resource from Session (Mentor Only) ──────────────────────
+// 6. Remove Single Resource from Session
 const removeSessionResource = catchAsync(async (req: Request, res: Response) => {
   const mentorId = req.user!.id;
   const { sessionId, resourceId } = req.params;
@@ -60,7 +55,7 @@ const removeSessionResource = catchAsync(async (req: Request, res: Response) => 
   sendSuccess(res, result.message, result);
 });
 
-// ── 7. Join Session with Credits (Student Only) ──────────────────────────────
+// 7. Join Session with Credits
 const joinCohortSession = catchAsync(async (req: Request, res: Response) => {
   const studentId = req.user!.id;
   const { sessionId } = req.params;
@@ -68,7 +63,7 @@ const joinCohortSession = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, result.message, result, 201);
 });
 
-// ── 8. Mark Session as Completed (Mentor Only) ──────────────────────────────
+// ── 8. Mark Session as Completed ─────────────────────────────────────────────
 const completeCohortSession = catchAsync(async (req: Request, res: Response) => {
   const mentorId = req.user!.id;
   const { sessionId } = req.params;

@@ -5217,7 +5217,7 @@ var initCronJobs = () => {
   cron.schedule("*/5 * * * *", async () => {
     await expireAbandonedPayments();
   });
-  console.log("\u23F0 Background Cron Worker initialized (Running cleanup every 5 minutes).");
+  console.log("\u23F0ackground Cron Worker initialized (Running cleanup every 5 minutes).");
 };
 
 // src/routes/v1/index.ts
@@ -5337,7 +5337,7 @@ async function bootstrap() {
     console.log(
       `\u2705  DevMentor Server running in ${env.NODE_ENV} mode on port ${env.PORT}`
     );
-    console.log(`\u{1F517}  http://localhost:${env.PORT}/api/v1/health`);
+    console.log(`\u{1F517}  ${env.BETTER_AUTH_URL}/api/v1/health`);
   });
   const shutdown = async (signal) => {
     console.log(`
