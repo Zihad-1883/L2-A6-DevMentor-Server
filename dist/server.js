@@ -1925,8 +1925,18 @@ import { Router as Router2 } from "express";
 // src/modules/sprintSession/sprintSession.validation.ts
 import { z as z3 } from "zod";
 var scheduleSprintSessionSchema = z3.object({
-  scheduledAt: z3.string().datetime(),
-  joinLink: z3.string().url().optional()
+  // Accept both field names for flexibility (Postman uses proposedTime, service uses scheduledAt)
+  proposedTime: z3.string().datetime().optional(),
+  scheduledAt: z3.string().datetime().optional(),
+  joinLink: z3.string().url().optional(),
+  durationMinutes: z3.number().int().positive().optional()
+}).transform((data) => ({
+  scheduledAt: data.scheduledAt || data.proposedTime,
+  joinLink: data.joinLink,
+  durationMinutes: data.durationMinutes
+})).refine((data) => !!data.scheduledAt, {
+  message: "proposedTime or scheduledAt is required (ISO 8601 datetime string)",
+  path: ["proposedTime"]
 });
 
 // src/modules/sprintSession/sprintSession.service.ts
@@ -4514,49 +4524,43 @@ var codeReviewController = {
 // src/modules/codeReview/codeReview.validation.ts
 import { z as z10 } from "zod";
 var createCodeReviewSchema = z10.object({
-  body: z10.object({
-    tier: z10.enum(["QUICK", "DEEP"]),
-    title: z10.string().min(3, "Title must be at least 3 characters").max(150, "Title must not exceed 150 characters"),
-    description: z10.string().min(10, "Description must be at least 10 characters"),
-    codeSnippet: z10.string().optional(),
-    language: z10.string().optional().default("typescript"),
-    githubRepoUrl: z10.string().url("Please provide a valid GitHub repository URL").optional().or(z10.literal("")),
-    branchName: z10.string().optional().default("main"),
-    specificFiles: z10.string().optional()
-  }).refine(
-    (data) => data.codeSnippet && data.codeSnippet.trim().length > 0 || data.githubRepoUrl && data.githubRepoUrl.trim().length > 0,
-    {
-      message: "You must provide either a code snippet or a GitHub repository URL for review.",
-      path: ["codeSnippet"]
-    }
-  )
-});
+  tier: z10.enum(["QUICK", "DEEP"]),
+  title: z10.string().min(3, "Title must be at least 3 characters").max(150, "Title must not exceed 150 characters"),
+  description: z10.string().min(10, "Description must be at least 10 characters"),
+  codeSnippet: z10.string().optional(),
+  language: z10.string().optional().default("typescript"),
+  githubRepoUrl: z10.string().url("Please provide a valid GitHub repository URL").optional().or(z10.literal("")),
+  branchName: z10.string().optional().default("main"),
+  specificFiles: z10.string().optional()
+}).refine(
+  (data) => data.codeSnippet && data.codeSnippet.trim().length > 0 || data.githubRepoUrl && data.githubRepoUrl.trim().length > 0,
+  {
+    message: "You must provide either a code snippet or a GitHub repository URL for review.",
+    path: ["codeSnippet"]
+  }
+);
 var updateCodeSnippetSchema = z10.object({
-  body: z10.object({
-    title: z10.string().min(3).max(150).optional(),
-    description: z10.string().min(10).optional(),
-    codeSnippet: z10.string().optional(),
-    language: z10.string().optional(),
-    githubRepoUrl: z10.string().url("Please provide a valid GitHub repository URL").optional().or(z10.literal("")),
-    branchName: z10.string().optional(),
-    specificFiles: z10.string().optional()
-  })
+  title: z10.string().min(3).max(150).optional(),
+  description: z10.string().min(10).optional(),
+  codeSnippet: z10.string().optional(),
+  language: z10.string().optional(),
+  githubRepoUrl: z10.string().url("Please provide a valid GitHub repository URL").optional().or(z10.literal("")),
+  branchName: z10.string().optional(),
+  specificFiles: z10.string().optional()
 });
 var submitCodeReviewSchema = z10.object({
-  body: z10.object({
-    summary: z10.string().min(10, "Feedback summary must be at least 10 characters"),
-    reviewedCodeSnippet: z10.string().optional(),
-    videoUrl: z10.string().url("Please provide a valid video feedback URL (e.g. Loom, Cloudinary)").optional().or(z10.literal("")),
-    pullRequestUrl: z10.string().url("Please provide a valid Pull Request URL").optional().or(z10.literal("")),
-    comments: z10.array(
-      z10.object({
-        filePath: z10.string().min(1, "File path is required for comment"),
-        lineNumber: z10.number().int().positive("Line number must be positive"),
-        commentText: z10.string().min(1, "Comment text cannot be empty"),
-        severity: z10.enum(["BUG", "SECURITY", "SUGGESTION"]).optional().default("SUGGESTION")
-      })
-    ).optional()
-  })
+  summary: z10.string().min(10, "Feedback summary must be at least 10 characters"),
+  reviewedCodeSnippet: z10.string().optional(),
+  videoUrl: z10.string().url("Please provide a valid video feedback URL (e.g. Loom, Cloudinary)").optional().or(z10.literal("")),
+  pullRequestUrl: z10.string().url("Please provide a valid Pull Request URL").optional().or(z10.literal("")),
+  comments: z10.array(
+    z10.object({
+      filePath: z10.string().min(1, "File path is required for comment"),
+      lineNumber: z10.number().int().positive("Line number must be positive"),
+      commentText: z10.string().min(1, "Comment text cannot be empty"),
+      severity: z10.enum(["BUG", "SECURITY", "SUGGESTION"]).optional().default("SUGGESTION")
+    })
+  ).optional()
 });
 var codeReviewValidation = {
   createCodeReviewSchema,
