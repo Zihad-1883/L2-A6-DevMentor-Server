@@ -13,7 +13,7 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import { env } from "./config/env.js";
-import { generalLimiter } from "./middlewares/rateLimiter.middleware.js";
+// import { generalLimiter } from "./middlewares/rateLimiter.middleware.js"; // rate limiter disabled for recording
 import { notFoundHandler } from "./middlewares/notFound.middleware.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { toNodeHandler } from "better-auth/node";
@@ -50,7 +50,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // ── Rate limiting ─────────────────────────────────────────────────────────────
-app.use(generalLimiter);
+// app.use(generalLimiter); // disabled for recording
 
 // ── Root route ────────────────────────────────────────────────────────────────
 app.get("/", (_req, res) => {
