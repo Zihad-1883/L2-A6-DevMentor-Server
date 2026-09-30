@@ -4,16 +4,14 @@
  *
  * Creates and configures the Express app:
  *  1. Global security & parsing middlewares (helmet, cors, json, urlencoded)
- *  2. General rate limiter
- *  3. API v1 router mounted at /api/v1
- *  4. 404 handler → global error handler (must be last)
+ *  2. API v1 router mounted at /api/v1
+ *  3. 404 handler → global error handler (must be last)
  */
 
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import { env } from "./config/env.js";
-import { generalLimiter } from "./middlewares/rateLimiter.middleware.js";
 import { notFoundHandler } from "./middlewares/notFound.middleware.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { toNodeHandler } from "better-auth/node";
@@ -23,7 +21,7 @@ import v1Router from "./routes/v1/index.js";
 
 const app = express();
 
-// Trust Vercel/proxy X-Forwarded-For header for accurate rate limiting
+// Trust Vercel/proxy X-Forwarded-For header
 app.set("trust proxy", 1);
 
 // ── Security headers ──────────────────────────────────────────────────────────
@@ -48,9 +46,6 @@ app.use(
 // ── Body parsers ──────────────────────────────────────────────────────────────
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-
-// ── Rate limiting ─────────────────────────────────────────────────────────────
-app.use(generalLimiter);
 
 // ── Root route ────────────────────────────────────────────────────────────────
 app.get("/", (_req, res) => {

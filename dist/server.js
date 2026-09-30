@@ -56,30 +56,6 @@ ${formattedErrors}`);
 }
 var env = parsed.data;
 
-// src/middlewares/rateLimiter.middleware.ts
-import rateLimit from "express-rate-limit";
-var generalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1e3,
-  // 15 minutes
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: {
-    success: false,
-    message: "Too many requests from this IP, please try again after 15 minutes."
-  }
-});
-var authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1e3,
-  max: 20,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: {
-    success: false,
-    message: "Too many auth attempts from this IP, please try again after 15 minutes."
-  }
-});
-
 // src/middlewares/notFound.middleware.ts
 var notFoundHandler = (req, _res, next) => {
   const error = new Error(`Route not found: ${req.method} ${req.originalUrl}`);
@@ -839,17 +815,7 @@ var auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL,
   basePath: "/api/v1/auth",
   rateLimit: {
-    window: 60,
-    max: 20,
-    customRules: {
-      "/sign-in/email": { window: 60, max: 10 },
-      "/sign-up/email": { window: 60, max: 10 },
-      "/email-otp/send-verification-otp": { window: 60, max: 10 },
-      "/email-otp/verify-email": { window: 60, max: 20 },
-      "/email-otp/request-password-reset": { window: 60, max: 10 },
-      "/email-otp/reset-password": { window: 60, max: 10 }
-    },
-    storage: "secondary-storage"
+    enabled: false
   },
   trustedOrigins: [
     env.CLIENT_URL,
@@ -5287,7 +5253,6 @@ app.use(
 );
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-app.use(generalLimiter);
 app.get("/", (_req, res) => {
   res.json({
     success: true,

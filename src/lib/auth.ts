@@ -46,17 +46,7 @@ export const auth = betterAuth({
     basePath: "/api/v1/auth",
 
     rateLimit: {
-        window: 60,
-        max: 20,
-        customRules: {
-            "/sign-in/email": { window: 60, max: 10 },
-            "/sign-up/email": { window: 60, max: 10 },
-            "/email-otp/send-verification-otp": { window: 60, max: 10 },
-            "/email-otp/verify-email": { window: 60, max: 20 },
-            "/email-otp/request-password-reset": { window: 60, max: 10 },
-            "/email-otp/reset-password": { window: 60, max: 10 },
-        },
-        storage: "secondary-storage",
+        enabled: false,
     },
     trustedOrigins: [
         env.CLIENT_URL,
