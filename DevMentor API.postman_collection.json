@@ -75,7 +75,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@devmentor.com\",\n  \"password\": \"Admin@123456\"\n}",
+              "raw": "// {\n//   \"email\": \"admin@devmentor.com\",\n//   \"password\": \"Admin@123456\"\n// }\n\n{\n    \"email\": \"student@devmentor.com\",\n  \"password\": \"Student@123456\"\n}\n\n// {\n//     \"email\": \"mentor@devmentor.com\",\n//     \"password\": \"Mentor@123456\"\n// }",
               "options": {
                 "raw": {
                   "language": "json"
@@ -101,12 +101,7 @@
           "name": "Logout",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/auth/sign-out",
               "host": [
@@ -129,10 +124,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
               }
             ],
             "body": {
@@ -167,10 +158,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
               }
             ],
             "body": {
@@ -205,10 +192,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
               }
             ],
             "body": {
@@ -243,10 +226,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
               }
             ],
             "body": {
@@ -283,12 +262,7 @@
           "name": "Get My Profile",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/me",
               "host": [
@@ -308,10 +282,6 @@
           "request": {
             "method": "PATCH",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -344,12 +314,7 @@
           "name": "Get My Dashboard Stats",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/me/dashboard",
               "host": [
@@ -411,12 +376,7 @@
           "name": "Get Single Mentor Profile",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/mentors/{{mentorId}}",
               "host": [
@@ -436,10 +396,6 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -480,10 +436,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -514,12 +466,7 @@
           "name": "Browse Open Sprint Pool (Mentor Only)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/sprints/open-pool?search=next.js&tag=TypeScript&page=1&limit=10",
               "host": [
@@ -556,12 +503,7 @@
           "name": "Get My Sprints (Student or Mentor)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/sprints/my-sprints",
               "host": [
@@ -580,12 +522,7 @@
           "name": "Get Single Sprint Details",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/sprints/{{sprintId}}",
               "host": [
@@ -605,10 +542,6 @@
           "request": {
             "method": "PATCH",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -641,12 +574,7 @@
           "name": "Claim Sprint Request (Mentor Only)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/sprints/{{sprintId}}/claim",
               "host": [
@@ -666,12 +594,7 @@
           "name": "Delete / Cancel Sprint Request (Student Only)",
           "request": {
             "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/sprints/{{sprintId}}",
               "host": [
@@ -697,10 +620,6 @@
           "request": {
             "method": "PATCH",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -734,12 +653,7 @@
           "name": "Student Confirms Session & Escrow Hold",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/sprint-sessions/{{sessionId}}/confirm",
               "host": [
@@ -759,12 +673,7 @@
           "name": "Complete Session & Release Credits to Mentor",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/sprint-sessions/{{sessionId}}/complete",
               "host": [
@@ -784,12 +693,7 @@
           "name": "Cancel Session (1-Hour Refund Rule)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/sprint-sessions/{{sessionId}}/cancel",
               "host": [
@@ -809,12 +713,7 @@
           "name": "Get All Sessions for a Sprint",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/sprint-sessions/sprint/{{sprintId}}",
               "host": [
@@ -876,12 +775,7 @@
           "name": "Get Single Cohort by ID",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/cohorts/{{cohortId}}",
               "host": [
@@ -901,10 +795,6 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -936,12 +826,7 @@
           "name": "Get My Created Cohorts (Mentor Only)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/cohorts/my-created",
               "host": [
@@ -961,10 +846,6 @@
           "request": {
             "method": "PATCH",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -997,12 +878,7 @@
           "name": "Enroll in Cohort (Student Only)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/cohorts/{{cohortId}}/register",
               "host": [
@@ -1022,12 +898,7 @@
           "name": "Delete Cohort (Mentor Only, Soft Delete)",
           "request": {
             "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/cohorts/{{cohortId}}",
               "host": [
@@ -1053,10 +924,6 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -1090,12 +957,7 @@
           "name": "Get Cohort Sessions (Gated Access — Enrolled Only)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/cohort-sessions/cohort/{{cohortId}}",
               "host": [
@@ -1116,10 +978,6 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -1153,12 +1011,7 @@
           "name": "Join Session & Escrow Credit Hold (Student Only)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/cohort-sessions/{{sessionId}}/join",
               "host": [
@@ -1178,12 +1031,7 @@
           "name": "Complete Session — Release Credits to Mentor",
           "request": {
             "method": "PATCH",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/cohort-sessions/{{sessionId}}/complete",
               "host": [
@@ -1203,12 +1051,7 @@
           "name": "Cancel Session — Refund All Participants",
           "request": {
             "method": "PATCH",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/cohort-sessions/{{sessionId}}/cancel",
               "host": [
@@ -1235,10 +1078,6 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -1272,10 +1111,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -1307,10 +1142,6 @@
           "request": {
             "method": "PATCH",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -1344,12 +1175,7 @@
           "name": "Browse Open Review Pool (Mentor, Filterable)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/code-reviews/pool?tier=QUICK&language=typescript&search=JWT&page=1&limit=10",
               "host": [
@@ -1390,12 +1216,7 @@
           "name": "Preview Lock Request — 10 Min Exclusive Lock (Mentor Only)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/code-reviews/{{reviewId}}/preview",
               "host": [
@@ -1415,12 +1236,7 @@
           "name": "Claim Review Request — SLA Starts (Mentor Only)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/code-reviews/{{reviewId}}/claim",
               "host": [
@@ -1441,10 +1257,6 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -1478,12 +1290,7 @@
           "name": "Approve Review & Release 100% Credits (Student Only)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{adminToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/code-reviews/{{reviewId}}/approve",
               "host": [
@@ -1503,12 +1310,7 @@
           "name": "Cancel Review Request — Full Refund (Student Only)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/code-reviews/{{reviewId}}/cancel",
               "host": [
@@ -1534,12 +1336,7 @@
           "name": "My Enrolled Cohorts (Student Only)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/enrollments/my-cohorts",
               "host": [
@@ -1558,12 +1355,7 @@
           "name": "My Sprint Requests (Student Only)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/enrollments/my-sprints",
               "host": [
@@ -1589,10 +1381,6 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -1625,12 +1413,7 @@
           "name": "bKash Payment Callback (Execute & Credit Wallet)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/payments/bkash/callback?paymentID=TR001&status=success",
               "host": [
@@ -1660,12 +1443,7 @@
           "name": "Get My Wallet Balance & Transaction Log",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/payments/wallet/me",
               "host": [
@@ -1685,12 +1463,7 @@
           "name": "Get Payment Invoice History",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/payments/history",
               "host": [
@@ -1710,10 +1483,6 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -1752,12 +1521,7 @@
           "name": "Upload Single File to Cloudinary",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "body": {
               "mode": "formdata",
               "formdata": [
@@ -1792,12 +1556,7 @@
           "name": "Get All Users (Paginated + Filterable)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{adminToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/admin/users?search=zihad&role=mentor&isBlocked=false&page=1&limit=20",
               "host": [
@@ -1840,10 +1599,6 @@
             "method": "PATCH",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{adminToken}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -1878,10 +1633,6 @@
           "request": {
             "method": "PATCH",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{adminToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -1918,10 +1669,6 @@
             "method": "PATCH",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{adminToken}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -1956,10 +1703,6 @@
           "request": {
             "method": "PATCH",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{adminToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -2000,12 +1743,7 @@
           "name": "Health Check (Public)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/health",
               "host": [
@@ -2042,12 +1780,7 @@
           "name": "🔴 Demo: 403 Forbidden — Wrong Role",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/admin/users",
               "host": [
@@ -2067,10 +1800,6 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -2102,12 +1831,7 @@
           "name": "🔴 Demo: 404 Not Found — Invalid Route",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/this-route-does-not-exist",
               "host": [
@@ -2148,10 +1872,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -2183,10 +1903,6 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -2220,12 +1936,7 @@
           "name": "[Mentor] Publish Exam",
           "request": {
             "method": "PATCH",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/exams/{{examId}}/publish",
               "host": [
@@ -2245,12 +1956,7 @@
           "name": "[Mentor] Get My Created Exams",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{mentorToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/exams/mentor/my-exams?page=1&limit=10",
               "host": [
@@ -2280,12 +1986,7 @@
           "name": "[Student] Browse Available Exams",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/exams?page=1&limit=10",
               "host": [
@@ -2313,12 +2014,7 @@
           "name": "[Student] Start Exam (Sanitized Questions)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/exams/{{examId}}/start",
               "host": [
@@ -2339,10 +2035,6 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -2376,12 +2068,7 @@
           "name": "[Student] Get My Past Exam Attempts",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{studentToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/exams/me/attempts?page=1&limit=10",
               "host": [
