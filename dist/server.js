@@ -385,9 +385,9 @@ model Exam {
 
   title           String
   description     String?
-  durationMinutes Int        @default(30)
+  durationMinutes Int        @default(0)
   totalQuestions  Int        @default(0)
-  totalMarks      Int        @default(100)
+  totalMarks      Int        @default(0)
   passMark        Int?       @default(60)
   status          ExamStatus @default(DRAFT)
 
@@ -814,18 +814,9 @@ var auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
   basePath: "/api/v1/auth",
+  // rateLimit disabled for demo recording — re-enable before production
   rateLimit: {
-    window: 60,
-    max: 100,
-    customRules: {
-      "/sign-in/email": { window: 60, max: 100 },
-      "/sign-up/email": { window: 60, max: 100 },
-      "/email-otp/send-verification-otp": { window: 60, max: 100 },
-      "/email-otp/verify-email": { window: 60, max: 100 },
-      "/email-otp/request-password-reset": { window: 60, max: 100 },
-      "/email-otp/reset-password": { window: 60, max: 100 }
-    },
-    storage: "secondary-storage"
+    enabled: false
   },
   trustedOrigins: [
     env.CLIENT_URL,

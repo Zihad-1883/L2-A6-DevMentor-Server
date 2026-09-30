@@ -45,18 +45,9 @@ export const auth = betterAuth({
     baseURL: env.BETTER_AUTH_URL,
     basePath: "/api/v1/auth",
 
+    // rateLimit disabled for demo recording — re-enable before production
     rateLimit: {
-        window: 60,
-        max: 100,
-        customRules: {
-            "/sign-in/email": { window: 60, max: 100 },
-            "/sign-up/email": { window: 60, max: 100 },
-            "/email-otp/send-verification-otp": { window: 60, max: 100 },
-            "/email-otp/verify-email": { window: 60, max: 100 },
-            "/email-otp/request-password-reset": { window: 60, max: 100 },
-            "/email-otp/reset-password": { window: 60, max: 100 },
-        },
-        storage: "secondary-storage",
+        enabled: false,
     },
     trustedOrigins: [
         env.CLIENT_URL,
