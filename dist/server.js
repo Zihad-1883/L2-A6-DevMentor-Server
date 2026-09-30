@@ -1468,12 +1468,12 @@ import { Router as Router13 } from "express";
 // src/middlewares/auth.middleware.ts
 var requireAuth = async (req, res, next) => {
   try {
-    const requestHeaders = { ...req.headers };
-    if (requestHeaders.authorization) {
-      delete requestHeaders.cookie;
+    const cleanHeaders = { ...req.headers };
+    if (cleanHeaders.authorization) {
+      delete cleanHeaders.cookie;
     }
     const session = await auth.api.getSession({
-      headers: requestHeaders
+      headers: cleanHeaders
     });
     if (!session?.user) {
       res.status(401).json({

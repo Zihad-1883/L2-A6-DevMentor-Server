@@ -27,13 +27,16 @@ export const requireAuth = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const requestHeaders = { ...req.headers };
-    if (requestHeaders.authorization) {
-      delete requestHeaders.cookie;
+    // Build a clean header set for Better‑Auth.
+    const cleanHeaders = { ...req.headers };
+    // If Authorization header is present, discard any stale cookie.
+    if (cleanHeaders.authorization) {
+      delete cleanHeaders.cookie;
     }
 
+    // Request session using only the sanitized headers.
     const session = await auth.api.getSession({
-      headers: requestHeaders as unknown as Headers,
+      headers: cleanHeaders as unknown as Headers,
     });
 
     if (!session?.user) {
