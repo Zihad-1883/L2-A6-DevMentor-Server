@@ -1,8 +1,3 @@
-/**
- * @file src/modules/admin/admin.routes.ts
- * @description Express routes for platform administration, user management, and mentor/cohort approvals.
- */
-
 import { Router } from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { requireRole } from "../../middlewares/rbac.middleware.js";

@@ -1,13 +1,3 @@
-/**
- * @file src/app.ts
- * @description Express Application Configuration
- *
- * Creates and configures the Express app:
- *  1. Global security & parsing middlewares (helmet, cors, json, urlencoded)
- *  2. API v1 router mounted at /api/v1
- *  3. 404 handler → global error handler (must be last)
- */
-
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
@@ -21,13 +11,10 @@ import v1Router from "./routes/v1/index.js";
 
 const app = express();
 
-// Trust Vercel/proxy X-Forwarded-For header
 app.set("trust proxy", 1);
 
-// ── Security headers ──────────────────────────────────────────────────────────
 app.use(helmet());
 
-// ── CORS ──────────────────────────────────────────────────────────────────────
 app.use(
   cors({
     origin: [
@@ -43,11 +30,9 @@ app.use(
   }),
 );
 
-// ── Body parsers ──────────────────────────────────────────────────────────────
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// ── Root route ────────────────────────────────────────────────────────────────
 app.get("/", (_req, res) => {
   res.json({
     success: true,
@@ -56,7 +41,6 @@ app.get("/", (_req, res) => {
   });
 });
 
-// ── Better Auth routes (must be before v1Router — needs full req.url) ───────────
 app.all("/api/v1/auth/*splat", (req, _res, next) => {
   if (!req.headers.origin) {
     req.headers.origin = env.CLIENT_URL || env.BETTER_AUTH_URL || "http://localhost:5000";
@@ -64,7 +48,6 @@ app.all("/api/v1/auth/*splat", (req, _res, next) => {
   next();
 }, toNodeHandler(auth));
 
-// ── bKash Callback Fallback Aliases ──────────────────────────────────────────
 app.all(
   [
     "/payment/status",
@@ -79,10 +62,8 @@ app.all(
   }
 );
 
-// ── API routes ────────────────────────────────────────────────────────────────
 app.use("/api/v1", v1Router);
 
-// ── 404 & global error handler (ORDER MATTERS — must be last) ─────────────────
 app.use(notFoundHandler);
 app.use(errorHandler);
 

@@ -1,8 +1,3 @@
-/**
- * @file src/modules/sprint/sprint.routes.ts
- * @description Express router for Sprint endpoints.
- */
-
 import { Router } from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { requireRole } from "../../middlewares/rbac.middleware.js";

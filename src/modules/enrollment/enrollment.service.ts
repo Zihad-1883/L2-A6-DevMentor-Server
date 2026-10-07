@@ -1,13 +1,8 @@
-/**
- * @file src/modules/enrollment/enrollment.service.ts
- * @description Domain logic for querying student cohort enrollments and sprint requests.
- */
-
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/apiError.js";
 import type { IEnrollmentQueryFilters } from "./enrollment.interface.js";
 
-// ── 1. Get Logged-In Student Enrolled Cohorts ─────────────────────────────────
+// 1. Get Logged-In Student Enrolled Cohorts
 const getMyEnrolledCohorts = async (studentId: string, filters: IEnrollmentQueryFilters = {}) => {
   const page = Number(filters.page) || 1;
   const limit = Number(filters.limit) || 10;
@@ -58,7 +53,7 @@ const getMyEnrolledCohorts = async (studentId: string, filters: IEnrollmentQuery
   };
 };
 
-// ── 2. Get Logged-In Student Sprint Requests ─────────────────────────────────
+// 2. Get Logged-In Student Sprint Requests
 const getMyEnrolledSprints = async (studentId: string, filters: IEnrollmentQueryFilters = {}) => {
   const page = Number(filters.page) || 1;
   const limit = Number(filters.limit) || 10;

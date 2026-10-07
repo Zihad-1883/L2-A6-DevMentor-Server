@@ -11,11 +11,7 @@ import { examController } from "./exam.controller.js";
 
 const router = Router();
 
-// ==========================================
-// 👨‍🏫 MENTOR EXAM MANAGEMENT ROUTES
-// ==========================================
-
-// 5. Create a new Exam (DRAFT mode)
+// Create a new Exam (DRAFT mode)
 router.post(
   "/",
   requireAuth,
@@ -24,7 +20,7 @@ router.post(
   examController.createExamController
 );
 
-// 6. Add / Bulk Upload Questions to an Exam
+// Add / Bulk Upload Questions to an Exam
 router.post(
   "/:examId/questions",
   requireAuth,
@@ -33,7 +29,7 @@ router.post(
   examController.addQuestionsController
 );
 
-// 7. Publish an Exam (Make active for students)
+// Publish an Exam
 router.patch(
   "/:examId/publish",
   requireAuth,
@@ -49,11 +45,8 @@ router.get(
   examController.getMentorExamsController
 );
 
-// ==========================================
-// 👨‍🎓 STUDENT EXAM PARTICIPATION ROUTES
-// ==========================================
 
-// 1. Browse Available Exams (Free public + enrolled cohort/sprint exams)
+// Browse Available Exams
 router.get(
   "/",
   requireAuth,
@@ -61,7 +54,7 @@ router.get(
   examController.getAvailableExamsController
 );
 
-// 2. View Past Exam Attempt History
+// View Past Exam Attempt History
 router.get(
   "/me/attempts",
   requireAuth,
@@ -69,7 +62,7 @@ router.get(
   examController.getStudentAttemptsController
 );
 
-// 3. Start an Exam (Receives sanitized questions without correct answers)
+// Start an Exam
 router.get(
   "/:examId/start",
   requireAuth,
@@ -77,7 +70,7 @@ router.get(
   examController.startExamAttemptController
 );
 
-// 4. Submit Exam Answers & Get Auto-Graded Result
+// Submit Exam Answers & Get Auto-Graded Result
 router.post(
   "/:examId/submit",
   requireAuth,

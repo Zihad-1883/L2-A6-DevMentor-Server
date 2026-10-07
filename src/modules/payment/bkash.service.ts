@@ -9,22 +9,17 @@ import type {
   IBKashQueryPaymentResponse,
 } from "./payment.interface.js";
 
-
-// Helper to ensure header values contain strictly ASCII characters
 const sanitizeASCII = (val: string) => (val || "").replace(/[^\x00-\x7F]/g, "").trim();
 
-// Helper to safely parse JSON from bKash API responses (stripping control chars)
 const parseBkashJSON = async <T>(response: Response): Promise<T> => {
   const rawText = await response.text();
   try {
-    // Replace unescaped control characters in JSON strings
     const sanitized = rawText.replace(/[\x00-\x1F\x7F-\x9F]/g, (match) => {
       if (match === "\n" || match === "\r" || match === "\t") return match;
       return "";
     });
     return JSON.parse(sanitized) as T;
   } catch {
-    // If strict JSON.parse failed due to bad control characters in string values, do a full strip
     try {
       const cleaned = rawText.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
       return JSON.parse(cleaned) as T;
@@ -42,7 +37,6 @@ const grantToken = async (): Promise<string> => {
     return cachedToken;
   }
 
-  // Clean env inputs to remove any non-ASCII characters or control chars
   const username = sanitizeASCII(env.BKASH_USERNAME);
   const password = sanitizeASCII(env.BKASH_PASSWORD);
   const appKey = sanitizeASCII(env.BKASH_APP_KEY);
@@ -86,7 +80,6 @@ const grantToken = async (): Promise<string> => {
   return data.id_token;
 };
 
-
 // 2. Create Payment Intent
 const createPayment = async (
   payload: IBKashCreatePaymentInput
@@ -128,7 +121,6 @@ const createPayment = async (
 
   return data;
 };
-
 
 // 3. Execute Payment Settlement
 const executePayment = async (

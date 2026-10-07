@@ -15,7 +15,7 @@ const initiateTopUpHandler = catchAsync(async (req: Request, res: Response) => {
 });
 
 
-// 2. bKash Callback Handler (Supports both Browser Redirect & API JSON Response)
+// 2. bKash Callback Handler
 const bkashCallbackHandler = catchAsync(async (req: Request, res: Response) => {
   const paymentID = (req.query.paymentID || req.body?.paymentID || req.query.paymentId || req.body?.paymentId) as string;
   const status = (req.query.status || req.body?.status) as string;
@@ -32,7 +32,6 @@ const bkashCallbackHandler = catchAsync(async (req: Request, res: Response) => {
     executionError = err.message || "Payment execution failed";
   }
 
-  // If request comes from Postman, curl, or accepts JSON, return JSON response directly
   const wantsJson =
     req.query.json === "true" ||
     req.headers.accept?.includes("application/json") ||
@@ -54,7 +53,6 @@ const bkashCallbackHandler = catchAsync(async (req: Request, res: Response) => {
     );
   }
 
-  // Browser redirect for frontend integration
   const redirectUrl = env.NODE_ENV === "development"
     ? `http://localhost:5500/test-client/index.html?paymentID=${paymentID || ""}&status=${status || "unknown"}`
     : `${env.CLIENT_URL}/payment/status?paymentID=${paymentID || ""}&status=${status || "unknown"}`;

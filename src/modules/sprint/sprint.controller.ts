@@ -1,27 +1,22 @@
-/**
- * @file src/modules/sprint/sprint.controller.ts
- * @description HTTP Request Controllers for Sprint operations.
- */
-
 import type { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync.js";
 import { sendSuccess } from "../../utils/apiResponse.js";
 import { sprintService } from "./sprint.service.js";
 
-// ── 1. Create Sprint Request (Student Initiated) ──────────────────────────────
+// 1. Create Sprint Request
 const createSprint = catchAsync(async (req: Request, res: Response) => {
   const studentId = req.user!.id;
   const result = await sprintService.createSprint(studentId, req.body);
   sendSuccess(res, "Sprint request created successfully", result, 201);
 });
 
-// ── 2. Get Open Sprint Pool (Mentors Browse Pending Requests) ──────────────────
+// 2. Get Open Sprint Pool
 const getOpenSprintPool = catchAsync(async (req: Request, res: Response) => {
   const result = await sprintService.getOpenSprintPool(req.query);
   sendSuccess(res, "Open sprint pool fetched successfully", result);
 });
 
-// ── 3. Claim Sprint Request (Approved Mentor Only) ─────────────────────────────
+// 3. Claim Sprint Request
 const claimSprint = catchAsync(async (req: Request, res: Response) => {
   const mentorId = req.user!.id;
   const { sprintId } = req.params;
@@ -29,7 +24,7 @@ const claimSprint = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Sprint request claimed successfully", result);
 });
 
-// ── 4. Get Single Sprint By ID ────────────────────────────────────────────────
+// 4. Get Single Sprint By ID
 const getSprintById = catchAsync(async (req: Request, res: Response) => {
   const { sprintId } = req.params;
   const userId = req.user!.id;
@@ -37,7 +32,7 @@ const getSprintById = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Sprint request details fetched successfully", result);
 });
 
-// ── 5. Get User's Own Sprints ─────────────────────────────────────────────────
+// 5. Get User's Own Sprints
 const getUserSprints = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user!.id;
   const role = req.user!.role;
@@ -45,7 +40,7 @@ const getUserSprints = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "User sprints fetched successfully", result);
 });
 
-// ── 6. Update Sprint Request ──────────────────────────────────────────────────
+// 6. Update Sprint Request
 const updateSprint = catchAsync(async (req: Request, res: Response) => {
   const studentId = req.user!.id;
   const { sprintId } = req.params;
@@ -53,7 +48,7 @@ const updateSprint = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Sprint request updated successfully", result);
 });
 
-// ── 7. Delete / Cancel Sprint Request ─────────────────────────────────────────
+// 7. Delete / Cancel Sprint Request
 const deleteSprint = catchAsync(async (req: Request, res: Response) => {
   const studentId = req.user!.id;
   const { sprintId } = req.params;

@@ -67,6 +67,25 @@ const getOpenPoolHandler = catchAsync(async (req: Request, res: Response) => {
   }, 200);
 });
 
+// 9. Get Logged-In Student's Code Review Requests
+const getMyRequestsHandler = catchAsync(async (req: Request, res: Response) => {
+  const studentId = req.user!.id;
+  const result = await codeReviewService.getMyCodeReviewRequests(studentId, req.query);
+  sendSuccess(res, "My code review requests retrieved successfully", {
+    requests: result.data,
+    meta: result.meta,
+  }, 200);
+});
+
+// 10. Get Single Code Review Request by ID
+const getReviewByIdHandler = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user!.id;
+  const userRole = req.user!.role;
+  const id = req.params.id as string;
+  const result = await codeReviewService.getCodeReviewById(userId, userRole, id);
+  sendSuccess(res, "Code review request details retrieved successfully", result.data, 200);
+});
+
 export const codeReviewController = {
   createReviewRequestHandler,
   updateCodeSnippetHandler,
@@ -76,4 +95,7 @@ export const codeReviewController = {
   approveAndReleaseHandler,
   cancelReviewRequestHandler,
   getOpenPoolHandler,
+  getMyRequestsHandler,
+  getReviewByIdHandler,
 };
+

@@ -2,7 +2,7 @@ import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/apiError.js";
 import type { IApplyMentorInput, IMentorQueryFilters } from "./mentor.interface.js";
 
-// 1. Apply for Mentor Role (Student Initiated)
+// 1. Apply for Mentor Role
 const applyForMentor = async (userId: string, payload: IApplyMentorInput) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },

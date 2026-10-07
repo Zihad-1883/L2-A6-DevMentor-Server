@@ -7,7 +7,7 @@ import { paymentController } from "../../modules/payment/payment.controller.js";
 
 const v1Router = Router();
 
-// Root / Health check & bKash Fallback Callback (Supports GET & POST)
+// Root / Health check & bKash Fallback Callback
 v1Router.all("/", (req, res, next) => {
   if (req.query.paymentID || req.body?.paymentID) {
     return paymentController.bkashCallbackHandler(req, res, next);
@@ -20,7 +20,6 @@ v1Router.get("/health", (_req, res) => {
 });
 
 // Auth & RBAC Testing Routes 
-// Protected route for any authenticated user
 v1Router.get(
   "/test/protected",
   requireAuth,

@@ -1,11 +1,3 @@
-/**
- * @file src/lib/redis.ts
- * @description Upstash Redis Client Singleton
- *
- * Provides a high-performance REST-based Redis client for session caching,
- * rate limiting, and secondary OTP storage in Better Auth.
- */
-
 import { Redis } from "@upstash/redis";
 import { env } from "../config/env.js";
 

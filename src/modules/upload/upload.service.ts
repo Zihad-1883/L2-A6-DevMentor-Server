@@ -1,8 +1,3 @@
-/**
- * @file src/modules/upload/upload.service.ts
- * @description Cloudinary buffer upload stream service.
- */
-
 import { cloudinary } from "../../lib/cloudinary.js";
 import { AppError } from "../../utils/apiError.js";
 
@@ -22,7 +17,6 @@ const uploadFileToCloudinary = async (
   }
 
   return new Promise((resolve, reject) => {
-    // 15-second timeout guard for Cloudinary network connection
     const timeout = setTimeout(() => {
       reject(new AppError("Cloudinary upload request timed out. Please try again.", 504));
     }, 15000);
@@ -61,7 +55,6 @@ const uploadMultipleFilesToCloudinary = async (
     throw new AppError("No files provided for upload", 400);
   }
 
-  // Upload all files in parallel to Cloudinary
   const uploadPromises = files.map((file) => uploadFileToCloudinary(file, folderName));
   return Promise.all(uploadPromises);
 };

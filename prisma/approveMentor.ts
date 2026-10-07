@@ -13,13 +13,11 @@ async function main() {
     process.exit(1);
   }
 
-  // 1. Update user role to 'mentor'
   await prisma.user.update({
     where: { id: user.id },
     data: { role: "mentor" },
   });
 
-  // 2. Upsert MentorProfile with APPROVED status
   const mentorProfile = await prisma.mentorProfile.upsert({
     where: { userId: user.id },
     update: {

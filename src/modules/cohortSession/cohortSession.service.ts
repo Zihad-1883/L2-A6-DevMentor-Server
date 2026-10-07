@@ -1,8 +1,3 @@
-/**
- * @file src/modules/cohortSession/cohortSession.service.ts
- * @description Service layer for Cohort Group Sessions & embedded resources.
- */
-
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/apiError.js";
 import type {
@@ -11,11 +6,7 @@ import type {
   IUpdateCohortSessionInput,
 } from "./cohortSession.interface.js";
 
-/**
- * 1. Add Cohort Session (Mentor Only)
- * - Verifies mentor ownership of the cohort program.
- * - Creates session with custom creditCost, scheduledAt, and embedded resources.
- */
+// 1. Add Cohort Session (Mentor Only)
 const addCohortSession = async (
   cohortId: string,
   mentorId: string,
@@ -33,7 +24,6 @@ const addCohortSession = async (
     throw new AppError("You are not authorized to add sessions to this cohort program", 403);
   }
 
-  // Auto-generate sessionNumber & dayNumber if not provided
   const existingCount = await prisma.cohortSession.count({ where: { cohortId } });
   const nextNumber = existingCount + 1;
 
@@ -80,11 +70,7 @@ const addCohortSession = async (
   return session;
 };
 
-/**
- * 2. Get Cohort Sessions (with Gated Access Protection)
- * - Unpaid/guest users see session titles and schedule, but joinLink & resources are redacted (null).
- * - Cohort Mentor & Paid Participants receive full unredacted data.
- */
+// 2. Get Cohort Sessions (with Gated Access Protection)
 const getCohortSessions = async (cohortId: string, userId?: string) => {
   const cohort = await prisma.cohortProgram.findFirst({
     where: { id: cohortId, deletedAt: null },
@@ -109,7 +95,6 @@ const getCohortSessions = async (cohortId: string, userId?: string) => {
     },
   });
 
-  // Apply Gated Access Control
   const processedSessions = sessions.map((session: any) => {
     const isPaidParticipant =
       Array.isArray(session.participants) && session.participants.length > 0 && session.participants[0].paid;
@@ -137,10 +122,7 @@ const getCohortSessions = async (cohortId: string, userId?: string) => {
   return processedSessions;
 };
 
-/**
- * 3. Update Cohort Session (Mentor Only)
- * - Verifies mentor ownership of underlying cohort.
- */
+// 3. Update Cohort Session (Mentor Only)
 const updateCohortSession = async (
   sessionId: string,
   mentorId: string,
@@ -187,9 +169,7 @@ const updateCohortSession = async (
   return updatedSession;
 };
 
-/**
- * 4. Delete Cohort Session (Mentor Only)
- */
+//  4. Delete Cohort Session (Mentor Only)
 const deleteCohortSession = async (sessionId: string, mentorId: string) => {
   const session = await prisma.cohortSession.findUnique({
     where: { id: sessionId },
@@ -211,10 +191,7 @@ const deleteCohortSession = async (sessionId: string, mentorId: string) => {
   return { message: "Cohort session deleted successfully" };
 };
 
-/**
- * 5. Add Single Resource to Cohort Session (Mentor Only)
- * - Appends a Cloudinary PDF, external link, note, or code snippet to existing session.resources.
- */
+// 5. Add Single Resource to Cohort Session (Mentor Only)
 const addSessionResource = async (
   sessionId: string,
   mentorId: string,
@@ -259,10 +236,7 @@ const addSessionResource = async (
   return updatedSession;
 };
 
-/**
- * 6. Remove Single Resource from Cohort Session (Mentor Only)
- * - Filters out target resource by resourceId from session.resources JSON array.
- */
+// 6. Remove Single Resource from Cohort Session (Mentor Only)
 const removeSessionResource = async (
   sessionId: string,
   mentorId: string,
@@ -295,11 +269,7 @@ const removeSessionResource = async (
   return { message: "Resource removed successfully", resources: updatedSession.resources };
 };
 
-/**
- * 7. Join Cohort Session (Student Only)
- * - Checks enrollment, verifies student credit balance, deducts session creditCost into Escrow.
- * - Does NOT credit mentor yet; credits remain in escrow until session completion.
- */
+// 7. Join Cohort Session (Student Only)
 const joinCohortSession = async (sessionId: string, studentId: string) => {
   const session = await prisma.cohortSession.findUnique({
     where: { id: sessionId },
@@ -310,7 +280,6 @@ const joinCohortSession = async (sessionId: string, studentId: string) => {
     throw new AppError("Cohort session not found", 404);
   }
 
-  // 1. Check student enrollment in cohort program
   const enrollment = await prisma.cohortEnrollment.findUnique({
     where: {
       cohortId_studentId: {
@@ -324,7 +293,6 @@ const joinCohortSession = async (sessionId: string, studentId: string) => {
     throw new AppError("You must register/enroll in the cohort program before joining its sessions", 400);
   }
 
-  // 2. Check if student already joined
   const existingParticipant = await prisma.cohortSessionParticipant.findUnique({
     where: {
       cohortSessionId_studentId: {
@@ -338,7 +306,6 @@ const joinCohortSession = async (sessionId: string, studentId: string) => {
     throw new AppError("You have already joined and paid for this cohort session", 400);
   }
 
-  // 3. Check student wallet credit balance
   const studentWallet = await (prisma as any).wallet?.findUnique({
     where: { userId: studentId },
   });
@@ -350,19 +317,16 @@ const joinCohortSession = async (sessionId: string, studentId: string) => {
     );
   }
 
-  // 4. Transaction: Deduct student wallet into Escrow & create CohortSessionParticipant record
   const result = await prisma.$transaction(async (tx: any) => {
     let remainingBalance = studentWallet?.balance || 0;
 
     if (tx.wallet) {
-      // Deduct credits from student wallet into Escrow
       const updatedStudentWallet = await tx.wallet.update({
         where: { userId: studentId },
         data: { balance: { decrement: session.creditCost } },
       });
       remainingBalance = updatedStudentWallet.balance;
 
-      // Create student debit transaction record (Escrow Hold)
       await tx.creditTransaction.create({
         data: {
           walletId: updatedStudentWallet.id,
@@ -374,7 +338,6 @@ const joinCohortSession = async (sessionId: string, studentId: string) => {
       });
     }
 
-    // Create CohortSessionParticipant record
     const participant = await tx.cohortSessionParticipant.upsert({
       where: {
         cohortSessionId_studentId: {
@@ -410,11 +373,7 @@ const joinCohortSession = async (sessionId: string, studentId: string) => {
   };
 };
 
-/**
- * 8. Complete Cohort Session (Mentor Only)
- * - TIME GUARD: Verifies that current time has passed the scheduled session end time.
- * - ESCROW RELEASE: Transfers accumulated credits (minus 15% platform fee) to mentor's wallet.
- */
+// 8. Complete Cohort Session (Mentor Only)
 const completeCohortSession = async (sessionId: string, mentorId: string) => {
   const session = await prisma.cohortSession.findUnique({
     where: { id: sessionId },
@@ -440,7 +399,6 @@ const completeCohortSession = async (sessionId: string, mentorId: string) => {
     throw new AppError("Cannot complete a cancelled cohort session", 400);
   }
 
-  // 1. Time Guard Check: Mentor CANNOT mark completed unless session has ended
   const now = new Date();
   const sessionStart = new Date(session.scheduledAt);
   const sessionEnd = new Date(sessionStart.getTime() + session.durationMinutes * 60 * 1000);
@@ -452,13 +410,11 @@ const completeCohortSession = async (sessionId: string, mentorId: string) => {
     );
   }
 
-  // 2. Escrow Calculation
   const totalPaidParticipants = session.participants.length;
   const totalEscrowCollected = session.creditCost * totalPaidParticipants;
-  const platformFeeRate = 0.15; // 15% platform commission
+  const platformFeeRate = 0.15;
   const mentorNetEarnings = Math.round(totalEscrowCollected * (1 - platformFeeRate));
 
-  // 3. Transaction: Update status to COMPLETED & Release Escrow to Mentor's Wallet
   const updatedSession = await prisma.$transaction(async (tx: any) => {
     if (tx.wallet && mentorNetEarnings > 0) {
       const mentorWallet = await tx.wallet.upsert({
@@ -490,10 +446,7 @@ const completeCohortSession = async (sessionId: string, mentorId: string) => {
   };
 };
 
-/**
- * 9. Cancel Cohort Session (Mentor Only)
- * - Marks status as CANCELLED and refunds held escrow credits back to all paid participants.
- */
+// 9. Cancel Cohort Session (Mentor Only)
 const cancelCohortSession = async (sessionId: string, mentorId: string) => {
   const session = await prisma.cohortSession.findUnique({
     where: { id: sessionId },
@@ -520,13 +473,11 @@ const cancelCohortSession = async (sessionId: string, mentorId: string) => {
   }
 
   await prisma.$transaction(async (tx: any) => {
-    // Mark session as CANCELLED
     await tx.cohortSession.update({
       where: { id: sessionId },
       data: { status: "CANCELLED" },
     });
 
-    // Refund each paid participant from Escrow
     if (tx.wallet) {
       for (const participant of session.participants) {
         const studentWallet = await tx.wallet.update({

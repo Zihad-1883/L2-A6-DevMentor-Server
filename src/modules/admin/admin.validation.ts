@@ -1,8 +1,3 @@
-/**
- * @file src/modules/admin/admin.validation.ts
- * @description Zod validation schemas for Admin moderation actions.
- */
-
 import { z } from "zod";
 
 export const approveMentorSchema = z.object({

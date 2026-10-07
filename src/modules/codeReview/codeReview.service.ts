@@ -508,6 +508,162 @@ const getOpenCodeReviewPool = async (filters: import("./codeReview.interface.js"
   };
 };
 
+// 9. Get Logged-In Student's Code Review Requests
+const getMyCodeReviewRequests = async (studentId: string, query: any = {}) => {
+  const page = Math.max(1, Number(query.page) || 1);
+  const limit = Math.max(1, Math.min(50, Number(query.limit) || 10));
+  const skip = (page - 1) * limit;
+
+  const whereConditions: any[] = [{ studentId }];
+
+  if (query.status) {
+    whereConditions.push({ status: query.status });
+  }
+
+  if (query.tier) {
+    whereConditions.push({ tier: query.tier });
+  }
+
+  if (query.search) {
+    whereConditions.push({
+      OR: [
+        { title: { contains: query.search, mode: "insensitive" } },
+        { description: { contains: query.search, mode: "insensitive" } },
+        { specificFiles: { contains: query.search, mode: "insensitive" } },
+      ],
+    });
+  }
+
+  const where = { AND: whereConditions };
+
+  const [totalCount, requests] = await Promise.all([
+    prisma.codeReviewRequest.count({ where }),
+    prisma.codeReviewRequest.findMany({
+      where,
+      skip,
+      take: limit,
+      include: {
+        assignedMentor: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            mentorProfile: {
+              select: {
+                bio: true,
+                techStackTags: true,
+                experienceLevel: true,
+                githubUrl: true,
+              },
+            },
+          },
+        },
+        submission: {
+          select: {
+            id: true,
+            summary: true,
+            videoUrl: true,
+            pullRequestUrl: true,
+            createdAt: true,
+            _count: {
+              select: { comments: true },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    }),
+  ]);
+
+  const totalPages = Math.ceil(totalCount / limit);
+
+  return {
+    success: true,
+    data: requests,
+    meta: {
+      page,
+      limit,
+      totalCount,
+      totalPages,
+    },
+  };
+};
+
+// 10. Get Single Code Review Request by ID (with permissions guard)
+const getCodeReviewById = async (userId: string, userRole: string, requestId: string) => {
+  const reviewRequest = await prisma.codeReviewRequest.findUnique({
+    where: { id: requestId },
+    include: {
+      student: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+        },
+      },
+      assignedMentor: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+          mentorProfile: {
+            select: {
+              bio: true,
+              techStackTags: true,
+              experienceLevel: true,
+              githubUrl: true,
+            },
+          },
+        },
+      },
+      submission: {
+        include: {
+          mentor: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              image: true,
+            },
+          },
+          comments: {
+            orderBy: { lineNumber: "asc" },
+          },
+        },
+      },
+    },
+  });
+
+  if (!reviewRequest) {
+    throw new AppError("Code review request not found", 404);
+  }
+
+  // Access check: Student owner, assigned mentor, previewing mentor, or Admin
+  // Or open requests in pool viewable by mentors
+  const isOwner = reviewRequest.studentId === userId;
+  const isAssignedMentor = reviewRequest.assignedMentorId === userId;
+  const isPreviewMentor = reviewRequest.previewMentorId === userId;
+  const isAdmin = userRole === "admin";
+  const isMentorViewingPool =
+    userRole === "mentor" &&
+    (reviewRequest.status === "OPEN" ||
+      (reviewRequest.status === "PREVIEW_LOCKED" &&
+        reviewRequest.previewExpiresAt &&
+        new Date(reviewRequest.previewExpiresAt) <= new Date()));
+
+  if (!isOwner && !isAssignedMentor && !isPreviewMentor && !isAdmin && !isMentorViewingPool) {
+    throw new AppError("You are not authorized to view this code review request", 403);
+  }
+
+  return {
+    success: true,
+    data: reviewRequest,
+  };
+};
+
 export const codeReviewService = {
   createReviewRequest,
   updateCodeSnippet,
@@ -517,4 +673,7 @@ export const codeReviewService = {
   approveAndRelease,
   cancelReviewRequest,
   getOpenCodeReviewPool,
+  getMyCodeReviewRequests,
+  getCodeReviewById,
 };
+

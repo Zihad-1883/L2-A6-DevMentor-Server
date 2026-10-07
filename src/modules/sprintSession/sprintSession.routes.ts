@@ -14,7 +14,7 @@ router.get(
     sprintSessionController.getSprintSessionsBySprintId
 );
 
-// Mentor proposes time slot & meeting join link (supports PATCH or POST)
+// Mentor proposes time slot & meeting join link
 router.patch(
     "/:sessionId/propose",
     requireAuth,
@@ -46,7 +46,7 @@ router.post(
     sprintSessionController.completeSprintSession
 );
 
-// Cancel session (enforces 1-hour refund cutoff rule)
+// Cancel session
 router.post(
     "/:sessionId/cancel",
     requireAuth,

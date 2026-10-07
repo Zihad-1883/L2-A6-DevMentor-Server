@@ -1,8 +1,3 @@
-/**
- * @file src/modules/admin/admin.interface.ts
- * @description Interfaces for admin moderation and user management payloads.
- */
-
 export interface IUserQueryFilters {
   search?: string;
   role?: string;

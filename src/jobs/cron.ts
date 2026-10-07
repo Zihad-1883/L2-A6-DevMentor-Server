@@ -16,10 +16,10 @@ export const expireAbandonedPayments = async () => {
     });
 
     if (result.count > 0) {
-      console.log(`⏰ Cron Job: Auto-expired ${result.count} abandoned payment intent(s).`);
+      console.log(`Cron Job: Auto-expired ${result.count} abandoned payment intent(s).`);
     }
   } catch (err) {
-    console.error("❌ Error running expireAbandonedPayments cron job:", err);
+    console.error("Error running expireAbandonedPayments cron job:", err);
   }
 };
 
@@ -28,5 +28,5 @@ export const initCronJobs = () => {
     await expireAbandonedPayments();
   });
 
-  console.log("⏰ackground Cron Worker initialized (Running cleanup every 5 minutes).");
+  console.log("Background Cron Worker initialized (Running cleanup every 5 minutes).");
 };

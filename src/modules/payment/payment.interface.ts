@@ -1,8 +1,3 @@
-/**
- * @file src/modules/payment/payment.interface.ts
- * @description DTOs and Interfaces for bKash Payment Gateway integration and Wallet operations.
- */
-
 export interface IBKashGrantTokenResponse {
   statusCode: string;
   statusMessage: string;

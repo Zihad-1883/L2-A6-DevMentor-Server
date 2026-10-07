@@ -1,11 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 import { AppError } from "../utils/apiError.js";
 
-// Valid roles in the system
 export type Role = "student" | "mentor" | "admin";
 
-// requireRole("admin") or requireRole("admin", "mentor")
-// Always use AFTER requireAuth — depends on req.user being set.
 export const requireRole = (...roles: Role[]) => {
     return (req: Request, _res: Response, next: NextFunction): void => {
         if (!req.user) {

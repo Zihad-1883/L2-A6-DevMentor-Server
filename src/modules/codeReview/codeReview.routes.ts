@@ -13,7 +13,10 @@ router.use(requireAuth);
 // 1. Browse Open Pool (Mentors & Admin)
 router.get("/pool", requireRole("mentor", "admin"), codeReviewController.getOpenPoolHandler);
 
-// 2. Create Code Review Request (Student)
+// 2. Get Student's Own Code Review Requests (Student & Admin)
+router.get("/my-requests", requireRole("student", "admin"), codeReviewController.getMyRequestsHandler);
+
+// 3. Create Code Review Request (Student)
 router.post(
   "/",
   requireRole("student"),
@@ -21,7 +24,10 @@ router.post(
   codeReviewController.createReviewRequestHandler
 );
 
-// 3. Update Code Snippet / Details (Student)
+// 4. Get Single Code Review Request Details by ID
+router.get("/:id", codeReviewController.getReviewByIdHandler);
+
+// 5. Update Code Snippet / Details (Student)
 router.patch(
   "/:id/snippet",
   requireRole("student"),
@@ -29,13 +35,13 @@ router.patch(
   codeReviewController.updateCodeSnippetHandler
 );
 
-// 4. Acquire 10-Minute Preview Lock (Mentor)
+// 6. Acquire 10-Minute Preview Lock (Mentor)
 router.post("/:id/preview", requireRole("mentor", "admin"), codeReviewController.previewLockHandler);
 
-// 5. Claim Code Review Request (Mentor)
+// 7. Claim Code Review Request (Mentor)
 router.post("/:id/claim", requireRole("mentor", "admin"), codeReviewController.claimReviewRequestHandler);
 
-// 6. Submit Review Feedback Delivery (Mentor)
+// 8. Submit Review Feedback Delivery (Mentor)
 router.post(
   "/:id/submit",
   requireRole("mentor", "admin"),
@@ -43,10 +49,11 @@ router.post(
   codeReviewController.submitReviewHandler
 );
 
-// 7. Approve & Release 100% Escrow Credits to Mentor (Student / Admin)
+// 9. Approve & Release 100% Escrow Credits to Mentor (Student / Admin)
 router.post("/:id/approve", requireRole("student", "admin"), codeReviewController.approveAndReleaseHandler);
 
-// 8. Cancel Unclaimed Request & Refund Student (Student)
+// 10. Cancel Unclaimed Request & Refund Student (Student)
 router.post("/:id/cancel", requireRole("student"), codeReviewController.cancelReviewRequestHandler);
 
 export default router;
+

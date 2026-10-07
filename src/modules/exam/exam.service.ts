@@ -1,216 +1,220 @@
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/apiError.js";
 import type {
-    ICreateExamInput,
-    IUpdateExamInput,
-    IAddQuestionInput,
+  ICreateExamInput,
+  IUpdateExamInput,
+  IAddQuestionInput,
 } from "./exam.interface.js";
 
-// 1. Create a new Exam (Free, Cohort-linked, or Sprint-linked)
+// 1. Create a new Exam
 const createExam = async (mentorId: string, payload: ICreateExamInput) => {
-    const {
-        title,
-        description,
-        durationMinutes = 30,
-        totalMarks = 100,
-        passMark = 70,
-        isFree = true,
-        cohortId,
-        sprintId,
-    } = payload;
+  const {
+    title,
+    description,
+    durationMinutes = 30,
+    totalMarks = 100,
+    passMark = 70,
+    isFree = true,
+    cohortId,
+    sprintId,
+  } = payload;
 
-    // Validate Cohort ownership if cohortId is provided
-    if (cohortId) {
-        const cohort = await prisma.cohortProgram.findUnique({
-            where: { id: cohortId },
-        });
-        if (!cohort) {
-            throw new AppError("Target Cohort Program not found", 404);
-        }
-        if (cohort.mentorId !== mentorId) {
-            throw new AppError("You can only attach exams to your own Cohort Programs", 403);
-        }
-    }
-
-    // Validate Sprint existence if sprintId is provided
-    if (sprintId) {
-        const sprint = await prisma.sprintRequest.findUnique({
-            where: { id: sprintId },
-        });
-        if (!sprint) {
-            throw new AppError("Target Sprint Request not found", 404);
-        }
-    }
-
-    const exam = await prisma.exam.create({
-        data: {
-            mentorId,
-            title,
-            description,
-            durationMinutes,
-            totalMarks,
-            passMark,
-            isFree: cohortId || sprintId ? false : isFree,
-            cohortId: cohortId || null,
-            sprintId: sprintId || null,
-            status: "DRAFT",
-        },
-        include: {
-            cohort: { select: { id: true, title: true } },
-            sprint: { select: { id: true, title: true } },
-        },
+  if (cohortId) {
+    const cohort = await prisma.cohortProgram.findUnique({
+      where: { id: cohortId },
     });
+    if (!cohort) {
+      throw new AppError("Target Cohort Program not found", 404);
+    }
+    if (cohort.mentorId !== mentorId) {
+      throw new AppError("You can only attach exams to your own Cohort Programs", 403);
+    }
+  }
 
-    return exam;
+  if (sprintId) {
+    const sprint = await prisma.sprintRequest.findUnique({
+      where: { id: sprintId },
+    });
+    if (!sprint) {
+      throw new AppError("Target Sprint Request not found", 404);
+    }
+  }
+
+  const exam = await prisma.exam.create({
+    data: {
+      mentorId,
+      title,
+      description,
+      durationMinutes,
+      totalMarks,
+      passMark,
+      isFree: cohortId || sprintId ? false : isFree,
+      cohortId: cohortId || null,
+      sprintId: sprintId || null,
+      status: "DRAFT",
+    },
+    include: {
+      cohort: { select: { id: true, title: true } },
+      sprint: { select: { id: true, title: true } },
+    },
+  });
+
+  return exam;
 };
 
 // 2. Add or Bulk Upload MCQs to an Exam
 const addQuestionsToExam = async (
-    mentorId: string,
-    examId: string,
-    questions: IAddQuestionInput[]
+  mentorId: string,
+  examId: string,
+  questions: IAddQuestionInput[]
 ) => {
-    const exam = await prisma.exam.findUnique({
-        where: { id: examId },
-    });
+  const exam = await prisma.exam.findUnique({
+    where: { id: examId },
+  });
 
-    if (!exam) {
-        throw new AppError("Exam not found", 404);
+  if (!exam) {
+    throw new AppError("Exam not found", 404);
+  }
+
+  if (exam.mentorId !== mentorId) {
+    throw new AppError("You do not have permission to modify questions for this exam", 403);
+  }
+
+  if (exam.status === "ARCHIVED") {
+    throw new AppError("Cannot add questions to an archived exam", 400);
+  }
+
+  questions.forEach((q, index) => {
+    if (q.correctOptionIndex < 0 || q.correctOptionIndex >= q.options.length) {
+      throw new AppError(
+        `Question ${index + 1}: correctOptionIndex (${q.correctOptionIndex}) is out of bounds for ${q.options.length} options`,
+        400
+      );
     }
+  });
 
-    if (exam.mentorId !== mentorId) {
-        throw new AppError("You do not have permission to modify questions for this exam", 403);
+  const createdQuestions = await prisma.$transaction(
+    async (tx) => {
+      const results = [];
+      for (const q of questions) {
+        const item = await tx.question.create({
+          data: {
+            examId,
+            questionText: q.questionText,
+            options: q.options,
+            correctOptionIndex: q.correctOptionIndex,
+            explanation: q.explanation || null,
+            marks: q.marks || 1,
+          },
+        });
+        results.push(item);
+      }
+      return results;
+    },
+    {
+      maxWait: 10000,
+      timeout: 25000,
     }
+  );
 
-    if (exam.status === "ARCHIVED") {
-        throw new AppError("Cannot add questions to an archived exam", 400);
-    }
+  const allQuestions = await prisma.question.findMany({
+    where: { examId },
+  });
 
-    // Validate option bounds for each question
-    questions.forEach((q, index) => {
-        if (q.correctOptionIndex < 0 || q.correctOptionIndex >= q.options.length) {
-            throw new AppError(
-                `Question ${index + 1}: correctOptionIndex (${q.correctOptionIndex}) is out of bounds for ${q.options.length} options`,
-                400
-            );
-        }
-    });
+  const totalQuestionsCount = allQuestions.length;
+  const computedTotalMarks = allQuestions.reduce((sum, q) => sum + q.marks, 0);
 
-    const createdQuestions = await prisma.$transaction(
-        questions.map((q) =>
-            prisma.question.create({
-                data: {
-                    examId,
-                    questionText: q.questionText,
-                    options: q.options,
-                    correctOptionIndex: q.correctOptionIndex,
-                    explanation: q.explanation || null,
-                    marks: q.marks || 1,
-                },
-            })
-        )
-    );
+  const updatedExam = await prisma.exam.update({
+    where: { id: examId },
+    data: {
+      totalQuestions: totalQuestionsCount,
+      totalMarks: computedTotalMarks,
+      durationMinutes: totalQuestionsCount > 0 ? totalQuestionsCount : exam.durationMinutes,
+    },
+    include: {
+      questions: true,
+      _count: { select: { questions: true } },
+    },
+  });
 
-    // Fetch all questions to calculate total questions, total marks, and duration
-    const allQuestions = await prisma.question.findMany({
-        where: { examId },
-    });
-
-    const totalQuestionsCount = allQuestions.length;
-    const computedTotalMarks = allQuestions.reduce((sum, q) => sum + q.marks, 0);
-
-    // Update Exam summary metrics: 1 Question = 1 Mark = 1 Min rule
-    const updatedExam = await prisma.exam.update({
-        where: { id: examId },
-        data: {
-            totalQuestions: totalQuestionsCount,
-            totalMarks: computedTotalMarks,
-            durationMinutes: totalQuestionsCount > 0 ? totalQuestionsCount : exam.durationMinutes,
-        },
-        include: {
-            questions: true,
-            _count: { select: { questions: true } },
-        },
-    });
-
-    return {
-        addedCount: createdQuestions.length,
-        totalQuestions: totalQuestionsCount,
-        totalMarks: computedTotalMarks,
-        durationMinutes: updatedExam.durationMinutes,
-        exam: updatedExam,
-    };
+  return {
+    addedCount: createdQuestions.length,
+    totalQuestions: totalQuestionsCount,
+    totalMarks: computedTotalMarks,
+    durationMinutes: updatedExam.durationMinutes,
+    exam: updatedExam,
+  };
 };
 
 // 3. Publish Exam (Activates the exam for students)
 const publishExam = async (mentorId: string, examId: string) => {
-    const exam = await prisma.exam.findUnique({
-        where: { id: examId },
-        include: {
-            _count: { select: { questions: true } },
-        },
-    });
+  const exam = await prisma.exam.findUnique({
+    where: { id: examId },
+    include: {
+      _count: { select: { questions: true } },
+    },
+  });
 
-    if (!exam) {
-        throw new AppError("Exam not found", 404);
-    }
+  if (!exam) {
+    throw new AppError("Exam not found", 404);
+  }
 
-    if (exam.mentorId !== mentorId) {
-        throw new AppError("You do not have permission to publish this exam", 403);
-    }
+  if (exam.mentorId !== mentorId) {
+    throw new AppError("You do not have permission to publish this exam", 403);
+  }
 
   if (exam.status === "PUBLISHED") {
     throw new AppError("Exam is already published", 400);
   }
 
-    if (exam._count.questions === 0) {
-        throw new AppError("Cannot publish an exam with 0 questions. Please add questions first.", 400);
-    }
+  if (exam._count.questions === 0) {
+    throw new AppError("Cannot publish an exam with 0 questions. Please add questions first.", 400);
+  }
 
-    const publishedExam = await prisma.exam.update({
-        where: { id: examId },
-        data: { status: "PUBLISHED" },
-        include: {
-            questions: true,
-            _count: { select: { questions: true, attempts: true } },
-        },
-    });
+  const publishedExam = await prisma.exam.update({
+    where: { id: examId },
+    data: { status: "PUBLISHED" },
+    include: {
+      questions: true,
+      _count: { select: { questions: true, attempts: true } },
+    },
+  });
 
-    return publishedExam;
+  return publishedExam;
 };
 
 // 4. Get Mentor's Created Exams with Statistics
 const getMentorExams = async (
-    mentorId: string,
-    page: number = 1,
-    limit: number = 10
+  mentorId: string,
+  page: number = 1,
+  limit: number = 10
 ) => {
-    const skip = (page - 1) * limit;
+  const skip = (page - 1) * limit;
 
-    const [exams, total] = await Promise.all([
-        prisma.exam.findMany({
-            where: { mentorId },
-            orderBy: { createdAt: "desc" },
-            skip,
-            take: limit,
-            include: {
-                cohort: { select: { id: true, title: true } },
-                sprint: { select: { id: true, title: true } },
-                _count: { select: { questions: true, attempts: true } },
-            },
-        }),
-        prisma.exam.count({ where: { mentorId } }),
-    ]);
+  const [exams, total] = await Promise.all([
+    prisma.exam.findMany({
+      where: { mentorId },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+      include: {
+        cohort: { select: { id: true, title: true } },
+        sprint: { select: { id: true, title: true } },
+        _count: { select: { questions: true, attempts: true } },
+      },
+    }),
+    prisma.exam.count({ where: { mentorId } }),
+  ]);
 
-    return {
-        meta: {
-            page,
-            limit,
-            total,
-            totalPages: Math.ceil(total / limit),
-        },
-        data: exams,
-    };
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    },
+    data: exams,
+  };
 };
 
 // 5. Get Available Exams for Student (Free public exams + enrolled cohort & sprint exams)
@@ -221,7 +225,6 @@ const getAvailableExams = async (
 ) => {
   const skip = (page - 1) * limit;
 
-  // Fetch student's cohort enrollments and sprint requests
   const [cohortEnrollments, sprintRequests] = await Promise.all([
     prisma.cohortEnrollment.findMany({
       where: { studentId },
@@ -272,7 +275,7 @@ const getAvailableExams = async (
   };
 };
 
-// 6. Start Exam Attempt (Sanitizes questions by hiding correctOptionIndex to prevent cheating)
+// 6. Start Exam Attempt
 const startExamAttempt = async (studentId: string, examId: string) => {
   const exam = await prisma.exam.findUnique({
     where: { id: examId },
@@ -325,7 +328,6 @@ const startExamAttempt = async (studentId: string, examId: string) => {
     }
   }
 
-  // Create an active ExamAttempt record
   const attempt = await prisma.examAttempt.create({
     data: {
       examId,
@@ -346,7 +348,7 @@ const startExamAttempt = async (studentId: string, examId: string) => {
       totalMarks: exam.totalMarks,
       passMark: exam.passMark,
       mentor: exam.mentor,
-      questions: exam.questions, // Sanitized: correctOptionIndex & explanation are NOT included
+      questions: exam.questions,
     },
   };
 };
@@ -368,7 +370,6 @@ const submitExamAttempt = async (
     throw new AppError("Exam not found", 404);
   }
 
-  // Fetch or find active attempt
   const attempt = await prisma.examAttempt.findFirst({
     where: { examId, studentId, submittedAt: null },
     orderBy: { startedAt: "desc" },

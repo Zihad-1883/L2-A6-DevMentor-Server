@@ -67,8 +67,6 @@ const initiateTopUp = async (userId: string, payload: IInitiateTopUpInput) => {
   };
 };
 
-
-// Execute Payment & Settlement
 const executePaymentAndTopUp = async (paymentID: string, status: string) => {
   const payment = await prisma.payment.findUnique({
     where: { paymentID },
@@ -101,7 +99,6 @@ const executePaymentAndTopUp = async (paymentID: string, status: string) => {
   try {
     bkashResult = await bkashService.executePayment(paymentID);
   } catch (err: any) {
-    // If bKash Sandbox returned Invalid Payment State (2056 - session unconfirmed in UI), fallback to mock trxID for sandbox demo testing
     if (err.message?.includes("Invalid Payment State") || err.message?.includes("2056")) {
       bkashResult = {
         trxID: `TRX-SANDBOX-${Date.now().toString(36).toUpperCase()}`,
@@ -117,7 +114,7 @@ const executePaymentAndTopUp = async (paymentID: string, status: string) => {
     }
   }
 
-  const CREDIT_RATE = 4; // 4 BDT = 1 Credit
+  const CREDIT_RATE = 4;
   const creditsEarned = Math.floor(payment.amount / CREDIT_RATE);
 
   const { updatedPayment, wallet } = await prisma.$transaction(async (tx) => {
@@ -190,10 +187,9 @@ const executePaymentAndTopUp = async (paymentID: string, status: string) => {
 };
 
 
-// Mentor / Admin bKash Cash-Out Withdrawal
 const requestWithdrawal = async (userId: string, payload: IRequestWithdrawalInput) => {
   const { amount, bkashNumber } = payload;
-  const CREDIT_RATE = 4; // 4 BDT = 1 Credit
+  const CREDIT_RATE = 4; 
   const creditsRequired = Math.ceil(amount / CREDIT_RATE);
 
   const user = await prisma.user.findUnique({

@@ -28,7 +28,6 @@ const approveOrRejectMentor = async (
     const { status } = payload;
 
     const updatedMentorProfile = await prisma.$transaction(async (tx) => {
-        // Update MentorProfile approval status
         const profile = await tx.mentorProfile.update({
             where: { id: mentorProfileId },
             data: {
@@ -43,7 +42,6 @@ const approveOrRejectMentor = async (
             },
         });
 
-        // If approved, upgrade target user's role to 'mentor'
         if (status === "APPROVED") {
             await tx.user.update({
                 where: { id: mentorProfile.userId },

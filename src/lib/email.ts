@@ -21,7 +21,7 @@ export interface ISendOTPEmailInput {
 const transporter = nodemailer.createTransport({
   host: env.SMTP_HOST,
   port: env.SMTP_PORT,
-  secure: env.SMTP_PORT === 465, // true for 465, false for 587
+  secure: env.SMTP_PORT === 465,
   auth:
     env.SMTP_USER && env.SMTP_PASS
       ? {
@@ -106,7 +106,7 @@ export const sendPaymentReceiptEmail = async (input: ISendReceiptEmailInput): Pr
 
     return true;
   } catch (err) {
-    console.error("❌ Failed to send receipt email via Nodemailer:", err);
+    console.error("Failed to send receipt email via Nodemailer:", err);
     return false;
   }
 };

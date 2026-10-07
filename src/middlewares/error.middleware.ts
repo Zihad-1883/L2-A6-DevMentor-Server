@@ -10,10 +10,8 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction,
 ): void => {
-  // Determine HTTP status
   let statusCode = err.statusCode ?? 500;
 
-  // Map 404 errors set by notFoundHandler
   if (err.code === "404") statusCode = 404;
 
   // Prisma known request error (e.g., unique constraint)

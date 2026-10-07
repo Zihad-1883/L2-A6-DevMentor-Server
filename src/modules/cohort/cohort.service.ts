@@ -1,8 +1,3 @@
-/**
- * @file src/modules/cohort/cohort.service.ts
- * @description Domain service functions for Mentor Cohort Program operations.
- */
-
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/apiError.js";
 import type {
@@ -11,11 +6,8 @@ import type {
   ICohortQueryFilters,
 } from "./cohort.interface.js";
 
-/**
- * 1. Create Cohort Program (Mentor Initiated)
- * - Checks mentor role and approved profile status.
- * - Creates cohort with PENDING_APPROVAL and DRAFT status.
- */
+
+// 1. Create Cohort Program 
 const createCohort = async (mentorId: string, payload: ICreateCohortInput) => {
   const mentor = await prisma.user.findUnique({
     where: { id: mentorId },
@@ -64,11 +56,8 @@ const createCohort = async (mentorId: string, payload: ICreateCohortInput) => {
   return cohort;
 };
 
-/**
- * 2. Get All Published Cohorts (Public Directory)
- * - Filters for approved and published cohorts.
- * - Supports keyword search, tag filtering, and pagination.
- */
+
+// 2. Get All Published Cohorts (Public Directory)
 const getAllPublishedCohorts = async (filters: ICohortQueryFilters) => {
   const { search, tag } = filters;
   const page = Number(filters.page) || 1;
@@ -132,11 +121,7 @@ const getAllPublishedCohorts = async (filters: ICohortQueryFilters) => {
   };
 };
 
-/**
- * 3. Get Single Cohort By ID
- * - Retrieves details of a specific cohort.
- * - Includes mentor info, sessions list, and enrollment count.
- */
+// 3. Get Single Cohort By ID
 const getCohortById = async (cohortId: string) => {
   const cohort = await prisma.cohortProgram.findFirst({
     where: {
@@ -171,11 +156,8 @@ const getCohortById = async (cohortId: string) => {
   return cohort;
 };
 
-/**
- * 4. Get Mentor's Created Cohorts
- * - Retrieves all cohorts created by the logged-in mentor.
- * - Includes drafts, pending approval, and published cohorts.
- */
+
+// 4. Get Mentor's Created Cohorts
 const getMyCreatedCohorts = async (mentorId: string) => {
   const cohorts = await prisma.cohortProgram.findMany({
     where: {
@@ -199,10 +181,8 @@ const getMyCreatedCohorts = async (mentorId: string) => {
   return cohorts;
 };
 
-/**
- * 5. Update Cohort Program
- * - Updates details of a cohort owned by the mentor.
- */
+
+// 5. Update Cohort Program
 const updateCohort = async (
   cohortId: string,
   mentorId: string,
@@ -220,14 +200,11 @@ const updateCohort = async (
     throw new AppError("You are not authorized to update this cohort program", 403);
   }
 
-  // If mentor is publishing the cohort
   if (payload.status === "PUBLISHED" && existingCohort.status !== "PUBLISHED") {
-    // Guard 1: Must be approved by an administrator first
     if (existingCohort.approvalStatus !== "APPROVED") {
       throw new AppError("Cannot publish cohort program until it has been approved by an administrator", 400);
     }
 
-    // Guard 2: A mentor cannot have more than 1 active published cohort at the same time
     const existingPublishedCohort = await prisma.cohortProgram.findFirst({
       where: {
         mentorId,
@@ -262,10 +239,7 @@ const updateCohort = async (
   return updatedCohort;
 };
 
-/**
- * 6. Soft Delete Cohort Program
- * - Marks cohort as ARCHIVED and sets deletedAt timestamp.
- */
+// 6. Soft Delete Cohort Program
 const deleteCohort = async (cohortId: string, mentorId: string) => {
   const existingCohort = await prisma.cohortProgram.findFirst({
     where: { id: cohortId, deletedAt: null },
@@ -290,10 +264,7 @@ const deleteCohort = async (cohortId: string, mentorId: string) => {
   return { message: "Cohort program deleted successfully" };
 };
 
-/**
- * 7. Register Student for Cohort Program
- * - Checks cohort status, capacity, and prevents duplicate enrollment.
- */
+// 7. Register Student for Cohort Program
 const registerCohort = async (cohortId: string, studentId: string) => {
   const student = await prisma.user.findUnique({
     where: { id: studentId },

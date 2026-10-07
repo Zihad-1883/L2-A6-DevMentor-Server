@@ -1,8 +1,3 @@
-/**
- * @file src/modules/user/user.routes.ts
- * @description Express routes for user profile management and dashboard metrics.
- */
-
 import { Router } from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { validate } from "../../middlewares/validate.middleware.js";

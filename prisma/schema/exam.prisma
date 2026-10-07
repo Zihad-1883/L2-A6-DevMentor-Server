@@ -40,9 +40,9 @@ model Question {
     exam   Exam   @relation(fields: [examId], references: [id], onDelete: Cascade)
 
     questionText       String
-    options            String[] // Array of strings e.g. ["Option A", "Option B", "Option C", "Option D"]
-    correctOptionIndex Int // Index of correct option (0-indexed)
-    explanation        String? // Explanation for student after submission
+    options            String[]
+    correctOptionIndex Int 
+    explanation        String?
     marks              Int      @default(1)
 
     @@map("question")
@@ -61,7 +61,7 @@ model ExamAttempt {
     startedAt   DateTime  @default(now())
     submittedAt DateTime?
 
-    answers Json // Array e.g. [{ questionId: "...", selectedOption: 1 }]
+    answers Json
 
     @@map("exam_attempt")
 }

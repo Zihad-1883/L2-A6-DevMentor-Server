@@ -10,7 +10,6 @@ export interface IPaymentReceiptData {
   studentEmail: string;
 }
 
-// Generates a branded payment receipt PDF as a Node.js Buffer array.
 export const generatePaymentReceiptPDF = (data: IPaymentReceiptData): Promise<Buffer> => {
   return new Promise((resolve, reject) => {
     try {

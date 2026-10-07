@@ -8,8 +8,8 @@
     "postinstall": "prisma generate",
     "build": "prisma generate && tsup",
     "start": "node dist/server.js",
-    "dev": "tsx watch src/server.ts",
-    "seed": "tsx prisma/seed.ts"
+    "dev": "node node_modules/tsx/dist/cli.mjs watch src/server.ts",
+    "seed": "node node_modules/tsx/dist/cli.mjs prisma/seed.ts"
   },
   "keywords": [],
   "author": "",

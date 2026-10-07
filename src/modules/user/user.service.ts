@@ -1,13 +1,8 @@
-/**
- * @file src/modules/user/user.service.ts
- * @description Domain logic for user profile management and student/mentor dashboard metrics.
- */
-
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/apiError.js";
 import type { IUpdateUserProfileInput } from "./user.interface.js";
 
-// ── 1. Get Logged-In User Profile Details ────────────────────────────────────
+// 1. Get Logged-In User Profile Details
 const getMyProfile = async (userId: string) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -29,22 +24,20 @@ const getMyProfile = async (userId: string) => {
     throw new AppError("User profile not found", 404);
   }
 
-  // Fetch student/mentor wallet balance if available
   const wallet = await (prisma as any).wallet?.findUnique({
     where: { userId },
   });
 
-  // Students only see balance; Mentors/Admins see totalEarned & totalWithdrawn
   const walletData =
     user.role === "mentor" || user.role === "admin"
       ? {
-          balance: wallet?.balance ?? 0,
-          totalEarned: wallet?.totalEarned ?? 0,
-          totalWithdrawn: wallet?.totalWithdrawn ?? 0,
-        }
+        balance: wallet?.balance ?? 0,
+        totalEarned: wallet?.totalEarned ?? 0,
+        totalWithdrawn: wallet?.totalWithdrawn ?? 0,
+      }
       : {
-          balance: wallet?.balance ?? 0,
-        };
+        balance: wallet?.balance ?? 0,
+      };
 
   return {
     ...user,
@@ -52,7 +45,7 @@ const getMyProfile = async (userId: string) => {
   };
 };
 
-// ── 2. Update Logged-In User Profile ─────────────────────────────────────────
+// 2. Update Logged-In User Profile
 const updateMyProfile = async (userId: string, payload: IUpdateUserProfileInput) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -90,7 +83,7 @@ const updateMyProfile = async (userId: string, payload: IUpdateUserProfileInput)
   return getMyProfile(userId);
 };
 
-// ── 3. Get User Summary Dashboard (Role-Specific) ───────────────────────────
+// 3. Get User Summary Dashboard
 const getMyDashboard = async (userId: string) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -105,7 +98,6 @@ const getMyDashboard = async (userId: string) => {
     where: { userId },
   });
 
-  // If Mentor: Return Mentor-only statistics & earning history
   if (user.role === "mentor") {
     const [createdCohorts, claimedSprints] = await Promise.all([
       prisma.cohortProgram.findMany({
@@ -139,7 +131,6 @@ const getMyDashboard = async (userId: string) => {
     };
   }
 
-  // If Student / Default: Return Student-only enrollments & credit balance
   const [enrolledCohorts, requestedSprints] = await Promise.all([
     prisma.cohortEnrollment.findMany({
       where: { studentId: userId },

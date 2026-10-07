@@ -1,8 +1,3 @@
-/**
- * @file src/modules/cohort/cohort.routes.ts
- * @description Express routes for Cohort Program operations.
- */
-
 import { Router } from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { requireRole } from "../../middlewares/rbac.middleware.js";
@@ -12,7 +7,7 @@ import { createCohortSchema, updateCohortSchema } from "./cohort.validation.js";
 
 const router = Router();
 
-// Mentor routes (static routes before parameterized /:id)
+// Mentor routes
 router.get(
   "/my-created",
   requireAuth,

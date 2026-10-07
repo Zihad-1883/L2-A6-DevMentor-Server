@@ -1,8 +1,3 @@
-/**
- * @file src/modules/sprint/sprint.service.ts
- * @description Domain service functions for Student Sprint operations (1-on-1 mentorship requests).
- */
-
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/apiError.js";
 import type {
@@ -11,7 +6,7 @@ import type {
   ISprintQueryFilters,
 } from "./sprint.interface.js";
 
-// 1. Create Sprint Request (Student Initiated)
+// 1. Create Sprint Request
 const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
   const student = await prisma.user.findUnique({
     where: { id: studentId },
@@ -21,7 +16,6 @@ const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
     throw new AppError("Student user account not found", 404);
   }
 
-  // Validate that the student has sufficient wallet credits to start the sprint
   const platformSetting = await (prisma as any).platformSetting?.findFirst();
   const creditCostPerSession = platformSetting?.sprintCreditPerSession || 50;
   const totalRequiredCredits = payload.selectedDays.length * creditCostPerSession;
@@ -42,10 +36,7 @@ const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
   const { title, description, techStackTags, startDate, durationDays, selectedDays } = payload;
 
   const start = new Date(startDate);
-
-  // Auto-generate session slots for each chosen day number
   const sessionData = selectedDays.map((dayNum) => {
-    // Calculate estimated session date based on startDate + dayNum offset
     const sessionDate = new Date(start);
     sessionDate.setDate(sessionDate.getDate() + (dayNum - 1));
 
@@ -90,7 +81,7 @@ const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
   return sprint;
 };
 
-// 2. Get Open Sprint Pool (Mentors Browse Pending Requests)
+// 2. Get Open Sprint Pool
 const getOpenSprintPool = async (filters: ISprintQueryFilters) => {
   const { search, tag } = filters;
   const page = Number(filters.page) || 1;
@@ -149,7 +140,7 @@ const getOpenSprintPool = async (filters: ISprintQueryFilters) => {
   };
 };
 
-// 3. Claim Sprint Request (Approved Mentor Only)
+// 3. Claim Sprint Request
 const claimSprint = async (sprintId: string, mentorId: string) => {
   const mentor = await prisma.user.findUnique({
     where: { id: mentorId },
@@ -261,7 +252,7 @@ const getSprintById = async (sprintId: string, userId: string) => {
   return sprint;
 };
 
-// 5. Get User's Own Sprints (Student requests OR Mentor claimed)
+// 5. Get User's Own Sprints 
 const getUserSprints = async (userId: string, role: string) => {
   const where: any = {
     deletedAt: null,
@@ -302,7 +293,7 @@ const getUserSprints = async (userId: string, role: string) => {
   return sprints;
 };
 
-// 6. Update Sprint Request (Student Only, Pending Claim Only)
+// 6. Update Sprint Request
 const updateSprint = async (
   sprintId: string,
   studentId: string,
@@ -365,7 +356,6 @@ const deleteSprint = async (sprintId: string, studentId: string) => {
   return { message: "Sprint request cancelled successfully" };
 };
 
-// Service Export Object 
 export const sprintService = {
   createSprint,
   getOpenSprintPool,

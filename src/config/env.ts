@@ -1,11 +1,3 @@
-/**
- * @file src/config/env.ts
- * @description Environment Variables Configuration & Validation
- *
- * Validates process.env at startup using Zod.
- * Import `env` instead of accessing process.env directly — it is fully typed.
- */
-
 import { z } from "zod";
 
 const envSchema = z.object({

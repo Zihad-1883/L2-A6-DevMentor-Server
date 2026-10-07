@@ -1,8 +1,3 @@
-/**
- * @file src/modules/cohortSession/cohortSession.routes.ts
- * @description Express routes for Cohort Group Session operations and resources.
- */
-
 import { Router } from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { requireRole } from "../../middlewares/rbac.middleware.js";
@@ -16,10 +11,10 @@ import {
 
 const router = Router();
 
-// ── Session Query Route (Public / Authenticated with Gated Access) ───────────
+// Session Query Route
 router.get("/cohort/:cohortId", cohortSessionController.getCohortSessions);
 
-// ── Mentor Session Creation & Resource Management Routes ──────────────────────
+// Mentor Session Creation & Resource Management Routes
 router.post(
   "/cohort/:cohortId",
   requireAuth,
@@ -72,7 +67,7 @@ router.patch(
   cohortSessionController.cancelCohortSession,
 );
 
-// ── Student Session Joining Route ─────────────────────────────────────────────
+// Student Session Joining Route
 router.post(
   "/:sessionId/join",
   requireAuth,

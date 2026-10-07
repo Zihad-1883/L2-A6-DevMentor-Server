@@ -3,7 +3,7 @@ import { prisma } from "../src/lib/prisma.js";
 import { auth } from "../src/lib/auth.js";
 
 async function main() {
-  console.log("🌱 Seeding database...");
+  console.log("Seeding database...");
 
   const adminEmail = "admin@devmentor.com";
   const adminPassword = "Admin@123456";
@@ -24,7 +24,7 @@ async function main() {
       data: { role: "admin" },
     });
 
-    console.log("✅ Admin user created");
+    console.log("   Admin user created");
     console.log(`   Email:    ${adminEmail}`);
     console.log(`   Password: ${adminPassword}`);
     console.log(`   Role:     admin`);
@@ -33,15 +33,15 @@ async function main() {
       where: { email: adminEmail },
       data: { role: "admin" },
     });
-    console.log("⚠️  Admin user already exists — role confirmed as admin");
+    console.log("Admin user already exists — role confirmed as admin");
   }
 
-  console.log("\n✅ Seeding complete.");
+  console.log("\n Seeding complete.");
 }
 
 main()
   .catch((e) => {
-    console.error("❌ Seed failed:", e);
+    console.error("Seed failed:", e);
     process.exit(1);
   })
   .finally(async () => {

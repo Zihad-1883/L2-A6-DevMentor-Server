@@ -2,7 +2,7 @@ import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/apiError.js";
 import type { IScheduleSprintSessionInput } from "./sprintSession.interface.js";
 
-// 1. Propose Session Time Slot (Mentor Only)
+// 1. Propose Session Time Slot
 const proposeSprintSessionSlot = async (
   sessionId: string,
   mentorId: string,
@@ -29,7 +29,6 @@ const proposeSprintSessionSlot = async (
   const durationMinutes = payload.durationMinutes || session.durationMinutes || 60;
   const proposedEndAt = new Date(proposedScheduledAt.getTime() + durationMinutes * 60 * 1000);
 
-  // Mentor Overlap Conflict Guard across Sprint Sessions AND Cohort Sessions
   const [conflictingSprintSessions, conflictingCohortSessions] = await Promise.all([
     prisma.sprintSession.findMany({
       where: {
@@ -53,7 +52,6 @@ const proposeSprintSessionSlot = async (
     }),
   ]);
 
-  // Check overlap against Sprint Sessions
   const hasSprintConflict = conflictingSprintSessions.some((s) => {
     if (!s.scheduledAt) return false;
     const sStart = new Date(s.scheduledAt);
@@ -61,7 +59,6 @@ const proposeSprintSessionSlot = async (
     return proposedScheduledAt < sEnd && proposedEndAt > sStart;
   });
 
-  // Check overlap against Cohort Sessions
   const hasCohortConflict = conflictingCohortSessions.some((s) => {
     if (!s.scheduledAt) return false;
     const sStart = new Date(s.scheduledAt);
@@ -94,7 +91,7 @@ const proposeSprintSessionSlot = async (
   return updatedSession;
 };
 
-// 2. Student Confirms Session Slot & Deducts Credit (Student Only)
+// 2. Student Confirms Session Slot & Deducts Credit
 const confirmSprintSession = async (sessionId: string, studentId: string) => {
   const session = await prisma.sprintSession.findUnique({
     where: { id: sessionId },
@@ -117,12 +114,9 @@ const confirmSprintSession = async (sessionId: string, studentId: string) => {
     throw new AppError("This session is already confirmed and paid for", 400);
   }
 
-  // Credit Deduction logic (wallet integration placeholder & validation)
-  // Fetch global sprintCreditPerSession setting (default 50)
   const platformSetting = await (prisma as any).platformSetting?.findFirst();
   const sprintCreditCost = platformSetting?.sprintCreditPerSession || 50;
 
-  // Update session status to CONFIRMED
   const confirmedSession = await prisma.sprintSession.update({
     where: { id: sessionId },
     data: {
@@ -145,7 +139,7 @@ const confirmSprintSession = async (sessionId: string, studentId: string) => {
   };
 };
 
-// 3. Complete Session & Release Credit to Mentor (Mentor or Student)
+// 3. Complete Session & Release Credit to Mentor
 const completeSprintSession = async (sessionId: string, userId: string) => {
   const session = await prisma.sprintSession.findUnique({
     where: { id: sessionId },
@@ -212,12 +206,10 @@ const cancelSprintSession = async (sessionId: string, userId: string) => {
     const timeDiffMs = new Date(session.scheduledAt).getTime() - now.getTime();
     const hoursRemaining = timeDiffMs / (1000 * 60 * 60);
 
-    // Eligible for full credit refund if cancelled > 1 hour before scheduled time
     if (hoursRemaining >= 1) {
       isEligibleForRefund = true;
     }
 
-    // Eligible if mentor cancelled 
     if( userId === claimedByMentorId){
         isEligibleForRefund = true;
     }
@@ -257,7 +249,6 @@ const getSprintSessionsBySprintId = async (sprintRequestId: string) => {
   return sessions;
 };
 
-// Export Service Object
 export const sprintSessionService = {
   proposeSprintSessionSlot,
   confirmSprintSession,

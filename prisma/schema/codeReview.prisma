@@ -28,11 +28,9 @@ model CodeReviewRequest {
   creditReward  Int
   status        CodeReviewStatus @default(OPEN)
 
-  // 10-Minute Temporary Preview Lock
   previewMentorId  String?
   previewExpiresAt DateTime?
 
-  // Assigned Mentor & Delivery Deadline
   assignedMentorId String?
   assignedMentor   User?     @relation("MentorCodeReviews", fields: [assignedMentorId], references: [id])
   deliveryDeadline DateTime?
@@ -53,9 +51,9 @@ model CodeReviewSubmission {
   mentor    User              @relation("MentorSubmissions", fields: [mentorId], references: [id])
 
   summary             String
-  reviewedCodeSnippet String? // Mentor's refactored/improved code snippet
-  videoUrl            String? // Loom/Cloudinary video feedback
-  pullRequestUrl      String? // GitHub PR URL
+  reviewedCodeSnippet String? 
+  videoUrl            String? 
+  pullRequestUrl      String?
 
   comments  CodeReviewComment[]
   createdAt DateTime            @default(now())
@@ -71,7 +69,7 @@ model CodeReviewComment {
   filePath    String
   lineNumber  Int
   commentText String
-  severity    String? @default("SUGGESTION") // "BUG", "SECURITY", "SUGGESTION"
+  severity    String? @default("SUGGESTION")
 
   createdAt DateTime @default(now())
 

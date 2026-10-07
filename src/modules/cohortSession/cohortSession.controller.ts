@@ -63,7 +63,7 @@ const joinCohortSession = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, result.message, result, 201);
 });
 
-// ── 8. Mark Session as Completed ─────────────────────────────────────────────
+// 8. Mark Session as Completed
 const completeCohortSession = catchAsync(async (req: Request, res: Response) => {
   const mentorId = req.user!.id;
   const { sessionId } = req.params;
@@ -71,7 +71,7 @@ const completeCohortSession = catchAsync(async (req: Request, res: Response) => 
   sendSuccess(res, typeof result.message === "string" ? result.message : "Cohort session marked as completed", result);
 });
 
-// ── 9. Cancel Session & Refund Escrow (Mentor Only) ─────────────────────────
+// 9. Cancel Session & Refund Escrow 
 const cancelCohortSession = catchAsync(async (req: Request, res: Response) => {
   const mentorId = req.user!.id;
   const { sessionId } = req.params;
