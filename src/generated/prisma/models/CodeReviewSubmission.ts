@@ -32,6 +32,8 @@ export type CodeReviewSubmissionMinAggregateOutputType = {
   reviewedCodeSnippet: string | null
   videoUrl: string | null
   pullRequestUrl: string | null
+  attachmentUrl: string | null
+  attachmentName: string | null
   createdAt: Date | null
 }
 
@@ -43,6 +45,8 @@ export type CodeReviewSubmissionMaxAggregateOutputType = {
   reviewedCodeSnippet: string | null
   videoUrl: string | null
   pullRequestUrl: string | null
+  attachmentUrl: string | null
+  attachmentName: string | null
   createdAt: Date | null
 }
 
@@ -54,6 +58,8 @@ export type CodeReviewSubmissionCountAggregateOutputType = {
   reviewedCodeSnippet: number
   videoUrl: number
   pullRequestUrl: number
+  attachmentUrl: number
+  attachmentName: number
   createdAt: number
   _all: number
 }
@@ -67,6 +73,8 @@ export type CodeReviewSubmissionMinAggregateInputType = {
   reviewedCodeSnippet?: true
   videoUrl?: true
   pullRequestUrl?: true
+  attachmentUrl?: true
+  attachmentName?: true
   createdAt?: true
 }
 
@@ -78,6 +86,8 @@ export type CodeReviewSubmissionMaxAggregateInputType = {
   reviewedCodeSnippet?: true
   videoUrl?: true
   pullRequestUrl?: true
+  attachmentUrl?: true
+  attachmentName?: true
   createdAt?: true
 }
 
@@ -89,6 +99,8 @@ export type CodeReviewSubmissionCountAggregateInputType = {
   reviewedCodeSnippet?: true
   videoUrl?: true
   pullRequestUrl?: true
+  attachmentUrl?: true
+  attachmentName?: true
   createdAt?: true
   _all?: true
 }
@@ -173,6 +185,8 @@ export type CodeReviewSubmissionGroupByOutputType = {
   reviewedCodeSnippet: string | null
   videoUrl: string | null
   pullRequestUrl: string | null
+  attachmentUrl: string | null
+  attachmentName: string | null
   createdAt: Date
   _count: CodeReviewSubmissionCountAggregateOutputType | null
   _min: CodeReviewSubmissionMinAggregateOutputType | null
@@ -205,6 +219,8 @@ export type CodeReviewSubmissionWhereInput = {
   reviewedCodeSnippet?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
   videoUrl?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
   pullRequestUrl?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
+  attachmentUrl?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
+  attachmentName?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CodeReviewSubmission"> | Date | string
   request?: Prisma.XOR<Prisma.CodeReviewRequestScalarRelationFilter, Prisma.CodeReviewRequestWhereInput>
   mentor?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -219,6 +235,8 @@ export type CodeReviewSubmissionOrderByWithRelationInput = {
   reviewedCodeSnippet?: Prisma.SortOrderInput | Prisma.SortOrder
   videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   pullRequestUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentName?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   request?: Prisma.CodeReviewRequestOrderByWithRelationInput
   mentor?: Prisma.UserOrderByWithRelationInput
@@ -236,6 +254,8 @@ export type CodeReviewSubmissionWhereUniqueInput = Prisma.AtLeast<{
   reviewedCodeSnippet?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
   videoUrl?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
   pullRequestUrl?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
+  attachmentUrl?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
+  attachmentName?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CodeReviewSubmission"> | Date | string
   request?: Prisma.XOR<Prisma.CodeReviewRequestScalarRelationFilter, Prisma.CodeReviewRequestWhereInput>
   mentor?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -250,6 +270,8 @@ export type CodeReviewSubmissionOrderByWithAggregationInput = {
   reviewedCodeSnippet?: Prisma.SortOrderInput | Prisma.SortOrder
   videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   pullRequestUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentName?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.CodeReviewSubmissionCountOrderByAggregateInput
   _max?: Prisma.CodeReviewSubmissionMaxOrderByAggregateInput
@@ -267,6 +289,8 @@ export type CodeReviewSubmissionScalarWhereWithAggregatesInput = {
   reviewedCodeSnippet?: Prisma.StringNullableWithAggregatesFilter<"CodeReviewSubmission"> | string | null
   videoUrl?: Prisma.StringNullableWithAggregatesFilter<"CodeReviewSubmission"> | string | null
   pullRequestUrl?: Prisma.StringNullableWithAggregatesFilter<"CodeReviewSubmission"> | string | null
+  attachmentUrl?: Prisma.StringNullableWithAggregatesFilter<"CodeReviewSubmission"> | string | null
+  attachmentName?: Prisma.StringNullableWithAggregatesFilter<"CodeReviewSubmission"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CodeReviewSubmission"> | Date | string
 }
 
@@ -276,6 +300,8 @@ export type CodeReviewSubmissionCreateInput = {
   reviewedCodeSnippet?: string | null
   videoUrl?: string | null
   pullRequestUrl?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
   createdAt?: Date | string
   request: Prisma.CodeReviewRequestCreateNestedOneWithoutSubmissionInput
   mentor: Prisma.UserCreateNestedOneWithoutMentorSubmissionsInput
@@ -290,6 +316,8 @@ export type CodeReviewSubmissionUncheckedCreateInput = {
   reviewedCodeSnippet?: string | null
   videoUrl?: string | null
   pullRequestUrl?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
   createdAt?: Date | string
   comments?: Prisma.CodeReviewCommentUncheckedCreateNestedManyWithoutSubmissionInput
 }
@@ -300,6 +328,8 @@ export type CodeReviewSubmissionUpdateInput = {
   reviewedCodeSnippet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pullRequestUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   request?: Prisma.CodeReviewRequestUpdateOneRequiredWithoutSubmissionNestedInput
   mentor?: Prisma.UserUpdateOneRequiredWithoutMentorSubmissionsNestedInput
@@ -314,6 +344,8 @@ export type CodeReviewSubmissionUncheckedUpdateInput = {
   reviewedCodeSnippet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pullRequestUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CodeReviewCommentUncheckedUpdateManyWithoutSubmissionNestedInput
 }
@@ -326,6 +358,8 @@ export type CodeReviewSubmissionCreateManyInput = {
   reviewedCodeSnippet?: string | null
   videoUrl?: string | null
   pullRequestUrl?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
   createdAt?: Date | string
 }
 
@@ -335,6 +369,8 @@ export type CodeReviewSubmissionUpdateManyMutationInput = {
   reviewedCodeSnippet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pullRequestUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -346,6 +382,8 @@ export type CodeReviewSubmissionUncheckedUpdateManyInput = {
   reviewedCodeSnippet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pullRequestUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -372,6 +410,8 @@ export type CodeReviewSubmissionCountOrderByAggregateInput = {
   reviewedCodeSnippet?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
   pullRequestUrl?: Prisma.SortOrder
+  attachmentUrl?: Prisma.SortOrder
+  attachmentName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -383,6 +423,8 @@ export type CodeReviewSubmissionMaxOrderByAggregateInput = {
   reviewedCodeSnippet?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
   pullRequestUrl?: Prisma.SortOrder
+  attachmentUrl?: Prisma.SortOrder
+  attachmentName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -394,6 +436,8 @@ export type CodeReviewSubmissionMinOrderByAggregateInput = {
   reviewedCodeSnippet?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
   pullRequestUrl?: Prisma.SortOrder
+  attachmentUrl?: Prisma.SortOrder
+  attachmentName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -496,6 +540,8 @@ export type CodeReviewSubmissionCreateWithoutMentorInput = {
   reviewedCodeSnippet?: string | null
   videoUrl?: string | null
   pullRequestUrl?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
   createdAt?: Date | string
   request: Prisma.CodeReviewRequestCreateNestedOneWithoutSubmissionInput
   comments?: Prisma.CodeReviewCommentCreateNestedManyWithoutSubmissionInput
@@ -508,6 +554,8 @@ export type CodeReviewSubmissionUncheckedCreateWithoutMentorInput = {
   reviewedCodeSnippet?: string | null
   videoUrl?: string | null
   pullRequestUrl?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
   createdAt?: Date | string
   comments?: Prisma.CodeReviewCommentUncheckedCreateNestedManyWithoutSubmissionInput
 }
@@ -549,6 +597,8 @@ export type CodeReviewSubmissionScalarWhereInput = {
   reviewedCodeSnippet?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
   videoUrl?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
   pullRequestUrl?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
+  attachmentUrl?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
+  attachmentName?: Prisma.StringNullableFilter<"CodeReviewSubmission"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CodeReviewSubmission"> | Date | string
 }
 
@@ -558,6 +608,8 @@ export type CodeReviewSubmissionCreateWithoutRequestInput = {
   reviewedCodeSnippet?: string | null
   videoUrl?: string | null
   pullRequestUrl?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
   createdAt?: Date | string
   mentor: Prisma.UserCreateNestedOneWithoutMentorSubmissionsInput
   comments?: Prisma.CodeReviewCommentCreateNestedManyWithoutSubmissionInput
@@ -570,6 +622,8 @@ export type CodeReviewSubmissionUncheckedCreateWithoutRequestInput = {
   reviewedCodeSnippet?: string | null
   videoUrl?: string | null
   pullRequestUrl?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
   createdAt?: Date | string
   comments?: Prisma.CodeReviewCommentUncheckedCreateNestedManyWithoutSubmissionInput
 }
@@ -596,6 +650,8 @@ export type CodeReviewSubmissionUpdateWithoutRequestInput = {
   reviewedCodeSnippet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pullRequestUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   mentor?: Prisma.UserUpdateOneRequiredWithoutMentorSubmissionsNestedInput
   comments?: Prisma.CodeReviewCommentUpdateManyWithoutSubmissionNestedInput
@@ -608,6 +664,8 @@ export type CodeReviewSubmissionUncheckedUpdateWithoutRequestInput = {
   reviewedCodeSnippet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pullRequestUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CodeReviewCommentUncheckedUpdateManyWithoutSubmissionNestedInput
 }
@@ -618,6 +676,8 @@ export type CodeReviewSubmissionCreateWithoutCommentsInput = {
   reviewedCodeSnippet?: string | null
   videoUrl?: string | null
   pullRequestUrl?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
   createdAt?: Date | string
   request: Prisma.CodeReviewRequestCreateNestedOneWithoutSubmissionInput
   mentor: Prisma.UserCreateNestedOneWithoutMentorSubmissionsInput
@@ -631,6 +691,8 @@ export type CodeReviewSubmissionUncheckedCreateWithoutCommentsInput = {
   reviewedCodeSnippet?: string | null
   videoUrl?: string | null
   pullRequestUrl?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
   createdAt?: Date | string
 }
 
@@ -656,6 +718,8 @@ export type CodeReviewSubmissionUpdateWithoutCommentsInput = {
   reviewedCodeSnippet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pullRequestUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   request?: Prisma.CodeReviewRequestUpdateOneRequiredWithoutSubmissionNestedInput
   mentor?: Prisma.UserUpdateOneRequiredWithoutMentorSubmissionsNestedInput
@@ -669,6 +733,8 @@ export type CodeReviewSubmissionUncheckedUpdateWithoutCommentsInput = {
   reviewedCodeSnippet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pullRequestUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -679,6 +745,8 @@ export type CodeReviewSubmissionCreateManyMentorInput = {
   reviewedCodeSnippet?: string | null
   videoUrl?: string | null
   pullRequestUrl?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
   createdAt?: Date | string
 }
 
@@ -688,6 +756,8 @@ export type CodeReviewSubmissionUpdateWithoutMentorInput = {
   reviewedCodeSnippet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pullRequestUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   request?: Prisma.CodeReviewRequestUpdateOneRequiredWithoutSubmissionNestedInput
   comments?: Prisma.CodeReviewCommentUpdateManyWithoutSubmissionNestedInput
@@ -700,6 +770,8 @@ export type CodeReviewSubmissionUncheckedUpdateWithoutMentorInput = {
   reviewedCodeSnippet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pullRequestUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CodeReviewCommentUncheckedUpdateManyWithoutSubmissionNestedInput
 }
@@ -711,6 +783,8 @@ export type CodeReviewSubmissionUncheckedUpdateManyWithoutMentorInput = {
   reviewedCodeSnippet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pullRequestUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -753,6 +827,8 @@ export type CodeReviewSubmissionSelect<ExtArgs extends runtime.Types.Extensions.
   reviewedCodeSnippet?: boolean
   videoUrl?: boolean
   pullRequestUrl?: boolean
+  attachmentUrl?: boolean
+  attachmentName?: boolean
   createdAt?: boolean
   request?: boolean | Prisma.CodeReviewRequestDefaultArgs<ExtArgs>
   mentor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -768,6 +844,8 @@ export type CodeReviewSubmissionSelectCreateManyAndReturn<ExtArgs extends runtim
   reviewedCodeSnippet?: boolean
   videoUrl?: boolean
   pullRequestUrl?: boolean
+  attachmentUrl?: boolean
+  attachmentName?: boolean
   createdAt?: boolean
   request?: boolean | Prisma.CodeReviewRequestDefaultArgs<ExtArgs>
   mentor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -781,6 +859,8 @@ export type CodeReviewSubmissionSelectUpdateManyAndReturn<ExtArgs extends runtim
   reviewedCodeSnippet?: boolean
   videoUrl?: boolean
   pullRequestUrl?: boolean
+  attachmentUrl?: boolean
+  attachmentName?: boolean
   createdAt?: boolean
   request?: boolean | Prisma.CodeReviewRequestDefaultArgs<ExtArgs>
   mentor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -794,10 +874,12 @@ export type CodeReviewSubmissionSelectScalar = {
   reviewedCodeSnippet?: boolean
   videoUrl?: boolean
   pullRequestUrl?: boolean
+  attachmentUrl?: boolean
+  attachmentName?: boolean
   createdAt?: boolean
 }
 
-export type CodeReviewSubmissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "requestId" | "mentorId" | "summary" | "reviewedCodeSnippet" | "videoUrl" | "pullRequestUrl" | "createdAt", ExtArgs["result"]["codeReviewSubmission"]>
+export type CodeReviewSubmissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "requestId" | "mentorId" | "summary" | "reviewedCodeSnippet" | "videoUrl" | "pullRequestUrl" | "attachmentUrl" | "attachmentName" | "createdAt", ExtArgs["result"]["codeReviewSubmission"]>
 export type CodeReviewSubmissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   request?: boolean | Prisma.CodeReviewRequestDefaultArgs<ExtArgs>
   mentor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -828,6 +910,8 @@ export type $CodeReviewSubmissionPayload<ExtArgs extends runtime.Types.Extension
     reviewedCodeSnippet: string | null
     videoUrl: string | null
     pullRequestUrl: string | null
+    attachmentUrl: string | null
+    attachmentName: string | null
     createdAt: Date
   }, ExtArgs["result"]["codeReviewSubmission"]>
   composites: {}
@@ -1262,6 +1346,8 @@ export interface CodeReviewSubmissionFieldRefs {
   readonly reviewedCodeSnippet: Prisma.FieldRef<"CodeReviewSubmission", 'String'>
   readonly videoUrl: Prisma.FieldRef<"CodeReviewSubmission", 'String'>
   readonly pullRequestUrl: Prisma.FieldRef<"CodeReviewSubmission", 'String'>
+  readonly attachmentUrl: Prisma.FieldRef<"CodeReviewSubmission", 'String'>
+  readonly attachmentName: Prisma.FieldRef<"CodeReviewSubmission", 'String'>
   readonly createdAt: Prisma.FieldRef<"CodeReviewSubmission", 'DateTime'>
 }
     

@@ -684,14 +684,6 @@ export type ExamUncheckedUpdateManyWithoutCohortNestedInput = {
   deleteMany?: Prisma.ExamScalarWhereInput | Prisma.ExamScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type EnumExamStatusFieldUpdateOperationsInput = {
   set?: $Enums.ExamStatus
 }

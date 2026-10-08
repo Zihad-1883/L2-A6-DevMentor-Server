@@ -9,7 +9,19 @@ const getCreditCostByTier = (tier: "QUICK" | "DEEP"): number => {
 
 // 1. Create Code Review Request (Student) with Atomic Credit Escrow Hold
 const createReviewRequest = async (studentId: string, payload: ICreateCodeReviewInput) => {
-  const { tier, title, description, codeSnippet, language, githubRepoUrl, branchName, specificFiles } = payload;
+  const {
+    tier,
+    title,
+    description,
+    codeSnippet,
+    language,
+    githubRepoUrl,
+    branchName,
+    specificFiles,
+    attachmentUrl,
+    attachmentName,
+    attachmentSize,
+  } = payload;
   const requiredCredits = getCreditCostByTier(tier);
 
   // Check student wallet balance
@@ -46,6 +58,9 @@ const createReviewRequest = async (studentId: string, payload: ICreateCodeReview
         githubRepoUrl,
         branchName: branchName || "main",
         specificFiles,
+        attachmentUrl: attachmentUrl || null,
+        attachmentName: attachmentName || null,
+        attachmentSize: attachmentSize || null,
         creditReward: requiredCredits,
         status: "OPEN",
       },
@@ -106,6 +121,9 @@ const updateCodeSnippet = async (studentId: string, requestId: string, payload: 
       ...(payload.githubRepoUrl !== undefined && { githubRepoUrl: payload.githubRepoUrl }),
       ...(payload.branchName && { branchName: payload.branchName }),
       ...(payload.specificFiles !== undefined && { specificFiles: payload.specificFiles }),
+      ...(payload.attachmentUrl !== undefined && { attachmentUrl: payload.attachmentUrl }),
+      ...(payload.attachmentName !== undefined && { attachmentName: payload.attachmentName }),
+      ...(payload.attachmentSize !== undefined && { attachmentSize: payload.attachmentSize }),
     },
   });
 
@@ -244,7 +262,7 @@ const claimReviewRequest = async (mentorId: string, requestId: string) => {
 
 // 5. Submit Review Delivery (Assigned Mentor)
 const submitReview = async (mentorId: string, requestId: string, payload: ISubmitCodeReviewInput) => {
-  const { summary, reviewedCodeSnippet, videoUrl, pullRequestUrl, comments } = payload;
+  const { summary, reviewedCodeSnippet, videoUrl, pullRequestUrl, attachmentUrl, attachmentName, comments } = payload;
 
   const request = await prisma.codeReviewRequest.findUnique({
     where: { id: requestId },
@@ -272,6 +290,8 @@ const submitReview = async (mentorId: string, requestId: string, payload: ISubmi
         reviewedCodeSnippet,
         videoUrl,
         pullRequestUrl,
+        attachmentUrl: attachmentUrl || null,
+        attachmentName: attachmentName || null,
         ...(comments && comments.length > 0 && {
           comments: {
             createMany: {

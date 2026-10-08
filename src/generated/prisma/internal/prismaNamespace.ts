@@ -2176,6 +2176,9 @@ export const CodeReviewRequestScalarFieldEnum = {
   githubRepoUrl: 'githubRepoUrl',
   branchName: 'branchName',
   specificFiles: 'specificFiles',
+  attachmentUrl: 'attachmentUrl',
+  attachmentName: 'attachmentName',
+  attachmentSize: 'attachmentSize',
   creditReward: 'creditReward',
   status: 'status',
   previewMentorId: 'previewMentorId',
@@ -2197,6 +2200,8 @@ export const CodeReviewSubmissionScalarFieldEnum = {
   reviewedCodeSnippet: 'reviewedCodeSnippet',
   videoUrl: 'videoUrl',
   pullRequestUrl: 'pullRequestUrl',
+  attachmentUrl: 'attachmentUrl',
+  attachmentName: 'attachmentName',
   createdAt: 'createdAt'
 } as const
 

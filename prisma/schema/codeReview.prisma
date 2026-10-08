@@ -25,6 +25,9 @@ model CodeReviewRequest {
   githubRepoUrl String?
   branchName    String?          @default("main")
   specificFiles String?
+  attachmentUrl String?          // Direct file attachment or git diff patch URL (Cloudinary)
+  attachmentName String?         // Original filename e.g. "feature.diff", "index.ts"
+  attachmentSize Int?            // File size in bytes
   creditReward  Int
   status        CodeReviewStatus @default(OPEN)
 
@@ -54,6 +57,8 @@ model CodeReviewSubmission {
   reviewedCodeSnippet String? 
   videoUrl            String? 
   pullRequestUrl      String?
+  attachmentUrl       String?
+  attachmentName      String?
 
   comments  CodeReviewComment[]
   createdAt DateTime            @default(now())

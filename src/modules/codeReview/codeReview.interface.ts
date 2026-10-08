@@ -9,6 +9,9 @@ export interface ICreateCodeReviewInput {
   githubRepoUrl?: string;
   branchName?: string;
   specificFiles?: string;
+  attachmentUrl?: string;
+  attachmentName?: string;
+  attachmentSize?: number;
 }
 
 export interface IUpdateCodeSnippetInput {
@@ -19,6 +22,9 @@ export interface IUpdateCodeSnippetInput {
   githubRepoUrl?: string;
   branchName?: string;
   specificFiles?: string;
+  attachmentUrl?: string;
+  attachmentName?: string;
+  attachmentSize?: number;
 }
 
 export interface ICodeReviewCommentInput {
@@ -33,6 +39,8 @@ export interface ISubmitCodeReviewInput {
   reviewedCodeSnippet?: string;
   videoUrl?: string;
   pullRequestUrl?: string;
+  attachmentUrl?: string;
+  attachmentName?: string;
   comments?: ICodeReviewCommentInput[];
 }
 

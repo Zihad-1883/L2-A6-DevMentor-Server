@@ -27,10 +27,12 @@ export type AggregateCodeReviewRequest = {
 }
 
 export type CodeReviewRequestAvgAggregateOutputType = {
+  attachmentSize: number | null
   creditReward: number | null
 }
 
 export type CodeReviewRequestSumAggregateOutputType = {
+  attachmentSize: number | null
   creditReward: number | null
 }
 
@@ -45,6 +47,9 @@ export type CodeReviewRequestMinAggregateOutputType = {
   githubRepoUrl: string | null
   branchName: string | null
   specificFiles: string | null
+  attachmentUrl: string | null
+  attachmentName: string | null
+  attachmentSize: number | null
   creditReward: number | null
   status: $Enums.CodeReviewStatus | null
   previewMentorId: string | null
@@ -66,6 +71,9 @@ export type CodeReviewRequestMaxAggregateOutputType = {
   githubRepoUrl: string | null
   branchName: string | null
   specificFiles: string | null
+  attachmentUrl: string | null
+  attachmentName: string | null
+  attachmentSize: number | null
   creditReward: number | null
   status: $Enums.CodeReviewStatus | null
   previewMentorId: string | null
@@ -87,6 +95,9 @@ export type CodeReviewRequestCountAggregateOutputType = {
   githubRepoUrl: number
   branchName: number
   specificFiles: number
+  attachmentUrl: number
+  attachmentName: number
+  attachmentSize: number
   creditReward: number
   status: number
   previewMentorId: number
@@ -100,10 +111,12 @@ export type CodeReviewRequestCountAggregateOutputType = {
 
 
 export type CodeReviewRequestAvgAggregateInputType = {
+  attachmentSize?: true
   creditReward?: true
 }
 
 export type CodeReviewRequestSumAggregateInputType = {
+  attachmentSize?: true
   creditReward?: true
 }
 
@@ -118,6 +131,9 @@ export type CodeReviewRequestMinAggregateInputType = {
   githubRepoUrl?: true
   branchName?: true
   specificFiles?: true
+  attachmentUrl?: true
+  attachmentName?: true
+  attachmentSize?: true
   creditReward?: true
   status?: true
   previewMentorId?: true
@@ -139,6 +155,9 @@ export type CodeReviewRequestMaxAggregateInputType = {
   githubRepoUrl?: true
   branchName?: true
   specificFiles?: true
+  attachmentUrl?: true
+  attachmentName?: true
+  attachmentSize?: true
   creditReward?: true
   status?: true
   previewMentorId?: true
@@ -160,6 +179,9 @@ export type CodeReviewRequestCountAggregateInputType = {
   githubRepoUrl?: true
   branchName?: true
   specificFiles?: true
+  attachmentUrl?: true
+  attachmentName?: true
+  attachmentSize?: true
   creditReward?: true
   status?: true
   previewMentorId?: true
@@ -268,6 +290,9 @@ export type CodeReviewRequestGroupByOutputType = {
   githubRepoUrl: string | null
   branchName: string | null
   specificFiles: string | null
+  attachmentUrl: string | null
+  attachmentName: string | null
+  attachmentSize: number | null
   creditReward: number
   status: $Enums.CodeReviewStatus
   previewMentorId: string | null
@@ -312,6 +337,9 @@ export type CodeReviewRequestWhereInput = {
   githubRepoUrl?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
   branchName?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
   specificFiles?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
+  attachmentUrl?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
+  attachmentName?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
+  attachmentSize?: Prisma.IntNullableFilter<"CodeReviewRequest"> | number | null
   creditReward?: Prisma.IntFilter<"CodeReviewRequest"> | number
   status?: Prisma.EnumCodeReviewStatusFilter<"CodeReviewRequest"> | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
@@ -336,6 +364,9 @@ export type CodeReviewRequestOrderByWithRelationInput = {
   githubRepoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   branchName?: Prisma.SortOrderInput | Prisma.SortOrder
   specificFiles?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentName?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentSize?: Prisma.SortOrderInput | Prisma.SortOrder
   creditReward?: Prisma.SortOrder
   status?: Prisma.SortOrder
   previewMentorId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -363,6 +394,9 @@ export type CodeReviewRequestWhereUniqueInput = Prisma.AtLeast<{
   githubRepoUrl?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
   branchName?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
   specificFiles?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
+  attachmentUrl?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
+  attachmentName?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
+  attachmentSize?: Prisma.IntNullableFilter<"CodeReviewRequest"> | number | null
   creditReward?: Prisma.IntFilter<"CodeReviewRequest"> | number
   status?: Prisma.EnumCodeReviewStatusFilter<"CodeReviewRequest"> | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
@@ -387,6 +421,9 @@ export type CodeReviewRequestOrderByWithAggregationInput = {
   githubRepoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   branchName?: Prisma.SortOrderInput | Prisma.SortOrder
   specificFiles?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentName?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentSize?: Prisma.SortOrderInput | Prisma.SortOrder
   creditReward?: Prisma.SortOrder
   status?: Prisma.SortOrder
   previewMentorId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -416,6 +453,9 @@ export type CodeReviewRequestScalarWhereWithAggregatesInput = {
   githubRepoUrl?: Prisma.StringNullableWithAggregatesFilter<"CodeReviewRequest"> | string | null
   branchName?: Prisma.StringNullableWithAggregatesFilter<"CodeReviewRequest"> | string | null
   specificFiles?: Prisma.StringNullableWithAggregatesFilter<"CodeReviewRequest"> | string | null
+  attachmentUrl?: Prisma.StringNullableWithAggregatesFilter<"CodeReviewRequest"> | string | null
+  attachmentName?: Prisma.StringNullableWithAggregatesFilter<"CodeReviewRequest"> | string | null
+  attachmentSize?: Prisma.IntNullableWithAggregatesFilter<"CodeReviewRequest"> | number | null
   creditReward?: Prisma.IntWithAggregatesFilter<"CodeReviewRequest"> | number
   status?: Prisma.EnumCodeReviewStatusWithAggregatesFilter<"CodeReviewRequest"> | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.StringNullableWithAggregatesFilter<"CodeReviewRequest"> | string | null
@@ -436,6 +476,9 @@ export type CodeReviewRequestCreateInput = {
   githubRepoUrl?: string | null
   branchName?: string | null
   specificFiles?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
   creditReward: number
   status?: $Enums.CodeReviewStatus
   previewMentorId?: string | null
@@ -459,6 +502,9 @@ export type CodeReviewRequestUncheckedCreateInput = {
   githubRepoUrl?: string | null
   branchName?: string | null
   specificFiles?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
   creditReward: number
   status?: $Enums.CodeReviewStatus
   previewMentorId?: string | null
@@ -480,6 +526,9 @@ export type CodeReviewRequestUpdateInput = {
   githubRepoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specificFiles?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditReward?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCodeReviewStatusFieldUpdateOperationsInput | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -503,6 +552,9 @@ export type CodeReviewRequestUncheckedUpdateInput = {
   githubRepoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specificFiles?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditReward?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCodeReviewStatusFieldUpdateOperationsInput | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -525,6 +577,9 @@ export type CodeReviewRequestCreateManyInput = {
   githubRepoUrl?: string | null
   branchName?: string | null
   specificFiles?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
   creditReward: number
   status?: $Enums.CodeReviewStatus
   previewMentorId?: string | null
@@ -545,6 +600,9 @@ export type CodeReviewRequestUpdateManyMutationInput = {
   githubRepoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specificFiles?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditReward?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCodeReviewStatusFieldUpdateOperationsInput | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -565,6 +623,9 @@ export type CodeReviewRequestUncheckedUpdateManyInput = {
   githubRepoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specificFiles?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditReward?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCodeReviewStatusFieldUpdateOperationsInput | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -596,6 +657,9 @@ export type CodeReviewRequestCountOrderByAggregateInput = {
   githubRepoUrl?: Prisma.SortOrder
   branchName?: Prisma.SortOrder
   specificFiles?: Prisma.SortOrder
+  attachmentUrl?: Prisma.SortOrder
+  attachmentName?: Prisma.SortOrder
+  attachmentSize?: Prisma.SortOrder
   creditReward?: Prisma.SortOrder
   status?: Prisma.SortOrder
   previewMentorId?: Prisma.SortOrder
@@ -607,6 +671,7 @@ export type CodeReviewRequestCountOrderByAggregateInput = {
 }
 
 export type CodeReviewRequestAvgOrderByAggregateInput = {
+  attachmentSize?: Prisma.SortOrder
   creditReward?: Prisma.SortOrder
 }
 
@@ -621,6 +686,9 @@ export type CodeReviewRequestMaxOrderByAggregateInput = {
   githubRepoUrl?: Prisma.SortOrder
   branchName?: Prisma.SortOrder
   specificFiles?: Prisma.SortOrder
+  attachmentUrl?: Prisma.SortOrder
+  attachmentName?: Prisma.SortOrder
+  attachmentSize?: Prisma.SortOrder
   creditReward?: Prisma.SortOrder
   status?: Prisma.SortOrder
   previewMentorId?: Prisma.SortOrder
@@ -642,6 +710,9 @@ export type CodeReviewRequestMinOrderByAggregateInput = {
   githubRepoUrl?: Prisma.SortOrder
   branchName?: Prisma.SortOrder
   specificFiles?: Prisma.SortOrder
+  attachmentUrl?: Prisma.SortOrder
+  attachmentName?: Prisma.SortOrder
+  attachmentSize?: Prisma.SortOrder
   creditReward?: Prisma.SortOrder
   status?: Prisma.SortOrder
   previewMentorId?: Prisma.SortOrder
@@ -653,6 +724,7 @@ export type CodeReviewRequestMinOrderByAggregateInput = {
 }
 
 export type CodeReviewRequestSumOrderByAggregateInput = {
+  attachmentSize?: Prisma.SortOrder
   creditReward?: Prisma.SortOrder
 }
 
@@ -749,6 +821,14 @@ export type EnumCodeReviewTierFieldUpdateOperationsInput = {
   set?: $Enums.CodeReviewTier
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -785,6 +865,9 @@ export type CodeReviewRequestCreateWithoutStudentInput = {
   githubRepoUrl?: string | null
   branchName?: string | null
   specificFiles?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
   creditReward: number
   status?: $Enums.CodeReviewStatus
   previewMentorId?: string | null
@@ -806,6 +889,9 @@ export type CodeReviewRequestUncheckedCreateWithoutStudentInput = {
   githubRepoUrl?: string | null
   branchName?: string | null
   specificFiles?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
   creditReward: number
   status?: $Enums.CodeReviewStatus
   previewMentorId?: string | null
@@ -837,6 +923,9 @@ export type CodeReviewRequestCreateWithoutAssignedMentorInput = {
   githubRepoUrl?: string | null
   branchName?: string | null
   specificFiles?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
   creditReward: number
   status?: $Enums.CodeReviewStatus
   previewMentorId?: string | null
@@ -859,6 +948,9 @@ export type CodeReviewRequestUncheckedCreateWithoutAssignedMentorInput = {
   githubRepoUrl?: string | null
   branchName?: string | null
   specificFiles?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
   creditReward: number
   status?: $Enums.CodeReviewStatus
   previewMentorId?: string | null
@@ -909,6 +1001,9 @@ export type CodeReviewRequestScalarWhereInput = {
   githubRepoUrl?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
   branchName?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
   specificFiles?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
+  attachmentUrl?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
+  attachmentName?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
+  attachmentSize?: Prisma.IntNullableFilter<"CodeReviewRequest"> | number | null
   creditReward?: Prisma.IntFilter<"CodeReviewRequest"> | number
   status?: Prisma.EnumCodeReviewStatusFilter<"CodeReviewRequest"> | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.StringNullableFilter<"CodeReviewRequest"> | string | null
@@ -945,6 +1040,9 @@ export type CodeReviewRequestCreateWithoutSubmissionInput = {
   githubRepoUrl?: string | null
   branchName?: string | null
   specificFiles?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
   creditReward: number
   status?: $Enums.CodeReviewStatus
   previewMentorId?: string | null
@@ -967,6 +1065,9 @@ export type CodeReviewRequestUncheckedCreateWithoutSubmissionInput = {
   githubRepoUrl?: string | null
   branchName?: string | null
   specificFiles?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
   creditReward: number
   status?: $Enums.CodeReviewStatus
   previewMentorId?: string | null
@@ -1003,6 +1104,9 @@ export type CodeReviewRequestUpdateWithoutSubmissionInput = {
   githubRepoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specificFiles?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditReward?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCodeReviewStatusFieldUpdateOperationsInput | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1025,6 +1129,9 @@ export type CodeReviewRequestUncheckedUpdateWithoutSubmissionInput = {
   githubRepoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specificFiles?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditReward?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCodeReviewStatusFieldUpdateOperationsInput | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1045,6 +1152,9 @@ export type CodeReviewRequestCreateManyStudentInput = {
   githubRepoUrl?: string | null
   branchName?: string | null
   specificFiles?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
   creditReward: number
   status?: $Enums.CodeReviewStatus
   previewMentorId?: string | null
@@ -1066,6 +1176,9 @@ export type CodeReviewRequestCreateManyAssignedMentorInput = {
   githubRepoUrl?: string | null
   branchName?: string | null
   specificFiles?: string | null
+  attachmentUrl?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
   creditReward: number
   status?: $Enums.CodeReviewStatus
   previewMentorId?: string | null
@@ -1085,6 +1198,9 @@ export type CodeReviewRequestUpdateWithoutStudentInput = {
   githubRepoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specificFiles?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditReward?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCodeReviewStatusFieldUpdateOperationsInput | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1106,6 +1222,9 @@ export type CodeReviewRequestUncheckedUpdateWithoutStudentInput = {
   githubRepoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specificFiles?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditReward?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCodeReviewStatusFieldUpdateOperationsInput | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1127,6 +1246,9 @@ export type CodeReviewRequestUncheckedUpdateManyWithoutStudentInput = {
   githubRepoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specificFiles?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditReward?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCodeReviewStatusFieldUpdateOperationsInput | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1147,6 +1269,9 @@ export type CodeReviewRequestUpdateWithoutAssignedMentorInput = {
   githubRepoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specificFiles?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditReward?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCodeReviewStatusFieldUpdateOperationsInput | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1169,6 +1294,9 @@ export type CodeReviewRequestUncheckedUpdateWithoutAssignedMentorInput = {
   githubRepoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specificFiles?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditReward?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCodeReviewStatusFieldUpdateOperationsInput | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1190,6 +1318,9 @@ export type CodeReviewRequestUncheckedUpdateManyWithoutAssignedMentorInput = {
   githubRepoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specificFiles?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditReward?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumCodeReviewStatusFieldUpdateOperationsInput | $Enums.CodeReviewStatus
   previewMentorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1212,6 +1343,9 @@ export type CodeReviewRequestSelect<ExtArgs extends runtime.Types.Extensions.Int
   githubRepoUrl?: boolean
   branchName?: boolean
   specificFiles?: boolean
+  attachmentUrl?: boolean
+  attachmentName?: boolean
+  attachmentSize?: boolean
   creditReward?: boolean
   status?: boolean
   previewMentorId?: boolean
@@ -1236,6 +1370,9 @@ export type CodeReviewRequestSelectCreateManyAndReturn<ExtArgs extends runtime.T
   githubRepoUrl?: boolean
   branchName?: boolean
   specificFiles?: boolean
+  attachmentUrl?: boolean
+  attachmentName?: boolean
+  attachmentSize?: boolean
   creditReward?: boolean
   status?: boolean
   previewMentorId?: boolean
@@ -1259,6 +1396,9 @@ export type CodeReviewRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   githubRepoUrl?: boolean
   branchName?: boolean
   specificFiles?: boolean
+  attachmentUrl?: boolean
+  attachmentName?: boolean
+  attachmentSize?: boolean
   creditReward?: boolean
   status?: boolean
   previewMentorId?: boolean
@@ -1282,6 +1422,9 @@ export type CodeReviewRequestSelectScalar = {
   githubRepoUrl?: boolean
   branchName?: boolean
   specificFiles?: boolean
+  attachmentUrl?: boolean
+  attachmentName?: boolean
+  attachmentSize?: boolean
   creditReward?: boolean
   status?: boolean
   previewMentorId?: boolean
@@ -1292,7 +1435,7 @@ export type CodeReviewRequestSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CodeReviewRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "tier" | "title" | "description" | "codeSnippet" | "language" | "githubRepoUrl" | "branchName" | "specificFiles" | "creditReward" | "status" | "previewMentorId" | "previewExpiresAt" | "assignedMentorId" | "deliveryDeadline" | "createdAt" | "updatedAt", ExtArgs["result"]["codeReviewRequest"]>
+export type CodeReviewRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "studentId" | "tier" | "title" | "description" | "codeSnippet" | "language" | "githubRepoUrl" | "branchName" | "specificFiles" | "attachmentUrl" | "attachmentName" | "attachmentSize" | "creditReward" | "status" | "previewMentorId" | "previewExpiresAt" | "assignedMentorId" | "deliveryDeadline" | "createdAt" | "updatedAt", ExtArgs["result"]["codeReviewRequest"]>
 export type CodeReviewRequestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   student?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   assignedMentor?: boolean | Prisma.CodeReviewRequest$assignedMentorArgs<ExtArgs>
@@ -1325,6 +1468,9 @@ export type $CodeReviewRequestPayload<ExtArgs extends runtime.Types.Extensions.I
     githubRepoUrl: string | null
     branchName: string | null
     specificFiles: string | null
+    attachmentUrl: string | null
+    attachmentName: string | null
+    attachmentSize: number | null
     creditReward: number
     status: $Enums.CodeReviewStatus
     previewMentorId: string | null
@@ -1769,6 +1915,9 @@ export interface CodeReviewRequestFieldRefs {
   readonly githubRepoUrl: Prisma.FieldRef<"CodeReviewRequest", 'String'>
   readonly branchName: Prisma.FieldRef<"CodeReviewRequest", 'String'>
   readonly specificFiles: Prisma.FieldRef<"CodeReviewRequest", 'String'>
+  readonly attachmentUrl: Prisma.FieldRef<"CodeReviewRequest", 'String'>
+  readonly attachmentName: Prisma.FieldRef<"CodeReviewRequest", 'String'>
+  readonly attachmentSize: Prisma.FieldRef<"CodeReviewRequest", 'Int'>
   readonly creditReward: Prisma.FieldRef<"CodeReviewRequest", 'Int'>
   readonly status: Prisma.FieldRef<"CodeReviewRequest", 'CodeReviewStatus'>
   readonly previewMentorId: Prisma.FieldRef<"CodeReviewRequest", 'String'>

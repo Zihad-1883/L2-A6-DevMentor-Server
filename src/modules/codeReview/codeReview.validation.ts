@@ -20,14 +20,22 @@ export const createCodeReviewSchema = z
       .or(z.literal("")),
     branchName: z.string().optional().default("main"),
     specificFiles: z.string().optional(),
+    attachmentUrl: z
+      .string()
+      .url("Please provide a valid attachment URL")
+      .optional()
+      .or(z.literal("")),
+    attachmentName: z.string().optional(),
+    attachmentSize: z.number().int().nonnegative().optional(),
   })
   .refine(
     (data) =>
       (data.codeSnippet && data.codeSnippet.trim().length > 0) ||
-      (data.githubRepoUrl && data.githubRepoUrl.trim().length > 0),
+      (data.githubRepoUrl && data.githubRepoUrl.trim().length > 0) ||
+      (data.attachmentUrl && data.attachmentUrl.trim().length > 0),
     {
       message:
-        "You must provide either a code snippet or a GitHub repository URL for review.",
+        "You must provide either a code snippet, a GitHub repository URL, or a file/diff patch attachment for review.",
       path: ["codeSnippet"],
     }
   );
@@ -45,6 +53,13 @@ export const updateCodeSnippetSchema = z.object({
     .or(z.literal("")),
   branchName: z.string().optional(),
   specificFiles: z.string().optional(),
+  attachmentUrl: z
+    .string()
+    .url("Please provide a valid attachment URL")
+    .optional()
+    .or(z.literal("")),
+  attachmentName: z.string().optional(),
+  attachmentSize: z.number().int().nonnegative().optional(),
 });
 
 // 3. Mentor Submit Code Review Delivery Schema
@@ -63,6 +78,12 @@ export const submitCodeReviewSchema = z.object({
     .url("Please provide a valid Pull Request URL")
     .optional()
     .or(z.literal("")),
+  attachmentUrl: z
+    .string()
+    .url("Please provide a valid attachment URL")
+    .optional()
+    .or(z.literal("")),
+  attachmentName: z.string().optional(),
   comments: z
     .array(
       z.object({

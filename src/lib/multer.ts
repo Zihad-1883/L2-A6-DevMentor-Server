@@ -17,12 +17,38 @@ export const upload = multer({
       "application/pdf",
       "application/msword",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/zip",
+      "application/x-zip-compressed",
+      "application/octet-stream",
+      "text/plain",
+      "text/x-patch",
+      "text/x-diff",
+      "text/javascript",
+      "text/typescript",
+      "application/json",
     ];
 
-    if (allowedMimeTypes.includes(file.mimetype)) {
+    const allowedExtensions = [
+      ".jpg", ".jpeg", ".png", ".webp", ".gif",
+      ".pdf", ".doc", ".docx",
+      ".diff", ".patch", ".txt", ".md",
+      ".js", ".jsx", ".ts", ".tsx", ".py", ".java", ".cpp", ".c", ".go", ".rs", ".json", ".zip"
+    ];
+
+    const fileName = (file.originalname || "").toLowerCase();
+    const isExtensionMatch = allowedExtensions.some((ext) => fileName.endsWith(ext));
+    const isMimeMatch = allowedMimeTypes.includes(file.mimetype) || file.mimetype.startsWith("text/");
+
+    if (isMimeMatch || isExtensionMatch) {
       cb(null, true);
     } else {
-      cb(new AppError(`Invalid file format '${file.mimetype}'. Only images and documents (PDF/DOC) are allowed.`, 400) as unknown as null, false);
+      cb(
+        new AppError(
+          `Invalid file format '${file.mimetype}'. Only images, documents, git diff/patches (.diff, .patch), source code files, and archives are allowed.`,
+          400
+        ) as unknown as null,
+        false
+      );
     }
   },
 });
