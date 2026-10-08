@@ -18,10 +18,10 @@ const initiateTopUpHandler = catchAsync(async (req: Request, res: Response) => {
 // 2. bKash Callback Handler
 const bkashCallbackHandler = catchAsync(async (req: Request, res: Response) => {
   const paymentID = (req.query.paymentID || req.body?.paymentID || req.query.paymentId || req.body?.paymentId) as string;
-  const status = (req.query.status || req.body?.status) as string;
+  const status = ((req.query.status || req.body?.status || "") as string).toLowerCase();
 
-  let executionResult = null;
-  let executionError = null;
+  let executionResult: any = null;
+  let executionError: string | null = null;
 
   try {
     if (paymentID && status) {
@@ -53,12 +53,48 @@ const bkashCallbackHandler = catchAsync(async (req: Request, res: Response) => {
     );
   }
 
-  const redirectUrl = env.NODE_ENV === "development"
-    ? `http://localhost:5500/test-client/index.html?paymentID=${paymentID || ""}&status=${status || "unknown"}`
-    : `${env.CLIENT_URL}/payment/status?paymentID=${paymentID || ""}&status=${status || "unknown"}`;
+  // Determine client base URL
+  const clientBase = (env.CLIENT_URL || "http://localhost:3000").replace(/\/+$/, "");
+
+  // Fallback to test-client only if explicitly opted in or in local development with no frontend configured
+  const useTestClient =
+    req.query.testClient === "true" ||
+    (env.NODE_ENV === "development" && env.CLIENT_URL.includes("5500"));
+
+  if (useTestClient) {
+    const redirectUrl = `http://localhost:5500/test-client/index.html?paymentID=${paymentID || ""}&status=${status || "unknown"}`;
+    return res.redirect(redirectUrl);
+  }
+
+  // Extract transaction ID if available from executionResult
+  const trxID =
+    executionResult?.payment?.trxID ||
+    (req.query.trxID as string) ||
+    (req.query.trxId as string) ||
+    "";
+
+  // Route to dedicated client status pages: /payment/success, /payment/cancel, /payment/fail
+  let redirectUrl: string;
+  if (status === "success" && !executionError) {
+    const params = new URLSearchParams();
+    if (paymentID) params.set("paymentID", paymentID);
+    if (trxID) params.set("trxID", trxID);
+    redirectUrl = `${clientBase}/payment/success${params.toString() ? `?${params.toString()}` : ""}`;
+  } else if (status === "cancel") {
+    const params = new URLSearchParams();
+    if (paymentID) params.set("paymentID", paymentID);
+    redirectUrl = `${clientBase}/payment/cancel${params.toString() ? `?${params.toString()}` : ""}`;
+  } else {
+    // failure or executionError
+    const params = new URLSearchParams();
+    if (paymentID) params.set("paymentID", paymentID);
+    if (executionError) params.set("error", executionError);
+    redirectUrl = `${clientBase}/payment/fail${params.toString() ? `?${params.toString()}` : ""}`;
+  }
 
   return res.redirect(redirectUrl);
 });
+
 
 
 // 3. Get User Wallet & Transactions

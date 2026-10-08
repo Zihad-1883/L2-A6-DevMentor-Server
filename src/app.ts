@@ -50,12 +50,12 @@ app.all("/api/v1/auth/*splat", (req, _res, next) => {
 
 app.all(
   [
-    "/payment/status",
-    "/payments/status",
-    "/api/v1/payment/status",
-    "/api/v1/payments/status",
-    "/api/v1/payment/callback",
-    "/api/v1/payment/bkash/callback",
+    /^\/api\/v1\/payments\/bkash\/callback(?:\/.*)?$/,
+    /^\/api\/v1\/payment\/bkash\/callback(?:\/.*)?$/,
+    /^\/api\/v1\/payments?\/callback(?:\/.*)?$/,
+    /^\/api\/v1\/payments?\/status(?:\/.*)?$/,
+    /^\/payments?\/status(?:\/.*)?$/,
+    /^\/payments?\/callback(?:\/.*)?$/,
   ],
   (req, res, next) => {
     paymentController.bkashCallbackHandler(req, res, next);
