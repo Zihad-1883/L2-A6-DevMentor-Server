@@ -355,23 +355,6 @@ const getPlatformStats = async (): Promise<IPlatformOverviewStats> => {
 
     const monthlyRevenue = await Promise.all(monthlyDataPromises);
 
-    const hasAnyHistoricalData = monthlyRevenue.some((m) => m.grossRevenue > 0);
-    const finalMonthlyRevenue = hasAnyHistoricalData
-        ? monthlyRevenue
-        : [
-            { month: "May", grossRevenue: 42000, platformCommission: 6300, mentorPayouts: 32000 },
-            { month: "Jun", grossRevenue: 56000, platformCommission: 8400, mentorPayouts: 44000 },
-            { month: "Jul", grossRevenue: 68000, platformCommission: 10200, mentorPayouts: 52000 },
-            { month: "Aug", grossRevenue: 85000, platformCommission: 12750, mentorPayouts: 66000 },
-            { month: "Sep", grossRevenue: 104000, platformCommission: 15600, mentorPayouts: 81000 },
-            {
-                month: monthNames[now.getMonth()],
-                grossRevenue: totalRevenueBdt,
-                platformCommission: platformCommissionEarnedBdt,
-                mentorPayouts: 0,
-            },
-        ];
-
     return {
         totalUsers,
         totalStudents,
@@ -382,7 +365,7 @@ const getPlatformStats = async (): Promise<IPlatformOverviewStats> => {
         totalRevenueBdt,
         platformCommissionEarnedBdt,
         totalCreditsCirculating,
-        monthlyRevenue: finalMonthlyRevenue,
+        monthlyRevenue,
     };
 };
 
