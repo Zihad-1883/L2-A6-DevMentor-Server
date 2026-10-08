@@ -327,6 +327,47 @@ const registerCohort = async (cohortId: string, studentId: string) => {
   return enrollment;
 };
 
+// 8. Get Enrolled Students for a Cohort (Mentor Only)
+const getCohortEnrollments = async (
+  cohortId: string,
+  userId: string,
+  userRole?: string
+) => {
+  const cohort = await prisma.cohortProgram.findFirst({
+    where: { id: cohortId, deletedAt: null },
+  });
+
+  if (!cohort) {
+    throw new AppError("Cohort program not found", 404);
+  }
+
+  // Ensure only the mentor creator (or admin) can access the student roster
+  if (cohort.mentorId !== userId) {
+    throw new AppError("You are not authorized to view enrollments for this cohort program", 403);
+  }
+
+  const enrollments = await prisma.cohortEnrollment.findMany({
+    where: { cohortId },
+    orderBy: { enrolledAt: "desc" },
+    select: {
+      id: true,
+      cohortId: true,
+      studentId: true,
+      enrolledAt: true,
+      student: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+        },
+      },
+    },
+  });
+
+  return enrollments;
+};
+
 export const cohortService = {
   createCohort,
   getAllPublishedCohorts,
@@ -335,6 +376,7 @@ export const cohortService = {
   updateCohort,
   deleteCohort,
   registerCohort,
+  getCohortEnrollments,
 };
 
 

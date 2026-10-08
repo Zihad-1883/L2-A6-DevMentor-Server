@@ -23,6 +23,13 @@ router.post(
   cohortController.createCohort,
 );
 
+router.get(
+  "/:id/enrollments",
+  requireAuth,
+  requireRole("mentor"),
+  cohortController.getCohortEnrollments,
+);
+
 // Public routes
 router.get("/", cohortController.getAllPublishedCohorts);
 router.get("/:id", cohortController.getCohortById);

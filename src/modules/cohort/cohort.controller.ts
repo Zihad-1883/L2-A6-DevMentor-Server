@@ -54,6 +54,15 @@ const registerCohort = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Enrolled in cohort program successfully", result, 201);
 });
 
+// 8. Get Cohort Enrolled Students (Mentor Only)
+const getCohortEnrollments = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user!.id;
+  const userRole = req.user!.role;
+  const { id } = req.params;
+  const result = await cohortService.getCohortEnrollments(id as string, userId, userRole);
+  sendSuccess(res, "Cohort enrolled students fetched successfully", result);
+});
+
 export const cohortController = {
   createCohort,
   getAllPublishedCohorts,
@@ -62,5 +71,6 @@ export const cohortController = {
   updateCohort,
   deleteCohort,
   registerCohort,
+  getCohortEnrollments,
 };
 
