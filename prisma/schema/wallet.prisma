@@ -6,6 +6,14 @@ enum CreditTransactionType {
     COHORT_FEE
     COHORT_RELEASE
     WITHDRAWAL
+    WITHDRAWAL_REFUND
+    PLATFORM_COMMISSION
+}
+
+enum PayoutStatus {
+    PENDING
+    PROCESSED
+    REJECTED
 }
 
 model Wallet {
@@ -20,7 +28,8 @@ model Wallet {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    transactions CreditTransaction[]
+    transactions   CreditTransaction[]
+    payoutRequests PayoutRequest[]
 
     @@map("wallet")
 }
@@ -38,4 +47,26 @@ model CreditTransaction {
     createdAt DateTime @default(now())
 
     @@map("credit_transaction")
+}
+
+model PayoutRequest {
+    id            String       @id @default(cuid())
+    mentorId      String
+    mentor        User         @relation("MentorPayouts", fields: [mentorId], references: [id], onDelete: Cascade)
+    walletId      String
+    wallet        Wallet       @relation(fields: [walletId], references: [id], onDelete: Cascade)
+    amountCredits Int
+    amountBdt     Int
+    method        String       @default("BKASH")
+    accountNumber String
+    status        PayoutStatus @default(PENDING)
+    processedBy   String?
+    admin         User?        @relation("AdminProcessedPayouts", fields: [processedBy], references: [id], onDelete: SetNull)
+    processedAt   DateTime?
+    rejectionReason String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("payout_request")
 }

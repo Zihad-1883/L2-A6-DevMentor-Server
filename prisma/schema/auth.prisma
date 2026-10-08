@@ -24,6 +24,8 @@ model User {
     mentorSubmissions    CodeReviewSubmission[]     @relation("MentorSubmissions")
     mentorExams          Exam[]                     @relation("MentorExams")
     studentExamAttempts  ExamAttempt[]              @relation("StudentExamAttempts")
+    payoutRequests       PayoutRequest[]            @relation("MentorPayouts")
+    processedPayouts     PayoutRequest[]            @relation("AdminProcessedPayouts")
 
     @@map("user")
 }

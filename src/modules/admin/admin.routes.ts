@@ -53,6 +53,17 @@ router.patch(
   adminController.updatePlatformSettings,
 );
 
+// Payout requests management
+import { payoutController } from "../payout/payout.controller.js";
+import { processPayoutSchema } from "../payout/payout.validation.js";
+
+router.get("/payouts", payoutController.getAdminPayoutsHandler);
+router.patch(
+  "/payouts/:id/process",
+  validate(processPayoutSchema),
+  payoutController.processPayoutRequestHandler
+);
+
 export default router;
 
 

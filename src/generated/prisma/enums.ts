@@ -124,7 +124,18 @@ export const CreditTransactionType = {
   SPRINT_REFUND: 'SPRINT_REFUND',
   COHORT_FEE: 'COHORT_FEE',
   COHORT_RELEASE: 'COHORT_RELEASE',
-  WITHDRAWAL: 'WITHDRAWAL'
+  WITHDRAWAL: 'WITHDRAWAL',
+  WITHDRAWAL_REFUND: 'WITHDRAWAL_REFUND',
+  PLATFORM_COMMISSION: 'PLATFORM_COMMISSION'
 } as const
 
 export type CreditTransactionType = (typeof CreditTransactionType)[keyof typeof CreditTransactionType]
+
+
+export const PayoutStatus = {
+  PENDING: 'PENDING',
+  PROCESSED: 'PROCESSED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type PayoutStatus = (typeof PayoutStatus)[keyof typeof PayoutStatus]

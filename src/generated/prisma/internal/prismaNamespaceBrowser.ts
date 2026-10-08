@@ -71,7 +71,8 @@ export const ModelName = {
   SprintRequest: 'SprintRequest',
   SprintSession: 'SprintSession',
   Wallet: 'Wallet',
-  CreditTransaction: 'CreditTransaction'
+  CreditTransaction: 'CreditTransaction',
+  PayoutRequest: 'PayoutRequest'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -414,6 +415,25 @@ export const CreditTransactionScalarFieldEnum = {
 } as const
 
 export type CreditTransactionScalarFieldEnum = (typeof CreditTransactionScalarFieldEnum)[keyof typeof CreditTransactionScalarFieldEnum]
+
+
+export const PayoutRequestScalarFieldEnum = {
+  id: 'id',
+  mentorId: 'mentorId',
+  walletId: 'walletId',
+  amountCredits: 'amountCredits',
+  amountBdt: 'amountBdt',
+  method: 'method',
+  accountNumber: 'accountNumber',
+  status: 'status',
+  processedBy: 'processedBy',
+  processedAt: 'processedAt',
+  rejectionReason: 'rejectionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PayoutRequestScalarFieldEnum = (typeof PayoutRequestScalarFieldEnum)[keyof typeof PayoutRequestScalarFieldEnum]
 
 
 export const SortOrder = {

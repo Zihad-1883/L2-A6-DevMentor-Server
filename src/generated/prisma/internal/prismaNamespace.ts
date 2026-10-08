@@ -417,7 +417,8 @@ export const ModelName = {
   SprintRequest: 'SprintRequest',
   SprintSession: 'SprintSession',
   Wallet: 'Wallet',
-  CreditTransaction: 'CreditTransaction'
+  CreditTransaction: 'CreditTransaction',
+  PayoutRequest: 'PayoutRequest'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -433,7 +434,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "codeReviewRequest" | "codeReviewSubmission" | "codeReviewComment" | "cohortProgram" | "cohortEnrollment" | "cohortSession" | "cohortSessionParticipant" | "exam" | "question" | "examAttempt" | "mentorProfile" | "payment" | "platformSetting" | "sprintRequest" | "sprintSession" | "wallet" | "creditTransaction"
+    modelProps: "user" | "session" | "account" | "verification" | "codeReviewRequest" | "codeReviewSubmission" | "codeReviewComment" | "cohortProgram" | "cohortEnrollment" | "cohortSession" | "cohortSessionParticipant" | "exam" | "question" | "examAttempt" | "mentorProfile" | "payment" | "platformSetting" | "sprintRequest" | "sprintSession" | "wallet" | "creditTransaction" | "payoutRequest"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1991,6 +1992,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PayoutRequest: {
+      payload: Prisma.$PayoutRequestPayload<ExtArgs>
+      fields: Prisma.PayoutRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PayoutRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PayoutRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PayoutRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PayoutRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.PayoutRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PayoutRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PayoutRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PayoutRequestPayload>
+        }
+        findMany: {
+          args: Prisma.PayoutRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PayoutRequestPayload>[]
+        }
+        create: {
+          args: Prisma.PayoutRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PayoutRequestPayload>
+        }
+        createMany: {
+          args: Prisma.PayoutRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PayoutRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PayoutRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.PayoutRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PayoutRequestPayload>
+        }
+        update: {
+          args: Prisma.PayoutRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PayoutRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.PayoutRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PayoutRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PayoutRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PayoutRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.PayoutRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PayoutRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.PayoutRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePayoutRequest>
+        }
+        groupBy: {
+          args: Prisma.PayoutRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PayoutRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PayoutRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PayoutRequestCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2356,6 +2431,25 @@ export const CreditTransactionScalarFieldEnum = {
 export type CreditTransactionScalarFieldEnum = (typeof CreditTransactionScalarFieldEnum)[keyof typeof CreditTransactionScalarFieldEnum]
 
 
+export const PayoutRequestScalarFieldEnum = {
+  id: 'id',
+  mentorId: 'mentorId',
+  walletId: 'walletId',
+  amountCredits: 'amountCredits',
+  amountBdt: 'amountBdt',
+  method: 'method',
+  accountNumber: 'accountNumber',
+  status: 'status',
+  processedBy: 'processedBy',
+  processedAt: 'processedAt',
+  rejectionReason: 'rejectionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PayoutRequestScalarFieldEnum = (typeof PayoutRequestScalarFieldEnum)[keyof typeof PayoutRequestScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2654,6 +2748,20 @@ export type EnumCreditTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInput
 export type ListEnumCreditTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreditTransactionType[]'>
     
 
+
+/**
+ * Reference to a field of type 'PayoutStatus'
+ */
+export type EnumPayoutStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PayoutStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PayoutStatus[]'
+ */
+export type ListEnumPayoutStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PayoutStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2826,6 +2934,7 @@ export type GlobalOmitConfig = {
   sprintSession?: Prisma.SprintSessionOmit
   wallet?: Prisma.WalletOmit
   creditTransaction?: Prisma.CreditTransactionOmit
+  payoutRequest?: Prisma.PayoutRequestOmit
 }
 
 /* Types for Logging */

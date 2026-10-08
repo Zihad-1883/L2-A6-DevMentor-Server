@@ -5,7 +5,7 @@ export const createExamSchema = z.object({
     .string()
     .min(3, "Exam title must be at least 3 characters long")
     .max(150, "Exam title cannot exceed 150 characters"),
-  description: z.string().optional(),
+  description: z.string().nullable().optional(),
   durationMinutes: z
     .number()
     .min(1, "Exam duration must be at least 1 minute")
@@ -27,7 +27,7 @@ export const createExamSchema = z.object({
 });
 
 export const questionItemSchema = z.object({
-  id: z.string().optional(),
+  id: z.string().nullable().optional(),
   questionText: z
     .string()
     .min(5, "Question text must be at least 5 characters long"),
@@ -43,6 +43,9 @@ export const questionItemSchema = z.object({
 });
 
 export const updateExamSchema = createExamSchema.partial().extend({
+  description: z.string().nullable().optional(),
+  cohortId: z.string().nullable().optional(),
+  sprintId: z.string().nullable().optional(),
   passingMarks: z
     .number()
     .min(1, "Passing marks percentage must be at least 1%")

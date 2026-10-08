@@ -146,3 +146,8 @@ export type Wallet = Prisma.WalletModel
  * 
  */
 export type CreditTransaction = Prisma.CreditTransactionModel
+/**
+ * Model PayoutRequest
+ * 
+ */
+export type PayoutRequest = Prisma.PayoutRequestModel

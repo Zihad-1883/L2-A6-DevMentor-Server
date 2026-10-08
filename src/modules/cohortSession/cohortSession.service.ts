@@ -1,5 +1,6 @@
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/apiError.js";
+import { getTreasuryWallet } from "../payout/payout.service.js";
 import type {
   ICohortResourceItem,
   ICreateCohortSessionInput,
@@ -415,25 +416,61 @@ const completeCohortSession = async (sessionId: string, mentorId: string) => {
   const platformSetting = await prisma.platformSetting.findFirst();
   const commissionPercent = platformSetting?.sessionCommissionPercent ?? 15;
   const platformFeeRate = commissionPercent / 100;
-  const mentorNetEarnings = Math.round(totalEscrowCollected * (1 - platformFeeRate));
+  const platformCommissionAmount = Math.round(totalEscrowCollected * platformFeeRate);
+  const mentorNetEarnings = totalEscrowCollected - platformCommissionAmount;
 
   const updatedSession = await prisma.$transaction(async (tx: any) => {
-    if (tx.wallet && mentorNetEarnings > 0) {
+    // 1. Release Net Earnings to Mentor
+    if (mentorNetEarnings > 0) {
       const mentorWallet = await tx.wallet.upsert({
         where: { userId: mentorId },
-        create: { userId: mentorId, balance: mentorNetEarnings, totalWithdrawn: 0 },
-        update: { balance: { increment: mentorNetEarnings } },
+        create: {
+          userId: mentorId,
+          balance: mentorNetEarnings,
+          totalEarned: mentorNetEarnings,
+          totalWithdrawn: 0,
+        },
+        update: {
+          balance: { increment: mentorNetEarnings },
+          totalEarned: { increment: mentorNetEarnings },
+        },
       });
 
       await tx.creditTransaction.create({
         data: {
           walletId: mentorWallet.id,
           amount: mentorNetEarnings,
-          type: "CREDIT",
-          description: `Escrow release for completed cohort session (${totalPaidParticipants} participants): ${session.title}`,
+          type: "COHORT_RELEASE",
+          description: `Escrow release for completed cohort session (${totalPaidParticipants} participants): ${session.title} (Net after ${commissionPercent}% platform cut)`,
           referenceId: session.id,
         },
       });
+    }
+
+    // 2. Deposit Platform Commission Cut into Treasury Wallet
+    if (platformCommissionAmount > 0) {
+      try {
+        const treasuryWallet = await getTreasuryWallet(tx);
+        await tx.wallet.update({
+          where: { id: treasuryWallet.id },
+          data: {
+            balance: { increment: platformCommissionAmount },
+            totalEarned: { increment: platformCommissionAmount },
+          },
+        });
+
+        await tx.creditTransaction.create({
+          data: {
+            walletId: treasuryWallet.id,
+            amount: platformCommissionAmount,
+            type: "PLATFORM_COMMISSION",
+            description: `Platform fee (${commissionPercent}%) earned from completed cohort session: ${session.title}`,
+            referenceId: session.id,
+          },
+        });
+      } catch (err) {
+        console.error("Warning: Failed to credit platform treasury wallet:", err);
+      }
     }
 
     return await tx.cohortSession.update({
