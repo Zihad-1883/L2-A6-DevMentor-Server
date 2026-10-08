@@ -38,5 +38,9 @@ router.patch(
   adminController.approveOrRejectCohort,
 );
 
+// Cohort submissions listing for admin queue
+router.get("/cohorts", adminController.getAllCohorts);
+
 export default router;
+
 

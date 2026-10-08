@@ -18,3 +18,12 @@ export interface IApproveCohortInput {
 export interface IToggleUserBlockInput {
   isBlocked: boolean;
 }
+
+export interface ICohortAdminQueryFilters {
+  approvalStatus?: string;
+  status?: string;
+  search?: string;
+  page?: number | string;
+  limit?: number | string;
+}
+

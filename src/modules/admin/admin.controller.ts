@@ -33,10 +33,18 @@ const approveOrRejectCohort = catchAsync(async (req: Request, res: Response) => 
   sendSuccess(res, `Cohort program approval status updated to ${result.approvalStatus}`, result);
 });
 
+// 5. Get All Cohort Submissions (Admin Queue)
+const getAllCohorts = catchAsync(async (req: Request, res: Response) => {
+  const result = await adminService.getAdminCohorts(req.query);
+  sendSuccess(res, "Admin cohorts fetched successfully", result);
+});
+
 export const adminController = {
   approveOrRejectMentor,
   toggleUserBlock,
   getAllUsers,
   approveOrRejectCohort,
+  getAllCohorts,
 };
+
 

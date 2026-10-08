@@ -193,10 +193,90 @@ const approveOrRejectCohort = async (
     return updatedCohort;
 };
 
+// 5. Get All Cohort Submissions for Admin Queue
+const getAdminCohorts = async (filters: any = {}) => {
+    const page = Math.max(1, Number(filters.page) || 1);
+    const limit = Math.max(1, Math.min(100, Number(filters.limit) || 10));
+    const skip = (page - 1) * limit;
+
+    const where: any = {
+        deletedAt: null,
+    };
+
+    if (filters.approvalStatus) {
+        // Map common frontend variants like PENDING to PENDING_APPROVAL if needed
+        const mappedStatus =
+            filters.approvalStatus === "PENDING"
+                ? "PENDING_APPROVAL"
+                : filters.approvalStatus;
+        where.approvalStatus = mappedStatus;
+    }
+
+    if (filters.status) {
+        where.status = filters.status;
+    }
+
+    if (filters.search) {
+        where.OR = [
+            { title: { contains: filters.search, mode: "insensitive" } },
+            { description: { contains: filters.search, mode: "insensitive" } },
+            { mentor: { name: { contains: filters.search, mode: "insensitive" } } },
+            { mentor: { email: { contains: filters.search, mode: "insensitive" } } },
+        ];
+    }
+
+    const [cohorts, total] = await Promise.all([
+        prisma.cohortProgram.findMany({
+            where,
+            skip,
+            take: limit,
+            orderBy: { createdAt: "desc" },
+            include: {
+                mentor: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        image: true,
+                        mentorProfile: {
+                            select: {
+                                id: true,
+                                bio: true,
+                                techStackTags: true,
+                                experienceLevel: true,
+                                githubUrl: true,
+                            },
+                        },
+                    },
+                },
+                _count: {
+                    select: {
+                        enrollments: true,
+                        sessions: true,
+                    },
+                },
+            },
+        }),
+        prisma.cohortProgram.count({ where }),
+    ]);
+
+    return {
+        meta: {
+            page,
+            limit,
+            total,
+            totalPages: Math.ceil(total / limit),
+        },
+        cohorts,
+    };
+};
+
 export const adminService = {
     approveOrRejectMentor,
     toggleUserBlock,
     getAllUsers,
     approveOrRejectCohort,
+    getAdminCohorts,
 };
+
 
