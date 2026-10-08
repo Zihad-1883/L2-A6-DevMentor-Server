@@ -116,6 +116,22 @@ const updateCodeSnippet = async (studentId: string, requestId: string, payload: 
   };
 };
 
+// Helper to clean expired 10-minute preview locks (used by cron and lazily)
+export const cleanExpiredPreviewLocks = async () => {
+  const now = new Date();
+  return await prisma.codeReviewRequest.updateMany({
+    where: {
+      status: "PREVIEW_LOCKED",
+      previewExpiresAt: { lt: now },
+    },
+    data: {
+      status: "OPEN",
+      previewMentorId: null,
+      previewExpiresAt: null,
+    },
+  });
+};
+
 // 3. Acquire 10-Minute Temporary Preview Lock (Mentor)
 const previewLockReviewRequest = async (mentorId: string, requestId: string) => {
   const mentor = await prisma.user.findUnique({
@@ -438,6 +454,13 @@ const cancelReviewRequest = async (studentId: string, requestId: string) => {
 
 // 8. Get Open Code Review Requests Pool with Filters & Pagination (Mentors)
 const getOpenCodeReviewPool = async (filters: import("./codeReview.interface.js").ICodeReviewQueryFilters = {}) => {
+  // Lazy preview lock expiration cleanup (ensures serverless resilience where cron may not run)
+  try {
+    await cleanExpiredPreviewLocks();
+  } catch (err) {
+    console.error("Warning: Lazy preview lock expiration failed:", err);
+  }
+
   const page = Math.max(1, Number(filters.page) || 1);
   const limit = Math.max(1, Math.min(50, Number(filters.limit) || 10));
   const skip = (page - 1) * limit;
@@ -641,6 +664,29 @@ const getCodeReviewById = async (userId: string, userRole: string, requestId: st
     throw new AppError("Code review request not found", 404);
   }
 
+  // Lazy check: If preview lock has expired, reset it
+  if (
+    reviewRequest.status === "PREVIEW_LOCKED" &&
+    reviewRequest.previewExpiresAt &&
+    new Date(reviewRequest.previewExpiresAt) <= new Date()
+  ) {
+    try {
+      await prisma.codeReviewRequest.update({
+        where: { id: requestId },
+        data: {
+          status: "OPEN",
+          previewMentorId: null,
+          previewExpiresAt: null,
+        },
+      });
+      reviewRequest.status = "OPEN";
+      reviewRequest.previewMentorId = null;
+      reviewRequest.previewExpiresAt = null;
+    } catch {
+      // Best-effort lazy update
+    }
+  }
+
   // Access check: Student owner, assigned mentor, previewing mentor, or Admin
   // Or open requests in pool viewable by mentors
   const isOwner = reviewRequest.studentId === userId;
@@ -665,6 +711,7 @@ const getCodeReviewById = async (userId: string, userRole: string, requestId: st
 };
 
 export const codeReviewService = {
+  cleanExpiredPreviewLocks,
   createReviewRequest,
   updateCodeSnippet,
   previewLockReviewRequest,
