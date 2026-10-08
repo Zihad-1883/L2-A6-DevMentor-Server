@@ -12,7 +12,8 @@ const createSprint = catchAsync(async (req: Request, res: Response) => {
 
 // 2. Get Open Sprint Pool
 const getOpenSprintPool = catchAsync(async (req: Request, res: Response) => {
-  const result = await sprintService.getOpenSprintPool(req.query);
+  const mentorId = req.user?.id;
+  const result = await sprintService.getOpenSprintPool(req.query, mentorId);
   sendSuccess(res, "Open sprint pool fetched successfully", result);
 });
 

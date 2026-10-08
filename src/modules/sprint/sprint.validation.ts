@@ -7,4 +7,5 @@ export const createSprintSchema = z.object({
     startDate: z.string().datetime(),
     durationDays: z.number().int().positive(),
     selectedDays: z.array(z.number().int().positive()),
+    targetMentorId: z.string().optional(),
 });

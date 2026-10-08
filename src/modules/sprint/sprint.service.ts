@@ -33,7 +33,30 @@ const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
     );
   }
 
-  const { title, description, techStackTags, startDate, durationDays, selectedDays } = payload;
+  const { title, description, techStackTags, startDate, durationDays, selectedDays, targetMentorId } = payload;
+
+  if (targetMentorId) {
+    if (targetMentorId === studentId) {
+      throw new AppError("You cannot target a sprint request to yourself.", 400);
+    }
+
+    const targetedMentor = await prisma.user.findUnique({
+      where: { id: targetMentorId },
+      include: { mentorProfile: true },
+    });
+
+    if (!targetedMentor || targetedMentor.role !== "mentor") {
+      throw new AppError("Target mentor does not exist or is not a registered mentor.", 404);
+    }
+
+    if (targetedMentor.isBlocked) {
+      throw new AppError("Targeted mentor account is currently suspended.", 400);
+    }
+
+    if (targetedMentor.mentorProfile?.approvalStatus !== "APPROVED") {
+      throw new AppError("Targeted mentor is not yet approved by platform administrators.", 400);
+    }
+  }
 
   const start = new Date(startDate);
   const sessionData = selectedDays.map((dayNum) => {
@@ -57,6 +80,7 @@ const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
       durationDays,
       selectedDays,
       status: "PENDING_CLAIM",
+      targetMentorId: targetMentorId || null,
       sessions: {
         createMany: {
           data: sessionData,
@@ -72,6 +96,15 @@ const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
           image: true,
         },
       },
+      targetMentor: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+          mentorProfile: true,
+        },
+      },
       sessions: {
         orderBy: { dayNumber: "asc" },
       },
@@ -82,7 +115,7 @@ const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
 };
 
 // 2. Get Open Sprint Pool
-const getOpenSprintPool = async (filters: ISprintQueryFilters) => {
+const getOpenSprintPool = async (filters: ISprintQueryFilters, requestingMentorId?: string) => {
   const { search, tag } = filters;
   const page = Number(filters.page) || 1;
   const limit = Number(filters.limit) || 10;
@@ -93,6 +126,19 @@ const getOpenSprintPool = async (filters: ISprintQueryFilters) => {
     status: "PENDING_CLAIM",
   };
 
+  if (requestingMentorId) {
+    where.AND = [
+      {
+        OR: [
+          { targetMentorId: null },
+          { targetMentorId: requestingMentorId },
+        ],
+      },
+    ];
+  } else {
+    where.targetMentorId = null;
+  }
+
   if (tag) {
     where.techStackTags = {
       has: tag,
@@ -100,10 +146,15 @@ const getOpenSprintPool = async (filters: ISprintQueryFilters) => {
   }
 
   if (search) {
-    where.OR = [
+    const searchConditions = [
       { title: { contains: search, mode: "insensitive" } },
       { description: { contains: search, mode: "insensitive" } },
     ];
+    if (where.AND) {
+      where.AND.push({ OR: searchConditions });
+    } else {
+      where.OR = searchConditions;
+    }
   }
 
   const [sprints, total] = await Promise.all([
@@ -119,6 +170,15 @@ const getOpenSprintPool = async (filters: ISprintQueryFilters) => {
             name: true,
             email: true,
             image: true,
+          },
+        },
+        targetMentor: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            mentorProfile: true,
           },
         },
         sessions: {
@@ -175,6 +235,10 @@ const claimSprint = async (sprintId: string, mentorId: string) => {
     throw new AppError("You cannot claim your own sprint request", 400);
   }
 
+  if (existingSprint.targetMentorId && existingSprint.targetMentorId !== mentorId) {
+    throw new AppError("This sprint was directly targeted to another specific mentor", 403);
+  }
+
   const claimedSprint = await prisma.sprintRequest.update({
     where: { id: sprintId },
     data: {
@@ -189,6 +253,15 @@ const claimSprint = async (sprintId: string, mentorId: string) => {
           name: true,
           email: true,
           image: true,
+        },
+      },
+      targetMentor: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+          mentorProfile: true,
         },
       },
       claimedByMentor: {
@@ -226,6 +299,15 @@ const getSprintById = async (sprintId: string, userId: string) => {
           image: true,
         },
       },
+      targetMentor: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+          mentorProfile: true,
+        },
+      },
       claimedByMentor: {
         select: {
           id: true,
@@ -245,8 +327,15 @@ const getSprintById = async (sprintId: string, userId: string) => {
     throw new AppError("Sprint request not found", 404);
   }
 
-  if (userId !== sprint.studentId && userId !== sprint.claimedByMentorId) {
-    throw new AppError("You cannot access this sprint details", 403)
+  const isStudentOwner = userId === sprint.studentId;
+  const isClaimedMentor = userId === sprint.claimedByMentorId;
+  const isTargetedMentor = userId === sprint.targetMentorId;
+  const isOpenPoolSprint =
+    sprint.status === "PENDING_CLAIM" &&
+    (!sprint.targetMentorId || sprint.targetMentorId === userId);
+
+  if (!isStudentOwner && !isClaimedMentor && !isTargetedMentor && !isOpenPoolSprint) {
+    throw new AppError("You cannot access this sprint details", 403);
   }
 
   return sprint;
@@ -259,7 +348,10 @@ const getUserSprints = async (userId: string, role: string) => {
   };
 
   if (role === "mentor") {
-    where.claimedByMentorId = userId;
+    where.OR = [
+      { claimedByMentorId: userId },
+      { targetMentorId: userId },
+    ];
   } else {
     where.studentId = userId;
   }
@@ -274,6 +366,15 @@ const getUserSprints = async (userId: string, role: string) => {
           name: true,
           email: true,
           image: true,
+        },
+      },
+      targetMentor: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+          mentorProfile: true,
         },
       },
       claimedByMentor: {

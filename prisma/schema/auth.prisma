@@ -14,6 +14,7 @@ model User {
     mentorProfile        MentorProfile?
     sprintsRequested     SprintRequest[]            @relation("StudentSprints")
     sprintsClaimed       SprintRequest[]            @relation("MentorSprints")
+    sprintsTargeted      SprintRequest[]            @relation("TargetedMentorSprints")
     cohortsCreated       CohortProgram[]            @relation("MentorCohorts")
     cohortEnrollments    CohortEnrollment[]         @relation("StudentCohortEnrollments")
     cohortSessionsJoined CohortSessionParticipant[] @relation("StudentCohortSessions")

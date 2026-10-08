@@ -30,6 +30,9 @@ model SprintRequest {
     claimedByMentor   User?        @relation("MentorSprints", fields: [claimedByMentorId], references: [id], onDelete: SetNull)
     claimedAt         DateTime?
 
+    targetMentorId    String?
+    targetMentor      User?        @relation("TargetedMentorSprints", fields: [targetMentorId], references: [id], onDelete: SetNull)
+
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?

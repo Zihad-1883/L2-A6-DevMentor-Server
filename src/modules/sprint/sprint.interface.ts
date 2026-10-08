@@ -8,6 +8,7 @@ export interface ICreateSprintInput {
   startDate: string;
   durationDays: number;
   selectedDays: number[];
+  targetMentorId?: string;
 }
 
 export interface IUpdateSprintInput {

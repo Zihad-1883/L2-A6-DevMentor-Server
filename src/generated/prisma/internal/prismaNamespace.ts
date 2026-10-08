@@ -2386,6 +2386,7 @@ export const SprintRequestScalarFieldEnum = {
   status: 'status',
   claimedByMentorId: 'claimedByMentorId',
   claimedAt: 'claimedAt',
+  targetMentorId: 'targetMentorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
