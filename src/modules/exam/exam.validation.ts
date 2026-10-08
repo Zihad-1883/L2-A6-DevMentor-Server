@@ -8,12 +8,12 @@ export const createExamSchema = z.object({
   description: z.string().optional(),
   durationMinutes: z
     .number()
-    .min(5, "Exam duration must be at least 5 minutes")
+    .min(1, "Exam duration must be at least 1 minute")
     .max(300, "Exam duration cannot exceed 300 minutes (5 hours)")
     .optional(),
   totalMarks: z
     .number()
-    .min(5, "Total marks must be at least 5")
+    .min(1, "Total marks must be at least 1")
     .max(1000, "Total marks cannot exceed 1000")
     .optional(),
   passMark: z
