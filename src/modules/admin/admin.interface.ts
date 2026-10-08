@@ -27,3 +27,23 @@ export interface ICohortAdminQueryFilters {
   limit?: number | string;
 }
 
+export interface IRevenueMonthlyDataPoint {
+  month: string;
+  grossRevenue: number;
+  platformCommission: number;
+  mentorPayouts: number;
+}
+
+export interface IPlatformOverviewStats {
+  totalUsers: number;
+  totalStudents: number;
+  totalMentors: number;
+  pendingMentorApplications: number;
+  totalCohorts: number;
+  pendingCohorts: number;
+  totalRevenueBdt: number;
+  platformCommissionEarnedBdt: number;
+  totalCreditsCirculating: number;
+  monthlyRevenue: IRevenueMonthlyDataPoint[];
+}
+

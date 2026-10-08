@@ -41,6 +41,9 @@ router.patch(
 // Cohort submissions listing for admin queue
 router.get("/cohorts", adminController.getAllCohorts);
 
+// Platform overview analytics & financial stats
+router.get("/stats", adminController.getPlatformStats);
+
 export default router;
 
 

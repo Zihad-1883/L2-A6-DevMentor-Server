@@ -39,12 +39,19 @@ const getAllCohorts = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Admin cohorts fetched successfully", result);
 });
 
+// 6. Aggregate Real-Time Platform Overview Statistics
+const getPlatformStats = catchAsync(async (req: Request, res: Response) => {
+  const result = await adminService.getPlatformStats();
+  sendSuccess(res, "Platform overview statistics fetched successfully", result);
+});
+
 export const adminController = {
   approveOrRejectMentor,
   toggleUserBlock,
   getAllUsers,
   approveOrRejectCohort,
   getAllCohorts,
+  getPlatformStats,
 };
 
 
