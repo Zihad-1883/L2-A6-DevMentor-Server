@@ -60,11 +60,14 @@ const updateMyProfile = async (userId: string, payload: IUpdateUserProfileInput)
     throw new AppError("Your account has been blocked by an administrator", 403);
   }
 
-  const { name, image, bio } = payload;
+  const { name, image, bio, techStackTags, githubUrl, resumeUrl } = payload;
 
-  const userDataToUpdate: any = {};
+  const userDataToUpdate: {
+    name?: string;
+    image?: string | null;
+  } = {};
   if (name !== undefined) userDataToUpdate.name = name;
-  if (image !== undefined) userDataToUpdate.image = image;
+  if (image !== undefined) userDataToUpdate.image = image === "" ? null : image;
 
   if (Object.keys(userDataToUpdate).length > 0) {
     await prisma.user.update({
@@ -73,10 +76,33 @@ const updateMyProfile = async (userId: string, payload: IUpdateUserProfileInput)
     });
   }
 
-  if (bio !== undefined && user.mentorProfile) {
-    await prisma.mentorProfile.update({
-      where: { userId },
-      data: { bio },
+  if (user.mentorProfile) {
+    const mentorDataToUpdate: {
+      bio?: string;
+      techStackTags?: string[];
+      githubUrl?: string | null;
+      resumeUrl?: string | null;
+    } = {};
+    if (bio !== undefined) mentorDataToUpdate.bio = bio;
+    if (techStackTags !== undefined) mentorDataToUpdate.techStackTags = techStackTags;
+    if (githubUrl !== undefined) mentorDataToUpdate.githubUrl = githubUrl === "" ? null : githubUrl;
+    if (resumeUrl !== undefined) mentorDataToUpdate.resumeUrl = resumeUrl === "" ? null : resumeUrl;
+
+    if (Object.keys(mentorDataToUpdate).length > 0) {
+      await prisma.mentorProfile.update({
+        where: { userId },
+        data: mentorDataToUpdate,
+      });
+    }
+  } else if (user.role === "mentor") {
+    await prisma.mentorProfile.create({
+      data: {
+        userId,
+        bio: bio ?? "Experienced software engineering mentor.",
+        techStackTags: techStackTags ?? [],
+        githubUrl: githubUrl === "" ? null : (githubUrl ?? null),
+        resumeUrl: resumeUrl === "" ? null : (resumeUrl ?? null),
+      },
     });
   }
 
