@@ -35,15 +35,31 @@ const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
 
   const { title, description, techStackTags, startDate, durationDays, selectedDays, targetMentorId } = payload;
 
+  let finalTargetMentorId: string | null = null;
+
   if (targetMentorId) {
     if (targetMentorId === studentId) {
       throw new AppError("You cannot target a sprint request to yourself.", 400);
     }
 
-    const targetedMentor = await prisma.user.findUnique({
+    let targetedMentor = await prisma.user.findUnique({
       where: { id: targetMentorId },
       include: { mentorProfile: true },
     });
+
+    if (!targetedMentor) {
+      // Check if targetMentorId is a MentorProfile id
+      const profile = await prisma.mentorProfile.findUnique({
+        where: { id: targetMentorId },
+        include: { user: true },
+      });
+      if (profile) {
+        targetedMentor = {
+          ...profile.user,
+          mentorProfile: profile,
+        };
+      }
+    }
 
     if (!targetedMentor || targetedMentor.role !== "mentor") {
       throw new AppError("Target mentor does not exist or is not a registered mentor.", 404);
@@ -56,6 +72,8 @@ const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
     if (targetedMentor.mentorProfile?.approvalStatus !== "APPROVED") {
       throw new AppError("Targeted mentor is not yet approved by platform administrators.", 400);
     }
+
+    finalTargetMentorId = targetedMentor.id;
   }
 
   const start = new Date(startDate);
@@ -80,7 +98,7 @@ const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
       durationDays,
       selectedDays,
       status: "PENDING_CLAIM",
-      targetMentorId: targetMentorId || null,
+      targetMentorId: finalTargetMentorId,
       sessions: {
         createMany: {
           data: sessionData,
@@ -116,7 +134,7 @@ const createSprint = async (studentId: string, payload: ICreateSprintInput) => {
 
 // 2. Get Open Sprint Pool
 const getOpenSprintPool = async (filters: ISprintQueryFilters, requestingMentorId?: string) => {
-  const { search, tag } = filters;
+  const { search, tag, scope } = filters;
   const page = Number(filters.page) || 1;
   const limit = Number(filters.limit) || 10;
   const skip = (page - 1) * limit;
@@ -127,15 +145,25 @@ const getOpenSprintPool = async (filters: ISprintQueryFilters, requestingMentorI
   };
 
   if (requestingMentorId) {
-    where.AND = [
-      {
-        OR: [
-          { targetMentorId: null },
-          { targetMentorId: requestingMentorId },
-        ],
-      },
-    ];
+    if (scope === "direct") {
+      // Exclusively direct sprint requests specifically targeting this mentor
+      where.targetMentorId = requestingMentorId;
+    } else if (scope === "broadcast") {
+      // Exclusively open pool requests that were broadcast to all mentors
+      where.targetMentorId = null;
+    } else {
+      // Default: broadcast requests + direct requests targeted to this mentor ONLY
+      where.AND = [
+        {
+          OR: [
+            { targetMentorId: null },
+            { targetMentorId: requestingMentorId },
+          ],
+        },
+      ];
+    }
   } else {
+    // Non-mentors or unauthenticated users can NEVER see direct sprints targeted to mentors
     where.targetMentorId = null;
   }
 

@@ -125,7 +125,7 @@ const getMyDashboard = async (userId: string) => {
   });
 
   if (user.role === "mentor") {
-    const [createdCohorts, claimedSprints] = await Promise.all([
+    const [createdCohorts, claimedSprints, directSprintRequests] = await Promise.all([
       prisma.cohortProgram.findMany({
         where: { mentorId: userId, deletedAt: null },
         orderBy: { createdAt: "desc" },
@@ -134,6 +134,30 @@ const getMyDashboard = async (userId: string) => {
         where: { claimedByMentorId: userId, deletedAt: null },
         orderBy: { createdAt: "desc" },
         take: 5,
+        include: {
+          student: {
+            select: { id: true, name: true, email: true, image: true },
+          },
+          sessions: {
+            orderBy: { dayNumber: "asc" },
+          },
+        },
+      }),
+      prisma.sprintRequest.findMany({
+        where: {
+          targetMentorId: userId,
+          status: "PENDING_CLAIM",
+          deletedAt: null,
+        },
+        orderBy: { createdAt: "desc" },
+        include: {
+          student: {
+            select: { id: true, name: true, email: true, image: true },
+          },
+          sessions: {
+            orderBy: { dayNumber: "asc" },
+          },
+        },
       }),
     ]);
 
@@ -151,8 +175,10 @@ const getMyDashboard = async (userId: string) => {
       summary: {
         totalCohortsCreated: createdCohorts.length,
         totalSprintsClaimed: claimedSprints.length,
+        totalDirectSprints: directSprintRequests.length,
         createdCohorts,
         claimedSprints,
+        directSprintRequests,
       },
     };
   }

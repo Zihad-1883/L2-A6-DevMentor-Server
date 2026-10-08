@@ -5,13 +5,13 @@ import { AppError } from "../../utils/apiError.js";
 import { uploadService } from "./upload.service.js";
 
 const handleFileUpload = catchAsync(async (req: Request, res: Response) => {
-  if (Array.isArray(req.files) && req.files.length > 0) {
+  if (Array.isArray(req.files) && req.files.length > 1) {
     const results = await uploadService.uploadMultipleFilesToCloudinary(req.files as Express.Multer.File[]);
     sendSuccess(res, `${results.length} file(s) uploaded to Cloudinary successfully`, results, 201);
     return;
   }
 
-  const singleFile = req.file || (Array.isArray(req.files) ? req.files[0] : undefined);
+  const singleFile = req.file || (Array.isArray(req.files) && req.files.length > 0 ? req.files[0] : undefined);
 
   if (!singleFile) {
     throw new AppError("Please attach file(s) in form-data key 'file' or 'files'", 400);

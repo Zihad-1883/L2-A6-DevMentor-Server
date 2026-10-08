@@ -62,6 +62,7 @@ v1Router.use("/mentors", mentorRouter);
 v1Router.use("/users", userRouter);
 v1Router.use("/enrollments", enrollmentRouter);
 v1Router.use("/upload", uploadRouter);
+v1Router.use("/uploads", uploadRouter);
 v1Router.use("/admin", adminRouter);
 v1Router.use("/payments", paymentRoutes);
 v1Router.use("/code-reviews", codeReviewRouter);

@@ -26,4 +26,5 @@ export interface ISprintQueryFilters {
   page?: number;
   limit?: number;
   status?: SprintStatus;
+  scope?: "all" | "direct" | "broadcast";
 }
