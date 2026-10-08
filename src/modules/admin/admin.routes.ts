@@ -7,6 +7,7 @@ import {
   approveMentorSchema,
   toggleUserBlockSchema,
   approveCohortSchema,
+  updatePlatformSettingSchema,
 } from "./admin.validation.js";
 
 const router = Router();
@@ -43,6 +44,14 @@ router.get("/cohorts", adminController.getAllCohorts);
 
 // Platform overview analytics & financial stats
 router.get("/stats", adminController.getPlatformStats);
+
+// Platform configuration & commission settings
+router.get("/settings", adminController.getPlatformSettings);
+router.patch(
+  "/settings",
+  validate(updatePlatformSettingSchema),
+  adminController.updatePlatformSettings,
+);
 
 export default router;
 

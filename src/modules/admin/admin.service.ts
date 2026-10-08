@@ -6,6 +6,7 @@ import type {
     IUserQueryFilters,
     IApproveCohortInput,
     IPlatformOverviewStats,
+    IUpdatePlatformSettingInput,
 } from "./admin.interface.js";
 
 // 1. Approve or Reject Mentor Application
@@ -369,6 +370,50 @@ const getPlatformStats = async (): Promise<IPlatformOverviewStats> => {
     };
 };
 
+// 7. Get or Initialize Platform Settings (Singleton)
+const getPlatformSettings = async () => {
+    let settings = await prisma.platformSetting.findFirst();
+    if (!settings) {
+        settings = await prisma.platformSetting.create({
+            data: {
+                sprintCreditPerSession: 50,
+                sessionCommissionPercent: 15,
+            },
+        });
+    }
+    return settings;
+};
+
+// 8. Update Platform Settings
+const updatePlatformSettings = async (payload: IUpdatePlatformSettingInput) => {
+    let settings = await prisma.platformSetting.findFirst();
+    if (!settings) {
+        settings = await prisma.platformSetting.create({
+            data: {
+                sprintCreditPerSession: payload.sprintCreditPerSession ?? 50,
+                sessionCommissionPercent: payload.sessionCommissionPercent ?? 15,
+            },
+        });
+    } else {
+        const updateData: {
+            sprintCreditPerSession?: number;
+            sessionCommissionPercent?: number;
+        } = {};
+        if (payload.sprintCreditPerSession !== undefined) {
+            updateData.sprintCreditPerSession = payload.sprintCreditPerSession;
+        }
+        if (payload.sessionCommissionPercent !== undefined) {
+            updateData.sessionCommissionPercent = payload.sessionCommissionPercent;
+        }
+
+        settings = await prisma.platformSetting.update({
+            where: { id: settings.id },
+            data: updateData,
+        });
+    }
+    return settings;
+};
+
 export const adminService = {
     approveOrRejectMentor,
     toggleUserBlock,
@@ -376,6 +421,8 @@ export const adminService = {
     approveOrRejectCohort,
     getAdminCohorts,
     getPlatformStats,
+    getPlatformSettings,
+    updatePlatformSettings,
 };
 
 

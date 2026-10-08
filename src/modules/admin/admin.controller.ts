@@ -45,6 +45,18 @@ const getPlatformStats = catchAsync(async (req: Request, res: Response) => {
   sendSuccess(res, "Platform overview statistics fetched successfully", result);
 });
 
+// 7. Get Platform Settings (Singleton)
+const getPlatformSettings = catchAsync(async (req: Request, res: Response) => {
+  const result = await adminService.getPlatformSettings();
+  sendSuccess(res, "Platform settings fetched successfully", result);
+});
+
+// 8. Update Platform Settings
+const updatePlatformSettings = catchAsync(async (req: Request, res: Response) => {
+  const result = await adminService.updatePlatformSettings(req.body);
+  sendSuccess(res, "Platform settings updated successfully", result);
+});
+
 export const adminController = {
   approveOrRejectMentor,
   toggleUserBlock,
@@ -52,6 +64,8 @@ export const adminController = {
   approveOrRejectCohort,
   getAllCohorts,
   getPlatformStats,
+  getPlatformSettings,
+  updatePlatformSettings,
 };
 
 

@@ -412,7 +412,9 @@ const completeCohortSession = async (sessionId: string, mentorId: string) => {
 
   const totalPaidParticipants = session.participants.length;
   const totalEscrowCollected = session.creditCost * totalPaidParticipants;
-  const platformFeeRate = 0.15;
+  const platformSetting = await prisma.platformSetting.findFirst();
+  const commissionPercent = platformSetting?.sessionCommissionPercent ?? 15;
+  const platformFeeRate = commissionPercent / 100;
   const mentorNetEarnings = Math.round(totalEscrowCollected * (1 - platformFeeRate));
 
   const updatedSession = await prisma.$transaction(async (tx: any) => {

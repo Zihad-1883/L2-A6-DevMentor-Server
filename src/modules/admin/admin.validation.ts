@@ -18,3 +18,18 @@ export const approveCohortSchema = z.object({
     error: "Status must be APPROVED or REJECTED",
   }),
 });
+
+export const updatePlatformSettingSchema = z.object({
+  sprintCreditPerSession: z
+    .number({ error: "sprintCreditPerSession must be a number" })
+    .int("sprintCreditPerSession must be an integer")
+    .min(1, "sprintCreditPerSession must be at least 1")
+    .max(5000, "sprintCreditPerSession cannot exceed 5000")
+    .optional(),
+  sessionCommissionPercent: z
+    .number({ error: "sessionCommissionPercent must be a number" })
+    .int("sessionCommissionPercent must be an integer")
+    .min(0, "sessionCommissionPercent must be at least 0%")
+    .max(100, "sessionCommissionPercent cannot exceed 100%")
+    .optional(),
+});

@@ -47,3 +47,8 @@ export interface IPlatformOverviewStats {
   monthlyRevenue: IRevenueMonthlyDataPoint[];
 }
 
+export interface IUpdatePlatformSettingInput {
+  sprintCreditPerSession?: number;
+  sessionCommissionPercent?: number;
+}
+
