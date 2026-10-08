@@ -183,6 +183,313 @@ const publishExam = async (mentorId: string, examId: string) => {
   return publishedExam;
 };
 
+// 3.1. Update Exam (Metadata and/or replacement Questions)
+const updateExam = async (
+  mentorId: string,
+  examId: string,
+  payload: IUpdateExamInput,
+  userRole?: string
+) => {
+  const existingExam = await prisma.exam.findUnique({
+    where: { id: examId },
+    include: {
+      questions: true,
+      _count: { select: { attempts: true } },
+    },
+  });
+
+  if (!existingExam) {
+    throw new AppError("Exam not found", 404);
+  }
+
+  if (existingExam.mentorId !== mentorId && userRole !== "admin") {
+    throw new AppError("You do not have permission to modify this exam", 403);
+  }
+
+  if (payload.cohortId) {
+    const cohort = await prisma.cohortProgram.findUnique({
+      where: { id: payload.cohortId },
+    });
+    if (!cohort) {
+      throw new AppError("Target Cohort Program not found", 404);
+    }
+    if (cohort.mentorId !== mentorId && userRole !== "admin") {
+      throw new AppError("You can only attach exams to your own Cohort Programs", 403);
+    }
+  }
+
+  if (payload.sprintId) {
+    const sprint = await prisma.sprintRequest.findUnique({
+      where: { id: payload.sprintId },
+    });
+    if (!sprint) {
+      throw new AppError("Target Sprint Request not found", 404);
+    }
+  }
+
+  // Handle questions replacement if provided
+  if (payload.questions && Array.isArray(payload.questions)) {
+    payload.questions.forEach((q, index) => {
+      if (q.correctOptionIndex < 0 || q.correctOptionIndex >= q.options.length) {
+        throw new AppError(
+          `Question ${index + 1}: correctOptionIndex (${q.correctOptionIndex}) is out of bounds for ${q.options.length} options`,
+          400
+        );
+      }
+    });
+
+    await prisma.$transaction(
+      async (tx) => {
+        await tx.question.deleteMany({ where: { examId } });
+        for (const q of payload.questions!) {
+          await tx.question.create({
+            data: {
+              examId,
+              questionText: q.questionText,
+              options: q.options,
+              correctOptionIndex: q.correctOptionIndex,
+              explanation: q.explanation || null,
+              marks: q.marks || 1,
+            },
+          });
+        }
+      },
+      {
+        maxWait: 10000,
+        timeout: 25000,
+      }
+    );
+  }
+
+  // Fetch up-to-date questions to recompute marks & count
+  const allQuestions = await prisma.question.findMany({
+    where: { examId },
+  });
+
+  const totalQuestionsCount = allQuestions.length;
+  const computedTotalMarks = allQuestions.reduce((sum, q) => sum + q.marks, 0);
+
+  const passMarkValue = payload.passMark ?? payload.passingMarks ?? existingExam.passMark;
+
+  const updatedExam = await prisma.exam.update({
+    where: { id: examId },
+    data: {
+      ...(payload.title !== undefined && { title: payload.title }),
+      ...(payload.description !== undefined && { description: payload.description }),
+      ...(payload.isFree !== undefined && { isFree: payload.isFree }),
+      ...(payload.cohortId !== undefined && { cohortId: payload.cohortId }),
+      ...(payload.sprintId !== undefined && { sprintId: payload.sprintId }),
+      ...(payload.status !== undefined && { status: payload.status }),
+      passMark: passMarkValue,
+      totalQuestions: totalQuestionsCount,
+      totalMarks: payload.totalMarks !== undefined ? payload.totalMarks : computedTotalMarks,
+      durationMinutes:
+        payload.durationMinutes !== undefined
+          ? payload.durationMinutes
+          : totalQuestionsCount > 0
+          ? totalQuestionsCount
+          : existingExam.durationMinutes,
+    },
+    include: {
+      cohort: { select: { id: true, title: true } },
+      sprint: { select: { id: true, title: true } },
+      questions: true,
+      _count: { select: { questions: true, attempts: true } },
+    },
+  });
+
+  return updatedExam;
+};
+
+// 3.2. Delete or Soft-Delete / Archive Exam
+const deleteExam = async (mentorId: string, examId: string, userRole?: string) => {
+  const exam = await prisma.exam.findUnique({
+    where: { id: examId },
+    include: {
+      _count: { select: { attempts: true } },
+    },
+  });
+
+  if (!exam) {
+    throw new AppError("Exam not found", 404);
+  }
+
+  if (exam.mentorId !== mentorId && userRole !== "admin") {
+    throw new AppError("You do not have permission to delete this exam", 403);
+  }
+
+  // If exam already has student attempts, archive it to preserve academic audit records
+  if (exam._count.attempts > 0) {
+    const archivedExam = await prisma.exam.update({
+      where: { id: examId },
+      data: { status: "ARCHIVED" },
+    });
+    return {
+      message: "Exam has recorded student attempts; safely archived and unpublished.",
+      archived: true,
+      exam: archivedExam,
+    };
+  }
+
+  // No student attempts exist: permanently remove
+  await prisma.exam.delete({
+    where: { id: examId },
+  });
+
+  return {
+    message: "Exam deleted successfully",
+    deleted: true,
+  };
+};
+
+// 3.3. Get Single Exam By ID
+const getExamById = async (examId: string, userId?: string, userRole?: string) => {
+  const exam = await prisma.exam.findUnique({
+    where: { id: examId },
+    include: {
+      mentor: { select: { id: true, name: true, email: true, image: true } },
+      cohort: { select: { id: true, title: true } },
+      sprint: { select: { id: true, title: true } },
+      questions: true,
+      _count: { select: { questions: true, attempts: true } },
+    },
+  });
+
+  if (!exam) {
+    throw new AppError("Exam not found", 404);
+  }
+
+  const isOwnerOrAdmin = (userId && exam.mentorId === userId) || userRole === "admin";
+  if (!isOwnerOrAdmin) {
+    return {
+      ...exam,
+      questions: exam.questions.map((q) => ({
+        id: q.id,
+        examId: q.examId,
+        questionText: q.questionText,
+        options: q.options,
+        correctOptionIndex: -1,
+        explanation: null,
+        marks: q.marks,
+      })),
+    };
+  }
+
+  return exam;
+};
+
+// 3.4. Update Single Question in Exam
+const updateQuestion = async (
+  mentorId: string,
+  examId: string,
+  questionId: string,
+  payload: Partial<IAddQuestionInput>,
+  userRole?: string
+) => {
+  const exam = await prisma.exam.findUnique({
+    where: { id: examId },
+  });
+
+  if (!exam) {
+    throw new AppError("Exam not found", 404);
+  }
+
+  if (exam.mentorId !== mentorId && userRole !== "admin") {
+    throw new AppError("You do not have permission to modify questions for this exam", 403);
+  }
+
+  const question = await prisma.question.findFirst({
+    where: { id: questionId, examId },
+  });
+
+  if (!question) {
+    throw new AppError("Question not found in this exam", 404);
+  }
+
+  const finalOptions = payload.options || question.options;
+  const finalCorrectIndex =
+    payload.correctOptionIndex !== undefined
+      ? payload.correctOptionIndex
+      : question.correctOptionIndex;
+
+  if (finalCorrectIndex < 0 || finalCorrectIndex >= finalOptions.length) {
+    throw new AppError(
+      `correctOptionIndex (${finalCorrectIndex}) is out of bounds for ${finalOptions.length} options`,
+      400
+    );
+  }
+
+  const updatedQuestion = await prisma.question.update({
+    where: { id: questionId },
+    data: {
+      ...(payload.questionText && { questionText: payload.questionText }),
+      ...(payload.options && { options: payload.options }),
+      ...(payload.correctOptionIndex !== undefined && {
+        correctOptionIndex: payload.correctOptionIndex,
+      }),
+      ...(payload.explanation !== undefined && { explanation: payload.explanation }),
+      ...(payload.marks !== undefined && { marks: payload.marks }),
+    },
+  });
+
+  // Recompute totalMarks
+  const allQuestions = await prisma.question.findMany({ where: { examId } });
+  const totalMarks = allQuestions.reduce((sum, q) => sum + q.marks, 0);
+  await prisma.exam.update({
+    where: { id: examId },
+    data: { totalMarks },
+  });
+
+  return updatedQuestion;
+};
+
+// 3.5. Delete Single Question from Exam
+const deleteQuestion = async (
+  mentorId: string,
+  examId: string,
+  questionId: string,
+  userRole?: string
+) => {
+  const exam = await prisma.exam.findUnique({
+    where: { id: examId },
+  });
+
+  if (!exam) {
+    throw new AppError("Exam not found", 404);
+  }
+
+  if (exam.mentorId !== mentorId && userRole !== "admin") {
+    throw new AppError("You do not have permission to delete questions from this exam", 403);
+  }
+
+  const question = await prisma.question.findFirst({
+    where: { id: questionId, examId },
+  });
+
+  if (!question) {
+    throw new AppError("Question not found in this exam", 404);
+  }
+
+  await prisma.question.delete({
+    where: { id: questionId },
+  });
+
+  const remainingQuestions = await prisma.question.findMany({ where: { examId } });
+  const totalQuestions = remainingQuestions.length;
+  const totalMarks = remainingQuestions.reduce((sum, q) => sum + q.marks, 0);
+
+  await prisma.exam.update({
+    where: { id: examId },
+    data: {
+      totalQuestions,
+      totalMarks,
+      durationMinutes: totalQuestions > 0 ? totalQuestions : exam.durationMinutes,
+    },
+  });
+
+  return { message: "Question deleted successfully", totalQuestions, totalMarks };
+};
+
 // 4. Get Mentor's Created Exams with Statistics
 const getMentorExams = async (
   mentorId: string,
@@ -485,6 +792,11 @@ export const examService = {
   createExam,
   addQuestionsToExam,
   publishExam,
+  updateExam,
+  deleteExam,
+  getExamById,
+  updateQuestion,
+  deleteQuestion,
   getMentorExams,
   getAvailableExams,
   startExamAttempt,

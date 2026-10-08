@@ -75,14 +75,76 @@ const getStudentAttemptsController = catchAsync(async (req: Request, res: Respon
   sendSuccess(res, "Student exam attempts fetched successfully", result);
 });
 
+// 9. Update Exam Controller
+const updateExamController = catchAsync(async (req: Request, res: Response) => {
+  const mentorId = req.user!.id;
+  const userRole = req.user!.role;
+  const { examId } = req.params;
+  const result = await examService.updateExam(mentorId, examId as string, req.body, userRole);
+  sendSuccess(res, "Exam updated successfully", result);
+});
+
+// 10. Delete or Soft-Delete / Archive Exam Controller
+const deleteExamController = catchAsync(async (req: Request, res: Response) => {
+  const mentorId = req.user!.id;
+  const userRole = req.user!.role;
+  const { examId } = req.params;
+  const result = await examService.deleteExam(mentorId, examId as string, userRole);
+  sendSuccess(res, result.message, result);
+});
+
+// 11. Get Single Exam By ID Controller
+const getExamByIdController = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  const userRole = req.user?.role;
+  const { examId } = req.params;
+  const result = await examService.getExamById(examId as string, userId, userRole);
+  sendSuccess(res, "Exam details fetched successfully", result);
+});
+
+// 12. Update Question in Exam Controller
+const updateQuestionController = catchAsync(async (req: Request, res: Response) => {
+  const mentorId = req.user!.id;
+  const userRole = req.user!.role;
+  const { examId, questionId } = req.params;
+  const result = await examService.updateQuestion(
+    mentorId,
+    examId as string,
+    questionId as string,
+    req.body,
+    userRole
+  );
+  sendSuccess(res, "Question updated successfully", result);
+});
+
+// 13. Delete Question from Exam Controller
+const deleteQuestionController = catchAsync(async (req: Request, res: Response) => {
+  const mentorId = req.user!.id;
+  const userRole = req.user!.role;
+  const { examId, questionId } = req.params;
+  const result = await examService.deleteQuestion(
+    mentorId,
+    examId as string,
+    questionId as string,
+    userRole
+  );
+  sendSuccess(res, result.message, result);
+});
+
 export const examController = {
   createExamController,
   addQuestionsController,
   publishExamController,
+  updateExamController,
+  deleteExamController,
+  getExamByIdController,
+  updateQuestionController,
+  deleteQuestionController,
   getMentorExamsController,
   getAvailableExamsController,
   startExamAttemptController,
   submitExamAttemptController,
   getStudentAttemptsController,
 };
+
 

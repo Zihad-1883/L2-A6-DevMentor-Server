@@ -26,11 +26,8 @@ export const createExamSchema = z.object({
   sprintId: z.string().optional(),
 });
 
-export const updateExamSchema = createExamSchema.partial().extend({
-  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional(),
-});
-
-const questionItemSchema = z.object({
+export const questionItemSchema = z.object({
+  id: z.string().optional(),
   questionText: z
     .string()
     .min(5, "Question text must be at least 5 characters long"),
@@ -41,8 +38,18 @@ const questionItemSchema = z.object({
   correctOptionIndex: z
     .number()
     .min(0, "Correct option index cannot be negative"),
-  explanation: z.string().optional(),
+  explanation: z.string().nullable().optional(),
   marks: z.number().min(1, "Question marks must be at least 1").optional(),
+});
+
+export const updateExamSchema = createExamSchema.partial().extend({
+  passingMarks: z
+    .number()
+    .min(1, "Passing marks percentage must be at least 1%")
+    .max(100, "Passing marks percentage cannot exceed 100%")
+    .optional(),
+  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional(),
+  questions: z.array(questionItemSchema).optional(),
 });
 
 export const addQuestionsSchema = z.object({
