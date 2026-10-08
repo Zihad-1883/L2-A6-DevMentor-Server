@@ -341,7 +341,6 @@ const getCohortEnrollments = async (
     throw new AppError("Cohort program not found", 404);
   }
 
-  // Ensure only the mentor creator (or admin) can access the student roster
   if (cohort.mentorId !== userId) {
     throw new AppError("You are not authorized to view enrollments for this cohort program", 403);
   }
