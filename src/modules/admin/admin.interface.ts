@@ -41,6 +41,7 @@ export interface IPlatformOverviewStats {
   pendingMentorApplications: number;
   totalCohorts: number;
   pendingCohorts: number;
+  pendingPayouts?: number;
   totalRevenueBdt: number;
   platformCommissionEarnedBdt: number;
   totalCreditsCirculating: number;

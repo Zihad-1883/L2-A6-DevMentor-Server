@@ -282,6 +282,7 @@ const getPlatformStats = async (): Promise<IPlatformOverviewStats> => {
         pendingMentorApplications,
         totalCohorts,
         pendingCohorts,
+        pendingPayouts,
         paymentAgg,
         walletAgg,
         platformSetting,
@@ -295,6 +296,11 @@ const getPlatformStats = async (): Promise<IPlatformOverviewStats> => {
             where: {
                 approvalStatus: "PENDING_APPROVAL",
                 deletedAt: null,
+            },
+        }),
+        prisma.payoutRequest.count({
+            where: {
+                status: "PENDING",
             },
         }),
         prisma.payment.aggregate({
@@ -363,6 +369,7 @@ const getPlatformStats = async (): Promise<IPlatformOverviewStats> => {
         pendingMentorApplications,
         totalCohorts,
         pendingCohorts,
+        pendingPayouts,
         totalRevenueBdt,
         platformCommissionEarnedBdt,
         totalCreditsCirculating,
