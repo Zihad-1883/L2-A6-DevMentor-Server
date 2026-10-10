@@ -88,23 +88,28 @@ const createPayment = async (
   const appKey = sanitizeASCII(env.BKASH_APP_KEY);
   const payerRef = sanitizeASCII(payload.payerReference || "DevMentorStudent") || "DevMentorStudent";
 
-  const response = await fetch(`${env.BKASH_BASE_URL.trim()}/tokenized/checkout/create`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: token,
-      "x-app-key": appKey,
-    },
-    body: JSON.stringify({
-      mode: "0011",
-      payerReference: payerRef,
-      callbackURL: env.BKASH_CALLBACK_URL.trim(),
-      amount: String(payload.amount),
-      currency: "BDT",
-      intent: "sale",
-      merchantInvoiceNumber: payload.merchantInvoiceNumber,
-    }),
-  });
+    let callbackURL = (env.BKASH_CALLBACK_URL || "").trim();
+    if (!callbackURL || callbackURL.includes("kodex")) {
+      callbackURL = "https://dev-mentor-server.vercel.app/api/v1/payments/bkash/callback";
+    }
+
+    const response = await fetch(`${env.BKASH_BASE_URL.trim()}/tokenized/checkout/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: token,
+        "x-app-key": appKey,
+      },
+      body: JSON.stringify({
+        mode: "0011",
+        payerReference: payerRef,
+        callbackURL,
+        amount: String(payload.amount),
+        currency: "BDT",
+        intent: "sale",
+        merchantInvoiceNumber: payload.merchantInvoiceNumber,
+      }),
+    });
 
   const data = await parseBkashJSON<IBKashCreatePaymentResponse>(response);
 

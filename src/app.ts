@@ -19,6 +19,8 @@ app.use(
   cors({
     origin: [
       env.CLIENT_URL,
+      "https://dev-mentor-client.vercel.app",
+      "https://dev-mentor-server.vercel.app",
       "http://localhost:5000",
       "http://localhost:3000",
       "http://127.0.0.1:5500",

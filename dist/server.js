@@ -309,6 +309,8 @@ var auth = betterAuth({
   trustedOrigins: [
     env.CLIENT_URL,
     env.BETTER_AUTH_URL,
+    "https://dev-mentor-client.vercel.app",
+    "https://dev-mentor-server.vercel.app",
     "http://localhost:5000",
     "http://localhost:3000",
     "http://127.0.0.1:5500",
@@ -501,6 +503,10 @@ var createPayment = async (payload) => {
   const token = sanitizeASCII(await grantToken());
   const appKey = sanitizeASCII(env.BKASH_APP_KEY);
   const payerRef = sanitizeASCII(payload.payerReference || "DevMentorStudent") || "DevMentorStudent";
+  let callbackURL = (env.BKASH_CALLBACK_URL || "").trim();
+  if (!callbackURL || callbackURL.includes("kodex")) {
+    callbackURL = "https://dev-mentor-server.vercel.app/api/v1/payments/bkash/callback";
+  }
   const response = await fetch(`${env.BKASH_BASE_URL.trim()}/tokenized/checkout/create`, {
     method: "POST",
     headers: {
@@ -511,7 +517,7 @@ var createPayment = async (payload) => {
     body: JSON.stringify({
       mode: "0011",
       payerReference: payerRef,
-      callbackURL: env.BKASH_CALLBACK_URL.trim(),
+      callbackURL,
       amount: String(payload.amount),
       currency: "BDT",
       intent: "sale",
@@ -868,7 +874,10 @@ var bkashCallbackHandler = catchAsync(async (req, res) => {
       200
     );
   }
-  const clientBase = (env.CLIENT_URL || "http://localhost:3000").replace(/\/+$/, "");
+  let clientBase = (env.CLIENT_URL || "").trim().replace(/\/+$/, "");
+  if (!clientBase || clientBase.includes("kodex") || env.NODE_ENV === "production" && clientBase.includes("localhost")) {
+    clientBase = "https://dev-mentor-client.vercel.app";
+  }
   const useTestClient = req.query.testClient === "true" || env.NODE_ENV === "development" && env.CLIENT_URL.includes("5500");
   if (useTestClient) {
     const redirectUrl2 = `http://localhost:5500/test-client/index.html?paymentID=${paymentID || ""}&status=${status || "unknown"}`;
@@ -6304,6 +6313,8 @@ app.use(
   cors({
     origin: [
       env.CLIENT_URL,
+      "https://dev-mentor-client.vercel.app",
+      "https://dev-mentor-server.vercel.app",
       "http://localhost:5000",
       "http://localhost:3000",
       "http://127.0.0.1:5500",

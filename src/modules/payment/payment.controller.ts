@@ -54,7 +54,14 @@ const bkashCallbackHandler = catchAsync(async (req: Request, res: Response) => {
   }
 
   // Determine client base URL
-  const clientBase = (env.CLIENT_URL || "http://localhost:3000").replace(/\/+$/, "");
+  let clientBase = (env.CLIENT_URL || "").trim().replace(/\/+$/, "");
+  if (
+    !clientBase ||
+    clientBase.includes("kodex") ||
+    (env.NODE_ENV === "production" && clientBase.includes("localhost"))
+  ) {
+    clientBase = "https://dev-mentor-client.vercel.app";
+  }
 
   // Fallback to test-client only if explicitly opted in or in local development with no frontend configured
   const useTestClient =
