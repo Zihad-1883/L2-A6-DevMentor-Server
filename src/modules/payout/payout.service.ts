@@ -7,7 +7,7 @@ import type {
   PayoutStatusType,
 } from "./payout.interface.js";
 
-const CREDIT_RATE = 4; // 1 Credit = 4 BDT
+const CREDIT_RATE = 4;
 
 // 1. Get or Initialize Platform Admin / Treasury Wallet
 export const getTreasuryWallet = async (tx?: any) => {
