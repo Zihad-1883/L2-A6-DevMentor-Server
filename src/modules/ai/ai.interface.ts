@@ -73,5 +73,6 @@ export interface CodeScanResponse {
   };
   findings: CodeIssueFinding[];
   suggestedMentorFocus: string[];
+  mentorFocusNotes?: string;
   providerUsed: AiProvider;
 }

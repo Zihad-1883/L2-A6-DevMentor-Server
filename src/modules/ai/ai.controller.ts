@@ -19,8 +19,18 @@ const matchMentorsAndCohortsHandler = catchAsync(
   }
 );
 
+// AI Code Review Pre-Scan Controller
+const scanCodeSnippetHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await aiService.scanCodeSnippet(req.body);
+    sendSuccess(res, "Code scanned successfully", result);
+  }
+);
+
 export const aiController = {
   chatWithAssistantHandler,
   matchMentorsAndCohortsHandler,
+  scanCodeSnippetHandler,
 };
+
 

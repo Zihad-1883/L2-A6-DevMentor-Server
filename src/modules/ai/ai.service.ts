@@ -1,6 +1,12 @@
 import { prisma } from "../../lib/prisma.js";
-import { DEVMENTOR_SYSTEM_PROMPT, MATCH_SYSTEM_PROMPT, buildMatchUserPrompt } from "./ai.knowledge.js";
-import type { ChatInput, MatchInput } from "./ai.validation.js";
+import {
+    DEVMENTOR_SYSTEM_PROMPT,
+    MATCH_SYSTEM_PROMPT,
+    buildMatchUserPrompt,
+    CODE_SCAN_SYSTEM_PROMPT,
+    buildCodeScanUserPrompt,
+} from "./ai.knowledge.js";
+import type { ChatInput, MatchInput, CodeScanInput } from "./ai.validation.js";
 import type {
     ChatResponse,
     ChatMessage,
@@ -8,6 +14,7 @@ import type {
     MatchedMentor,
     MatchedCohort,
     RawMatchOutput,
+    CodeScanResponse,
 } from "./ai.interface.js";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
@@ -20,9 +27,7 @@ const GEMINI_API_URL =
 // Groq fallback endpoint
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
-/**
- * Helper to dynamically generate contextual suggested prompt chips
- */
+// Helper to dynamically generate contextual suggested prompt chips
 function generateSuggestedPrompts(answer: string): string[] {
     const lower = answer.toLowerCase();
 
@@ -492,4 +497,212 @@ export const matchMentorsAndCohorts = async (
 export const aiService = {
     chatWithAssistant,
     matchMentorsAndCohorts,
+    scanCodeSnippet: async (input: CodeScanInput): Promise<CodeScanResponse> => {
+        return scanCodeSnippet(input);
+    },
 };
+
+// ==========================================
+// 🔹 Function 3: scanCodeSnippet & Static Fallback
+// ==========================================
+
+function computeStaticCodeScanFallback(
+    code: string,
+    languageHint: string = "typescript"
+): CodeScanResponse {
+    const findings: CodeScanResponse["findings"] = [];
+    let maintainabilityScore = 90;
+
+    // Rule 1: Detect nested loops
+    const lines = code.split("\n");
+    let loopDepth = 0;
+    let maxLoopDepth = 0;
+    let loopLine = 1;
+
+    lines.forEach((line, index) => {
+        const trimmed = line.trim();
+        if (/\b(for|while)\s*\(/.test(trimmed)) {
+            loopDepth++;
+            if (loopDepth > maxLoopDepth) {
+                maxLoopDepth = loopDepth;
+                loopLine = index + 1;
+            }
+        }
+        if (trimmed.includes("}")) {
+            loopDepth = Math.max(0, loopDepth - 1);
+        }
+    });
+
+    if (maxLoopDepth >= 2) {
+        maintainabilityScore -= 12;
+        findings.push({
+            severity: "warning",
+            title: "Nested iteration detected (Potential O(N^2) complexity)",
+            description: "Nested loops can cause significant performance degradation on large datasets. Consider using a Map/Set lookup.",
+            lineRange: `Line ${loopLine}`,
+        });
+    }
+
+    // Rule 2: Unsafe 'any' types
+    const anyMatches = code.match(/:\s*any\b/g);
+    if (anyMatches && anyMatches.length > 0) {
+        maintainabilityScore -= Math.min(15, anyMatches.length * 5);
+        findings.push({
+            severity: "warning",
+            title: `Loose typing detected (${anyMatches.length} 'any' type usages)`,
+            description: "Bypassing TypeScript's compiler checks with 'any' increases runtime vulnerability. Replace with strict interfaces or unknown.",
+        });
+    }
+
+    // Rule 3: Leftover debug statements
+    if (/console\.(log|debug|info)\(/.test(code)) {
+        maintainabilityScore -= 5;
+        findings.push({
+            severity: "suggestion",
+            title: "Leftover debugging statements",
+            description: "Direct console outputs should be removed or routed through a structured logger before production escrow review.",
+        });
+    }
+
+    // Rule 4: TODO / FIXME flags
+    if (/\/\/\s*(TODO|FIXME)/i.test(code)) {
+        findings.push({
+            severity: "suggestion",
+            title: "Unresolved TODO / FIXME markers found",
+            description: "Ensure temporary flags or incomplete logic are resolved before the mentor conducts deep architectural review.",
+        });
+    }
+
+    if (findings.length === 0) {
+        findings.push({
+            severity: "suggestion",
+            title: "Code structure appears clean",
+            description: "No immediate static violations detected. Mentor will focus on architecture and business logic edge cases.",
+        });
+    }
+
+    return {
+        language: languageHint || "TypeScript",
+        complexitySummary: {
+            timeComplexity: maxLoopDepth >= 2 ? "O(N^2)" : "O(N)",
+            spaceComplexity: "O(1)",
+            maintainabilityScore: Math.max(40, Math.min(100, maintainabilityScore)),
+        },
+        findings,
+        suggestedMentorFocus: [
+            "Verify edge case inputs, concurrency handling, and error boundaries.",
+            "Review database queries and async promise propagation.",
+        ],
+        mentorFocusNotes: "Scrutinize runtime data validation and error recovery flow.",
+        providerUsed: "fallback",
+    };
+}
+
+export const scanCodeSnippet = async (
+    input: CodeScanInput
+): Promise<CodeScanResponse> => {
+    const { code, language = "typescript", context } = input;
+    const systemPrompt = CODE_SCAN_SYSTEM_PROMPT;
+    const userPrompt = buildCodeScanUserPrompt(code, language, context);
+
+    let parsedResult: any = null;
+    let providerUsed: "gemini" | "groq" | "fallback" = "fallback";
+
+    // Step 1: Attempt Groq (qwen/qwen3.8-27b)
+    if (GROQ_API_KEY) {
+        try {
+            const response = await fetch(GROQ_API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${GROQ_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    model: "qwen/qwen3.8-27b",
+                    messages: [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: userPrompt },
+                    ],
+                    temperature: 0.1,
+                    max_tokens: 1500,
+                }),
+                signal: AbortSignal.timeout(15000),
+            });
+
+            if (response.ok) {
+                const data = (await response.json()) as any;
+                const content = data?.choices?.[0]?.message?.content || "";
+                const cleanJson = content.replace(/```json/g, "").replace(/```/g, "").trim();
+                parsedResult = JSON.parse(cleanJson);
+                providerUsed = "groq";
+            }
+        } catch (groqErr: any) {
+            console.warn(`[AI Scan Fallback] Groq scan failed: ${groqErr?.message || groqErr}. Routing to Gemini...`);
+        }
+    }
+
+    // Step 2: Attempt Gemini
+    if (!parsedResult && GEMINI_API_KEY) {
+        try {
+            const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    contents: [
+                        {
+                            role: "user",
+                            parts: [
+                                { text: `${systemPrompt}\n\n${userPrompt}` },
+                            ],
+                        },
+                    ],
+                    generationConfig: {
+                        temperature: 0.1,
+                        maxOutputTokens: 1500,
+                    },
+                }),
+                signal: AbortSignal.timeout(15000),
+            });
+
+            if (response.ok) {
+                const data = (await response.json()) as any;
+                const content = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                const cleanJson = content.replace(/```json/g, "").replace(/```/g, "").trim();
+                parsedResult = JSON.parse(cleanJson);
+                providerUsed = "gemini";
+            }
+        } catch (geminiErr: any) {
+            console.warn(`[AI Scan Fallback] Gemini scan failed: ${geminiErr?.message || geminiErr}.`);
+        }
+    }
+
+    // Step 3: Format result or fallback
+    if (parsedResult) {
+        const mentorFocusArray: string[] = Array.isArray(parsedResult.suggestedMentorFocus)
+            ? parsedResult.suggestedMentorFocus
+            : parsedResult.mentorFocusNotes
+            ? [parsedResult.mentorFocusNotes]
+            : ["Review edge case handling and data validation."];
+
+        return {
+            language: parsedResult.language || language || "TypeScript",
+            complexitySummary: {
+                timeComplexity: parsedResult.complexitySummary?.timeComplexity || "O(N)",
+                spaceComplexity: parsedResult.complexitySummary?.spaceComplexity || "O(1)",
+                maintainabilityScore:
+                    typeof parsedResult.complexitySummary?.maintainabilityScore === "number"
+                        ? parsedResult.complexitySummary.maintainabilityScore
+                        : 85,
+            },
+            findings: Array.isArray(parsedResult.findings) ? parsedResult.findings : [],
+            suggestedMentorFocus: mentorFocusArray,
+            mentorFocusNotes: parsedResult.mentorFocusNotes || mentorFocusArray.join(" "),
+            providerUsed,
+        };
+    }
+
+    return computeStaticCodeScanFallback(code, language);
+};
+

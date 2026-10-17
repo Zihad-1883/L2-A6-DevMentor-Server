@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validate } from "../../middlewares/validate.middleware.js";
-import { chatSchema, matchSchema } from "./ai.validation.js";
+import { chatSchema, matchSchema, codeScanSchema } from "./ai.validation.js";
 import { aiController } from "./ai.controller.js";
 
 const router = Router();
@@ -19,5 +19,12 @@ router.post(
   aiController.matchMentorsAndCohortsHandler
 );
 
+// POST /api/v1/ai/code-scan - AI Code Review Pre-Scan Summary
+router.post(
+  "/code-scan",
+  validate(codeScanSchema, "body"),
+  aiController.scanCodeSnippetHandler
+);
 
 export default router;
+
