@@ -52,6 +52,7 @@ import { paymentRoutes } from "../../modules/payment/payment.routes.js";
 import codeReviewRouter from "../../modules/codeReview/codeReview.routes.js";
 import { examRoutes } from "../../modules/exam/exam.routes.js";
 import payoutRouter from "../../modules/payout/payout.routes.js";
+import aiRouter from "../../modules/ai/ai.routes.js";
 import { expireAbandonedPayments } from "../../jobs/cron.js";
 
 v1Router.use("/sprints", sprintRouter);
@@ -68,6 +69,7 @@ v1Router.use("/payments", paymentRoutes);
 v1Router.use("/code-reviews", codeReviewRouter);
 v1Router.use("/exams", examRoutes);
 v1Router.use("/payouts", payoutRouter);
+v1Router.use("/ai", aiRouter);
 
 // Vercel Cron Job Automated Endpoint
 v1Router.get(
