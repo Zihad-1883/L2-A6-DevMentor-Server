@@ -35,6 +35,20 @@ export interface MatchedCohort {
   matchReason: string;
 }
 
+export interface RawMatchOutput {
+  analysisSummary: string;
+  recommendedMentors: {
+    id: string;
+    matchScore: number;
+    matchReason: string;
+  }[];
+  recommendedCohorts: {
+    id: string;
+    matchScore: number;
+    matchReason: string;
+  }[];
+}
+
 export interface MatchResultResponse {
   analysisSummary: string;
   recommendedMentors: MatchedMentor[];

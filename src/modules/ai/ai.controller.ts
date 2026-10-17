@@ -11,6 +11,16 @@ const chatWithAssistantHandler = catchAsync(
   }
 );
 
+// AI Smart Matcher Controller
+const matchMentorsAndCohortsHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await aiService.matchMentorsAndCohorts(req.body);
+    sendSuccess(res, "Matches found successfully", result);
+  }
+);
+
 export const aiController = {
   chatWithAssistantHandler,
+  matchMentorsAndCohortsHandler,
 };
+

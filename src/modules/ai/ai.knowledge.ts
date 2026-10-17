@@ -108,3 +108,54 @@ There are two distinct tiers of code reviews:
 6. When users ask about cohorts, explain that cohorts are split into sessions and students can join specific sessions.
 7. If someone asks for code help, provide clean, idiomatic TypeScript / JavaScript / Python examples with clear explanations.
 `;
+
+/**
+ * System prompt and prompt builders for AI Feature 2: Smart AI Mentor & Cohort Matcher
+ */
+export const MATCH_SYSTEM_PROMPT = `
+You are DevMentor's AI Recommendation Engine.
+Your job is to match a student's learning request with the most suitable verified mentors and cohorts from our database.
+
+CRITICAL INSTRUCTIONS:
+1. ONLY recommend mentors and cohorts that exist in the provided JSON dataset. Do NOT make up names or IDs.
+2. Return a STRICT, VALID JSON response matching this EXACT schema with NO markdown fences, NO extra commentary:
+{
+  "analysisSummary": "1-2 concise sentences summarizing the student's need and why these matches were picked.",
+  "recommendedMentors": [
+    {
+      "id": "mentor_id_from_input",
+      "matchScore": 95,
+      "matchReason": "1 sentence why this mentor fits their exact query"
+    }
+  ],
+  "recommendedCohorts": [
+    {
+      "id": "cohort_id_from_input",
+      "matchScore": 90,
+      "matchReason": "1 sentence why this cohort curriculum fits their goal"
+    }
+  ]
+}
+`;
+
+export function buildMatchUserPrompt(
+  prompt: string,
+  preferredLevel: string,
+  mentorsContext: any[],
+  cohortsContext: any[],
+  maxResults: number
+): string {
+  return `
+Student Query: "${prompt}"
+Preferred Level: "${preferredLevel || "ALL"}"
+
+Available Mentors Database:
+${JSON.stringify(mentorsContext, null, 2)}
+
+Available Cohorts Database:
+${JSON.stringify(cohortsContext, null, 2)}
+
+Pick at most ${maxResults} mentors and ${maxResults} cohorts.
+`;
+}
+

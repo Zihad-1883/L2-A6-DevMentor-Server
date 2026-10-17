@@ -1,6 +1,14 @@
-import { DEVMENTOR_SYSTEM_PROMPT } from "./ai.knowledge.js";
-import type { ChatInput } from "./ai.validation.js";
-import type { ChatResponse, ChatMessage } from "./ai.interface.js";
+import { prisma } from "../../lib/prisma.js";
+import { DEVMENTOR_SYSTEM_PROMPT, MATCH_SYSTEM_PROMPT, buildMatchUserPrompt } from "./ai.knowledge.js";
+import type { ChatInput, MatchInput } from "./ai.validation.js";
+import type {
+    ChatResponse,
+    ChatMessage,
+    MatchResultResponse,
+    MatchedMentor,
+    MatchedCohort,
+    RawMatchOutput,
+} from "./ai.interface.js";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 const GROQ_API_KEY = process.env.GROQ_API_KEY || "";
@@ -233,6 +241,255 @@ export const chatWithAssistant = async (
     };
 };
 
+// Function 2: matchMentorsAndCohorts
+
+// Deterministic keyword-matching fallback if LLM calls timeout or fail
+function computeKeywordFallbackMatch(
+    prompt: string,
+    mentors: any[],
+    cohorts: any[],
+    maxResults: number
+): MatchResultResponse {
+    const promptWords = prompt.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
+
+    const scoredMentors: MatchedMentor[] = mentors.map((m) => {
+        let score = 50;
+        const tags = (m.techStackTags || []).map((t: string) => t.toLowerCase());
+        const bio = (m.bio || "").toLowerCase();
+
+        promptWords.forEach((word) => {
+            if (tags.some((t: string) => t.includes(word))) score += 20;
+            if (bio.includes(word)) score += 10;
+        });
+
+        return {
+            id: m.userId || m.id,
+            name: m.user?.name || "Verified Mentor",
+            bio: m.bio,
+            experienceLevel: m.experienceLevel,
+            techStackTags: m.techStackTags || [],
+            matchScore: Math.min(98, score),
+            matchReason: `High specialization in relevant stack areas: ${(m.techStackTags || []).slice(0, 3).join(", ")}.`,
+            avatarUrl: m.user?.image || null,
+        };
+    });
+
+    scoredMentors.sort((a, b) => b.matchScore - a.matchScore);
+
+    const scoredCohorts: MatchedCohort[] = cohorts.map((c) => {
+        let score = 50;
+        const tags = (c.techStackTags || []).map((t: string) => t.toLowerCase());
+        const text = `${c.title} ${c.description}`.toLowerCase();
+
+        promptWords.forEach((word) => {
+            if (tags.some((t: string) => t.includes(word))) score += 20;
+            if (text.includes(word)) score += 10;
+        });
+
+        return {
+            id: c.id,
+            title: c.title,
+            description: c.description,
+            category: c.techStackTags?.[0] || "Engineering",
+            techStackTags: c.techStackTags || [],
+            totalCost: c.totalCost,
+            matchScore: Math.min(95, score),
+            matchReason: `Structured curriculum directly targets your learning objectives.`,
+        };
+    });
+
+    scoredCohorts.sort((a, b) => b.matchScore - a.matchScore);
+
+    return {
+        analysisSummary: `Found matching mentors and cohorts relevant to: "${prompt.slice(0, 60)}..."`,
+        recommendedMentors: scoredMentors.slice(0, maxResults),
+        recommendedCohorts: scoredCohorts.slice(0, maxResults),
+        providerUsed: "fallback",
+    };
+}
+
+export const matchMentorsAndCohorts = async (
+    input: MatchInput
+): Promise<MatchResultResponse> => {
+    const { prompt, preferredLevel, maxResults = 2 } = input;
+
+    // 1. Fetch Approved Mentors & Published Cohorts from Database
+    const [rawMentors, rawCohorts] = await Promise.all([
+        prisma.mentorProfile.findMany({
+            where: {
+                approvalStatus: "APPROVED",
+                ...(preferredLevel && preferredLevel !== "ALL"
+                    ? { experienceLevel: preferredLevel as any }
+                    : {}),
+            },
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        image: true,
+                    },
+                },
+            },
+            take: 12,
+        }),
+        prisma.cohortProgram.findMany({
+            where: {
+                status: "PUBLISHED",
+                approvalStatus: "APPROVED",
+            },
+            take: 8,
+        }),
+    ]);
+
+    // Format candidate summaries for LLM prompt context
+    const mentorsContext = rawMentors.map((m) => ({
+        id: m.userId || m.id,
+        name: m.user?.name || "Verified Mentor",
+        experienceLevel: m.experienceLevel,
+        techStackTags: m.techStackTags,
+        bio: m.bio?.slice(0, 180),
+    }));
+
+    const cohortsContext = rawCohorts.map((c) => ({
+        id: c.id,
+        title: c.title,
+        description: c.description?.slice(0, 180),
+        techStackTags: c.techStackTags,
+        totalCost: c.totalCost,
+    }));
+
+    const systemPrompt = MATCH_SYSTEM_PROMPT;
+    const userPrompt = buildMatchUserPrompt(
+        prompt,
+        preferredLevel || "ALL",
+        mentorsContext,
+        cohortsContext,
+        maxResults
+    );
+
+    // 2. Call AI Provider (Groq fallback or Gemini)
+    let parsedResult: RawMatchOutput | null = null;
+    let providerUsed: "gemini" | "groq" | "fallback" = "fallback";
+
+    // Attempt Groq (qwen/qwen3.8-27b) first for JSON reliability & speed
+    if (GROQ_API_KEY) {
+        try {
+            const response = await fetch(GROQ_API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${GROQ_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    model: "qwen/qwen3.8-27b",
+                    messages: [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: userPrompt },
+                    ],
+                    temperature: 0.2, // Low temperature for deterministic JSON output
+                    max_tokens: 1000,
+                }),
+                signal: AbortSignal.timeout(12000),
+            });
+
+            if (response.ok) {
+                const data = (await response.json()) as any;
+                const content = data?.choices?.[0]?.message?.content || "";
+                const cleanJson = content.replace(/```json/g, "").replace(/```/g, "").trim();
+                parsedResult = JSON.parse(cleanJson);
+                providerUsed = "groq";
+            }
+        } catch (err: any) {
+            console.warn(`[AI Matcher] Groq ranking call failed: ${err?.message || err}.`);
+        }
+    }
+
+    // Attempt Gemini if Groq was not available or failed
+    if (!parsedResult && GEMINI_API_KEY) {
+        try {
+            const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [
+                        {
+                            role: "user",
+                            parts: [{ text: `${systemPrompt}\n\n${userPrompt}` }],
+                        },
+                    ],
+                    generationConfig: {
+                        temperature: 0.2,
+                        maxOutputTokens: 1000,
+                    },
+                }),
+                signal: AbortSignal.timeout(12000),
+            });
+
+            if (response.ok) {
+                const data = (await response.json()) as any;
+                const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                const cleanJson = text.replace(/```json/g, "").replace(/```/g, "").trim();
+                parsedResult = JSON.parse(cleanJson);
+                providerUsed = "gemini";
+            }
+        } catch (err: any) {
+            console.warn(`[AI Matcher] Gemini ranking call failed: ${err?.message || err}.`);
+        }
+    }
+
+    // 3. Fallback if AI providers failed to return parseable JSON
+    if (!parsedResult) {
+        return computeKeywordFallbackMatch(prompt, rawMentors, rawCohorts, maxResults);
+    }
+
+    // 4. Merge AI scores back with full database candidate entities
+    const mentorMap = new Map(rawMentors.map((m) => [m.userId || m.id, m]));
+    const cohortMap = new Map(rawCohorts.map((c) => [c.id, c]));
+
+    const recommendedMentors: MatchedMentor[] = (parsedResult.recommendedMentors || [])
+        .map((rm) => {
+            const original = mentorMap.get(rm.id);
+            if (!original) return null;
+            return {
+                id: original.userId || original.id,
+                name: original.user?.name || "Verified Mentor",
+                bio: original.bio,
+                experienceLevel: original.experienceLevel,
+                techStackTags: original.techStackTags || [],
+                matchScore: rm.matchScore || 90,
+                matchReason: rm.matchReason || "Matched against your target tech stack.",
+                avatarUrl: original.user?.image || null,
+            };
+        })
+        .filter(Boolean) as MatchedMentor[];
+
+    const recommendedCohorts: MatchedCohort[] = (parsedResult.recommendedCohorts || [])
+        .map((rc) => {
+            const original = cohortMap.get(rc.id);
+            if (!original) return null;
+            return {
+                id: original.id,
+                title: original.title,
+                description: original.description,
+                category: original.techStackTags?.[0] || "Engineering",
+                techStackTags: original.techStackTags || [],
+                totalCost: original.totalCost,
+                matchScore: rc.matchScore || 88,
+                matchReason: rc.matchReason || "Curriculum directly relevant to your goal.",
+            };
+        })
+        .filter(Boolean) as MatchedCohort[];
+
+    return {
+        analysisSummary: parsedResult.analysisSummary || "Top recommended mentors and cohorts based on your query.",
+        recommendedMentors: recommendedMentors.slice(0, maxResults),
+        recommendedCohorts: recommendedCohorts.slice(0, maxResults),
+        providerUsed,
+    };
+};
+
 export const aiService = {
     chatWithAssistant,
+    matchMentorsAndCohorts,
 };
