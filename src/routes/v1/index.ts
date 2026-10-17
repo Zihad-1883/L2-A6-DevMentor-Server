@@ -12,11 +12,28 @@ v1Router.all("/", (req, res, next) => {
   if (req.query.paymentID || req.body?.paymentID) {
     return paymentController.bkashCallbackHandler(req, res, next);
   }
-  res.json({ success: true, message: "Kōdex API v1 root endpoint", data: null });
+  res.json({
+    success: true,
+    message: "DevMentor API v1 root endpoint",
+    data: {
+      author: "Zihad",
+      github: "https://github.com/Zihad-1883",
+    },
+  });
 });
 
 v1Router.get("/health", (_req, res) => {
-  res.json({ success: true, message: "Kōdex API v1 is up and running 🚀", data: null });
+  res.json({
+    success: true,
+    message: "DevMentor API v1 is up and running 🚀",
+    data: {
+      name: "DevMentor API",
+      status: "healthy",
+      author: "Zihad",
+      github: "https://github.com/Zihad-1883",
+      timestamp: new Date().toISOString(),
+    },
+  });
 });
 
 // Auth & RBAC Testing Routes 

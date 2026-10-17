@@ -38,8 +38,14 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.get("/", (_req, res) => {
   res.json({
     success: true,
-    message: "Welcome to Kōdex API",
-    data: { name: "Kōdex API", version: "1.0.0", docs: "/api/v1/health" },
+    message: "Welcome to DevMentor API",
+    data: {
+      name: "DevMentor API",
+      version: "1.0.0",
+      author: "Zihad",
+      github: "https://github.com/Zihad-1883",
+      docs: "/api/v1/health",
+    },
   });
 });
 

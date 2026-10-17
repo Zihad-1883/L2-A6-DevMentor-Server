@@ -948,7 +948,7 @@ var paymentController = {
 };
 
 // src/routes/v1/index.ts
-import { Router as Router14 } from "express";
+import { Router as Router15 } from "express";
 
 // src/middlewares/auth.middleware.ts
 var requireAuth = async (req, res, next) => {
@@ -6215,6 +6215,813 @@ router13.patch(
 );
 var payout_routes_default = router13;
 
+// src/modules/ai/ai.routes.ts
+import { Router as Router14 } from "express";
+
+// src/modules/ai/ai.validation.ts
+import { z as z13 } from "zod";
+var chatSchema = z13.object({
+  message: z13.string({
+    error: "Message is required"
+  }).trim().min(1, "Message cannot be empty").max(2e3, "Message cannot exceed 2000 characters"),
+  history: z13.array(
+    z13.object({
+      role: z13.enum(["user", "model", "assistant"], {
+        error: "Role must be 'user', 'model', or 'assistant'"
+      }),
+      content: z13.string().trim().min(1, "History content cannot be empty").max(4e3, "History content cannot exceed 4000 characters")
+    })
+  ).max(20, "History cannot exceed 20 messages").optional().default([])
+});
+var matchSchema = z13.object({
+  prompt: z13.string({
+    error: "Prompt is required"
+  }).trim().min(3, "Prompt must be at least 3 characters").max(1e3, "Prompt cannot exceed 1000 characters"),
+  preferredLevel: z13.enum(["JUNIOR", "MID", "SENIOR", "LEAD", "ALL"]).optional().default("ALL"),
+  techStack: z13.array(z13.string().trim()).max(10, "Cannot specify more than 10 tech stack tags").optional(),
+  maxResults: z13.number().int().min(1).max(5).optional().default(2)
+});
+var codeScanSchema = z13.object({
+  code: z13.string({
+    error: "Code snippet is required"
+  }).trim().min(5, "Code snippet must be at least 5 characters").max(12e3, "Code snippet cannot exceed 12,000 characters"),
+  language: z13.string().trim().max(50).optional().default("typescript"),
+  context: z13.string().trim().max(1e3, "Context cannot exceed 1000 characters").optional()
+});
+
+// src/modules/ai/ai.knowledge.ts
+var DEVMENTOR_SYSTEM_PROMPT = `
+You are "DevMentor AI", the intelligent engineering assistant and advisor for the DevMentor platform.
+Your mission is to assist students, mentors, and developers with clear, technical, friendly, and structured markdown guidance.
+
+==================================================
+1. PLATFORM OVERVIEW & CORE MISSION
+==================================================
+- DevMentor is an engineering mentorship & assessment ecosystem designed for developers in Bangladesh and globally.
+- It bridges the gap between learning syntax and production engineering through:
+  1) 1-on-1 Mentorship Sprints (hands-on debugging, architecture guidance, mock interviews).
+  2) Curated Batch Cohorts (multi-session bootcamps taught by industry veterans).
+  3) Code Review Escrow (Quick & Deep tier reviews with strict delivery SLAs).
+  4) Skill Assessments (timed MCQ benchmarking tests with profile skill badges).
+
+==================================================
+2. ECONOMIC ENGINE: DEVCREDITS & BKASH PAYMENTS
+==================================================
+- Virtual Currency: DevCredits (Cr).
+- Fixed Exchange Parity: 1 DevCredit = \u09F34.00 BDT.
+- Student Top-Ups: Handled via official bKash Payment Gateway integration.
+  * Preset top-up packages: 50 Cr (\u09F3200), 100 Cr (\u09F3400), 250 Cr (\u09F31,000), 500 Cr (\u09F32,000), 1000 Cr (\u09F34,000).
+  * Webhook & Callback validation ensures instant credit allotment into the student's DevWallet.
+- Escrow Protection:
+  * When a student books a sprint, enrolls in a cohort session, or requests a code review, credits are NOT immediately sent to the mentor.
+  * Instead, credits are held safely in platform ESCROW.
+  * Credits are released to the mentor's earnings balance only after milestones are verified, sessions are completed, or code reviews are finalized.
+- Mentor Payouts & Cash-Out:
+  * Verified mentors can withdraw their settled credit balance directly to personal bKash accounts.
+  * Minimum cash-out: 50 Credits (\u09F3200 BDT).
+  * Maximum cash-out per transaction: \u09F3100,000 BDT.
+  * Platform Commission: Default 15% deducted from transactions to fund escrow guarantees and platform operations.
+
+==================================================
+3. 1-ON-1 MENTORSHIP SPRINTS
+==================================================
+- Structure & Cost:
+  * Sprints are customized 1-on-1 programs. Students specify a start date, duration in days, and select the specific session days (e.g. days 1, 3, 5).
+  * Pricing: 50 DevCredits per session selected (customizable via platform settings). Total required credits = selectedDays.length * 50 Credits.
+- Booking Modes:
+  1) Direct Request: Student picks a specific mentor from the Mentors directory (/mentors) based on tech stack, experience level (Junior, Mid, Senior, Lead), and reviews.
+  2) Open Broadcast Pool: Student posts their learning goal or project blocker to the open pool (/mentor/sprints); any qualified verified mentor can claim it.
+- Milestone Tracking: Students and mentors track daily checklist objectives and exchange notes. Escrow settles upon program completion.
+
+==================================================
+4. CURATED BATCH COHORTS
+==================================================
+- Intensive group cohorts on high-demand stacks (e.g. Next.js 15, PostgreSQL & Prisma, Docker & DevOps, AI integrations).
+- Features: Live sessions, curated assignment repositories, homework grading, and private community discussions.
+- Modular Session Pricing:
+  * Mentors create cohorts split into multiple sessions.
+  * Students can pay for individual sessions they want to attend or join the full program.
+  * Seat limits are strictly enforced by the backend.
+
+==================================================
+5. CODE REVIEW SERVICE (QUICK VS DEEP TIERS)
+==================================================
+Students can submit either raw code snippets or a GitHub repository branch/files for expert mentor evaluation.
+There are two distinct tiers of code reviews:
+
+1) QUICK REVIEW:
+   - Cost: 10 DevCredits (\u09F340 BDT).
+   - Turnaround SLA: 2 Hours.
+   - Ideal for: Quick bug diagnosis, single function debugging, syntax validation, and brief PR checks.
+
+2) DEEP REVIEW:
+   - Cost: 50 DevCredits (\u09F3200 BDT).
+   - Turnaround SLA: 24 Hours (1 Day).
+   - Ideal for: Full architecture review, security vulnerability audit, database schema & query optimization, performance profiling, and comprehensive PR inspection.
+
+- Guarantee & Escrow:
+  * When submitted, credits are held in escrow.
+  * Mentors receive the credit payout only upon submitting inline comments, line-by-line breakdown, and a review verdict.
+  * If a mentor claims a review but fails to deliver within the target deadline (2h for Quick, 24h for Deep), the student's credits are protected.
+
+==================================================
+6. SKILL ASSESSMENTS & MCQ BENCHMARKING
+==================================================
+- Objective tests evaluating frontend, backend, database, and devops skills.
+- Timed format (e.g., 20\u201330 minutes, 20 questions).
+- Passing Score (typically 65% or 75%) unlocks verifiable badges displayed on the student's public DevMentor profile.
+
+==================================================
+7. USER ROLES & NAVIGATION SHORTCUTS
+==================================================
+- Student:
+  * Public routes: /how-it-works, /mentors, /cohorts, /exams, /about, /contact, /faq
+  * Protected dashboard: /dashboard, /dashboard/wallet (bKash top-up), /dashboard/sprints, /dashboard/code-reviews, /dashboard/exams
+- Mentor:
+  * Application: /apply-mentor (requires GitHub, bio, years of experience; pending admin review).
+  * Protected studio: /mentor (workspace), /mentor/sprints (pool), /mentor/cohorts, /mentor/code-reviews, /mentor/earnings (bKash cash-out)
+- Admin:
+  * Protected command center: /admin, /admin/mentors (review applicants), /admin/cohorts (approve courses), /admin/users, /admin/payouts (disburse cash-outs), /admin/settings
+
+==================================================
+8. RESPONSE GUIDELINES FOR DEVMENTOR AI
+==================================================
+1. Always be concise, encouraging, and technically precise.
+2. Structure long answers with bullet points and bold highlights.
+3. When users ask about pricing or bKash, cite 1 Credit = \u09F34.00 BDT.
+4. When users ask about code reviews, distinguish clearly between QUICK (10 Cr / 2 hours) and DEEP (50 Cr / 24 hours).
+5. When users ask about sprint pricing, explain that it is calculated per session (50 Cr per session selected).
+6. When users ask about cohorts, explain that cohorts are split into sessions and students can join specific sessions.
+7. If someone asks for code help, provide clean, idiomatic TypeScript / JavaScript / Python examples with clear explanations.
+`;
+var MATCH_SYSTEM_PROMPT = `
+You are DevMentor's AI Recommendation Engine.
+Your job is to match a student's learning request with the most suitable verified mentors and cohorts from our database.
+
+CRITICAL INSTRUCTIONS:
+1. ONLY recommend mentors and cohorts that exist in the provided JSON dataset. Do NOT make up names or IDs.
+2. Return a STRICT, VALID JSON response matching this EXACT schema with NO markdown fences, NO extra commentary:
+{
+  "analysisSummary": "1-2 concise sentences summarizing the student's need and why these matches were picked.",
+  "recommendedMentors": [
+    {
+      "id": "mentor_id_from_input",
+      "matchScore": 95,
+      "matchReason": "1 sentence why this mentor fits their exact query"
+    }
+  ],
+  "recommendedCohorts": [
+    {
+      "id": "cohort_id_from_input",
+      "matchScore": 90,
+      "matchReason": "1 sentence why this cohort curriculum fits their goal"
+    }
+  ]
+}
+`;
+function buildMatchUserPrompt(prompt, preferredLevel, mentorsContext, cohortsContext, maxResults) {
+  return `
+Student Query: "${prompt}"
+Preferred Level: "${preferredLevel || "ALL"}"
+
+Available Mentors Database:
+${JSON.stringify(mentorsContext, null, 2)}
+
+Available Cohorts Database:
+${JSON.stringify(cohortsContext, null, 2)}
+
+Pick at most ${maxResults} mentors and ${maxResults} cohorts.
+`;
+}
+var CODE_SCAN_SYSTEM_PROMPT = `
+You are DevMentor's Automated Code Review & Static Analysis Engine.
+Your job is to analyze student code submissions before a human mentor conducts their deep review.
+You evaluate algorithmic complexity, syntax safety, edge cases, anti-patterns, and code maintainability.
+
+CRITICAL INSTRUCTIONS:
+1. Return a STRICT, VALID JSON response matching this EXACT schema with NO markdown fences, NO extra commentary:
+{
+  "language": "detected or confirmed language (e.g., TypeScript, Python, Go)",
+  "complexitySummary": {
+    "timeComplexity": "e.g., O(N) or O(N^2)",
+    "spaceComplexity": "e.g., O(1) or O(N)",
+    "maintainabilityScore": 85
+  },
+  "findings": [
+    {
+      "severity": "critical",
+      "title": "Short 1-sentence issue title",
+      "description": "Clear explanation of the problem, why it matters, and how to fix it.",
+      "lineRange": "e.g., Lines 14-22"
+    }
+  ],
+  "mentorFocusNotes": "1-2 sentences advising the human mentor on specific architectural or concurrency areas to scrutinize."
+}
+
+RULES:
+- 'severity' must strictly be one of: "critical" | "warning" | "suggestion"
+- 'maintainabilityScore' must be an integer between 1 and 100
+- Keep findings concise, high-signal, and production-oriented (no nitpicking trivial indentation)
+- Identify security vulnerabilities (SQL injection, unsafe auth, unprotected secret leaks) as "critical"
+`;
+function buildCodeScanUserPrompt(code, language, context) {
+  return `
+Target Code Snippet:
+\`\`\`${language || ""}
+${code}
+\`\`\`
+
+${context ? `Student's Context/Goal: "${context}"` : ""}
+Language Hint: ${language || "Auto-detect"}
+
+Perform static code review pre-scan now and output strict JSON.
+`;
+}
+
+// src/modules/ai/ai.service.ts
+var GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+var GROQ_API_KEY = process.env.GROQ_API_KEY || "";
+var GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+var GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+function generateSuggestedPrompts(answer) {
+  const lower = answer.toLowerCase();
+  if (lower.includes("credit") || lower.includes("bdt") || lower.includes("bkash")) {
+    return [
+      "How do I top up credits with bKash?",
+      "How do mentor payouts work?",
+      "Can I get a refund on credits?"
+    ];
+  }
+  if (lower.includes("review") || lower.includes("quick") || lower.includes("deep")) {
+    return [
+      "What is the difference between Quick & Deep reviews?",
+      "What happens if a mentor misses the 2h SLA?",
+      "How do I submit code for review?"
+    ];
+  }
+  if (lower.includes("sprint") || lower.includes("mentor") || lower.includes("session")) {
+    return [
+      "How do I book a 1-on-1 sprint?",
+      "Can I choose my sprint session days?",
+      "Find me a mentor for Next.js"
+    ];
+  }
+  return [
+    "How does DevCredits escrow work?",
+    "Find top mentors for fullstack development",
+    "How do modular cohorts work?"
+  ];
+}
+async function callGeminiChat(message, history = []) {
+  const contents = [
+    ...history.map((h) => ({
+      role: h.role === "assistant" ? "model" : "user",
+      parts: [{ text: h.content }]
+    })),
+    {
+      role: "user",
+      parts: [{ text: message }]
+    }
+  ];
+  const payload = {
+    system_instruction: {
+      parts: [{ text: DEVMENTOR_SYSTEM_PROMPT }]
+    },
+    contents,
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: 1200
+    }
+  };
+  const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(15e3)
+    // 15 second timeout
+  });
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Gemini API error status ${response.status}: ${errorText}`);
+  }
+  const data = await response.json();
+  const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!candidateText) {
+    throw new Error("Empty candidate response returned by Gemini API");
+  }
+  return candidateText.trim();
+}
+async function callGroqChat(message, history = []) {
+  const messages = [
+    { role: "system", content: DEVMENTOR_SYSTEM_PROMPT },
+    ...history.map((h) => ({
+      role: h.role === "model" ? "assistant" : "user",
+      content: h.content
+    })),
+    { role: "user", content: message }
+  ];
+  const payload = {
+    model: "qwen/qwen3.8-27b",
+    messages,
+    temperature: 0.7,
+    max_tokens: 1200
+  };
+  const response = await fetch(GROQ_API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${GROQ_API_KEY}`
+    },
+    body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(12e3)
+    // 12 second timeout
+  });
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Groq API error status ${response.status}: ${errorText}`);
+  }
+  const data = await response.json();
+  const candidateText = data?.choices?.[0]?.message?.content;
+  if (!candidateText) {
+    throw new Error("Empty completion returned by Groq API");
+  }
+  return candidateText.trim();
+}
+function getStaticFallbackResponse(message) {
+  const lower = message.toLowerCase();
+  if (lower.includes("credit") || lower.includes("bdt") || lower.includes("cost")) {
+    return "### DevCredits & Pricing\n\n- **Exchange Rate**: 1 DevCredit = **\u09F34.00 BDT**.\n- **bKash Top-Up**: Students can instantly add credits to their DevWallet via bKash (packages: 50, 100, 250, 500, 1000 Cr).\n- **Escrow Protection**: Credits are kept in platform escrow until mentorship sessions or code reviews are delivered.";
+  }
+  if (lower.includes("review") || lower.includes("code")) {
+    return "### DevMentor Code Reviews\n\n- **Quick Review**: 10 Credits (\u09F340 BDT) \u2022 **2-Hour SLA** (Single functions, quick bug hunting).\n- **Deep Review**: 50 Credits (\u09F3200 BDT) \u2022 **24-Hour SLA** (Full architecture, security, and optimization).\n- If a mentor fails to meet the SLA, credits are immediately returned to your wallet.";
+  }
+  return "### DevMentor AI Assistant\n\nWelcome to DevMentor! Here are key areas I can assist you with:\n- **1-on-1 Sprints**: Custom mentorship scheduled per session (50 Cr / session).\n- **Curated Cohorts**: Multi-session engineering bootcamps with flexible session enrollment.\n- **Code Reviews**: Quick (2h SLA / 10 Cr) & Deep (24h SLA / 50 Cr).\n- **DevCredits**: 1 Credit = \u09F34.00 BDT via bKash.";
+}
+var chatWithAssistant = async (input) => {
+  const { message, history = [] } = input;
+  if (GEMINI_API_KEY) {
+    try {
+      const answer = await callGeminiChat(message, history);
+      return {
+        answer,
+        suggestedPrompts: generateSuggestedPrompts(answer),
+        providerUsed: "gemini"
+      };
+    } catch (geminiError) {
+      console.warn(
+        `[AI Fallback] Primary Gemini 2.5 Flash call failed: ${geminiError?.message || geminiError}. Attempting Groq fallback...`
+      );
+    }
+  } else {
+    console.warn(
+      "[AI Service] GEMINI_API_KEY is missing from environment variables."
+    );
+  }
+  if (GROQ_API_KEY) {
+    try {
+      const answer = await callGroqChat(message, history);
+      return {
+        answer,
+        suggestedPrompts: generateSuggestedPrompts(answer),
+        providerUsed: "groq"
+      };
+    } catch (groqError) {
+      console.warn(
+        `[AI Fallback] Groq fallback failed: ${groqError?.message || groqError}. Using offline fallback knowledge...`
+      );
+    }
+  } else {
+    console.warn(
+      "[AI Service] GROQ_API_KEY is missing from environment variables."
+    );
+  }
+  const fallbackAnswer = getStaticFallbackResponse(message);
+  return {
+    answer: fallbackAnswer,
+    suggestedPrompts: generateSuggestedPrompts(fallbackAnswer),
+    providerUsed: "fallback"
+  };
+};
+function computeKeywordFallbackMatch(prompt, mentors, cohorts, maxResults) {
+  const promptWords = prompt.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
+  const scoredMentors = mentors.map((m) => {
+    let score = 50;
+    const tags = (m.techStackTags || []).map((t) => t.toLowerCase());
+    const bio = (m.bio || "").toLowerCase();
+    promptWords.forEach((word) => {
+      if (tags.some((t) => t.includes(word))) score += 20;
+      if (bio.includes(word)) score += 10;
+    });
+    return {
+      id: m.userId || m.id,
+      name: m.user?.name || "Verified Mentor",
+      bio: m.bio,
+      experienceLevel: m.experienceLevel,
+      techStackTags: m.techStackTags || [],
+      matchScore: Math.min(98, score),
+      matchReason: `High specialization in relevant stack areas: ${(m.techStackTags || []).slice(0, 3).join(", ")}.`,
+      avatarUrl: m.user?.image || null
+    };
+  });
+  scoredMentors.sort((a, b) => b.matchScore - a.matchScore);
+  const scoredCohorts = cohorts.map((c) => {
+    let score = 50;
+    const tags = (c.techStackTags || []).map((t) => t.toLowerCase());
+    const text = `${c.title} ${c.description}`.toLowerCase();
+    promptWords.forEach((word) => {
+      if (tags.some((t) => t.includes(word))) score += 20;
+      if (text.includes(word)) score += 10;
+    });
+    return {
+      id: c.id,
+      title: c.title,
+      description: c.description,
+      category: c.techStackTags?.[0] || "Engineering",
+      techStackTags: c.techStackTags || [],
+      totalCost: c.totalCost,
+      matchScore: Math.min(95, score),
+      matchReason: `Structured curriculum directly targets your learning objectives.`
+    };
+  });
+  scoredCohorts.sort((a, b) => b.matchScore - a.matchScore);
+  return {
+    analysisSummary: `Found matching mentors and cohorts relevant to: "${prompt.slice(0, 60)}..."`,
+    recommendedMentors: scoredMentors.slice(0, maxResults),
+    recommendedCohorts: scoredCohorts.slice(0, maxResults),
+    providerUsed: "fallback"
+  };
+}
+var matchMentorsAndCohorts = async (input) => {
+  const { prompt, preferredLevel, maxResults = 2 } = input;
+  const [rawMentors, rawCohorts] = await Promise.all([
+    prisma.mentorProfile.findMany({
+      where: {
+        approvalStatus: "APPROVED",
+        ...preferredLevel && preferredLevel !== "ALL" ? { experienceLevel: preferredLevel } : {}
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            image: true
+          }
+        }
+      },
+      take: 12
+    }),
+    prisma.cohortProgram.findMany({
+      where: {
+        status: "PUBLISHED",
+        approvalStatus: "APPROVED"
+      },
+      take: 8
+    })
+  ]);
+  const mentorsContext = rawMentors.map((m) => ({
+    id: m.userId || m.id,
+    name: m.user?.name || "Verified Mentor",
+    experienceLevel: m.experienceLevel,
+    techStackTags: m.techStackTags,
+    bio: m.bio?.slice(0, 180)
+  }));
+  const cohortsContext = rawCohorts.map((c) => ({
+    id: c.id,
+    title: c.title,
+    description: c.description?.slice(0, 180),
+    techStackTags: c.techStackTags,
+    totalCost: c.totalCost
+  }));
+  const systemPrompt = MATCH_SYSTEM_PROMPT;
+  const userPrompt = buildMatchUserPrompt(
+    prompt,
+    preferredLevel || "ALL",
+    mentorsContext,
+    cohortsContext,
+    maxResults
+  );
+  let parsedResult = null;
+  let providerUsed = "fallback";
+  if (GROQ_API_KEY) {
+    try {
+      const response = await fetch(GROQ_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${GROQ_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "qwen/qwen3.8-27b",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt }
+          ],
+          temperature: 0.2,
+          // Low temperature for deterministic JSON output
+          max_tokens: 1e3
+        }),
+        signal: AbortSignal.timeout(12e3)
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const content = data?.choices?.[0]?.message?.content || "";
+        const cleanJson = content.replace(/```json/g, "").replace(/```/g, "").trim();
+        parsedResult = JSON.parse(cleanJson);
+        providerUsed = "groq";
+      }
+    } catch (err) {
+      console.warn(`[AI Matcher] Groq ranking call failed: ${err?.message || err}.`);
+    }
+  }
+  if (!parsedResult && GEMINI_API_KEY) {
+    try {
+      const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: `${systemPrompt}
+
+${userPrompt}` }]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 1e3
+          }
+        }),
+        signal: AbortSignal.timeout(12e3)
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        const cleanJson = text.replace(/```json/g, "").replace(/```/g, "").trim();
+        parsedResult = JSON.parse(cleanJson);
+        providerUsed = "gemini";
+      }
+    } catch (err) {
+      console.warn(`[AI Matcher] Gemini ranking call failed: ${err?.message || err}.`);
+    }
+  }
+  if (!parsedResult) {
+    return computeKeywordFallbackMatch(prompt, rawMentors, rawCohorts, maxResults);
+  }
+  const mentorMap = new Map(rawMentors.map((m) => [m.userId || m.id, m]));
+  const cohortMap = new Map(rawCohorts.map((c) => [c.id, c]));
+  const recommendedMentors = (parsedResult.recommendedMentors || []).map((rm) => {
+    const original = mentorMap.get(rm.id);
+    if (!original) return null;
+    return {
+      id: original.userId || original.id,
+      name: original.user?.name || "Verified Mentor",
+      bio: original.bio,
+      experienceLevel: original.experienceLevel,
+      techStackTags: original.techStackTags || [],
+      matchScore: rm.matchScore || 90,
+      matchReason: rm.matchReason || "Matched against your target tech stack.",
+      avatarUrl: original.user?.image || null
+    };
+  }).filter(Boolean);
+  const recommendedCohorts = (parsedResult.recommendedCohorts || []).map((rc) => {
+    const original = cohortMap.get(rc.id);
+    if (!original) return null;
+    return {
+      id: original.id,
+      title: original.title,
+      description: original.description,
+      category: original.techStackTags?.[0] || "Engineering",
+      techStackTags: original.techStackTags || [],
+      totalCost: original.totalCost,
+      matchScore: rc.matchScore || 88,
+      matchReason: rc.matchReason || "Curriculum directly relevant to your goal."
+    };
+  }).filter(Boolean);
+  return {
+    analysisSummary: parsedResult.analysisSummary || "Top recommended mentors and cohorts based on your query.",
+    recommendedMentors: recommendedMentors.slice(0, maxResults),
+    recommendedCohorts: recommendedCohorts.slice(0, maxResults),
+    providerUsed
+  };
+};
+var aiService = {
+  chatWithAssistant,
+  matchMentorsAndCohorts,
+  scanCodeSnippet: async (input) => {
+    return scanCodeSnippet(input);
+  }
+};
+function computeStaticCodeScanFallback(code, languageHint = "typescript") {
+  const findings = [];
+  let maintainabilityScore = 90;
+  const lines = code.split("\n");
+  let loopDepth = 0;
+  let maxLoopDepth = 0;
+  let loopLine = 1;
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+    if (/\b(for|while)\s*\(/.test(trimmed)) {
+      loopDepth++;
+      if (loopDepth > maxLoopDepth) {
+        maxLoopDepth = loopDepth;
+        loopLine = index + 1;
+      }
+    }
+    if (trimmed.includes("}")) {
+      loopDepth = Math.max(0, loopDepth - 1);
+    }
+  });
+  if (maxLoopDepth >= 2) {
+    maintainabilityScore -= 12;
+    findings.push({
+      severity: "warning",
+      title: "Nested iteration detected (Potential O(N^2) complexity)",
+      description: "Nested loops can cause significant performance degradation on large datasets. Consider using a Map/Set lookup.",
+      lineRange: `Line ${loopLine}`
+    });
+  }
+  const anyMatches = code.match(/:\s*any\b/g);
+  if (anyMatches && anyMatches.length > 0) {
+    maintainabilityScore -= Math.min(15, anyMatches.length * 5);
+    findings.push({
+      severity: "warning",
+      title: `Loose typing detected (${anyMatches.length} 'any' type usages)`,
+      description: "Bypassing TypeScript's compiler checks with 'any' increases runtime vulnerability. Replace with strict interfaces or unknown."
+    });
+  }
+  if (/console\.(log|debug|info)\(/.test(code)) {
+    maintainabilityScore -= 5;
+    findings.push({
+      severity: "suggestion",
+      title: "Leftover debugging statements",
+      description: "Direct console outputs should be removed or routed through a structured logger before production escrow review."
+    });
+  }
+  if (/\/\/\s*(TODO|FIXME)/i.test(code)) {
+    findings.push({
+      severity: "suggestion",
+      title: "Unresolved TODO / FIXME markers found",
+      description: "Ensure temporary flags or incomplete logic are resolved before the mentor conducts deep architectural review."
+    });
+  }
+  if (findings.length === 0) {
+    findings.push({
+      severity: "suggestion",
+      title: "Code structure appears clean",
+      description: "No immediate static violations detected. Mentor will focus on architecture and business logic edge cases."
+    });
+  }
+  return {
+    language: languageHint || "TypeScript",
+    complexitySummary: {
+      timeComplexity: maxLoopDepth >= 2 ? "O(N^2)" : "O(N)",
+      spaceComplexity: "O(1)",
+      maintainabilityScore: Math.max(40, Math.min(100, maintainabilityScore))
+    },
+    findings,
+    suggestedMentorFocus: [
+      "Verify edge case inputs, concurrency handling, and error boundaries.",
+      "Review database queries and async promise propagation."
+    ],
+    mentorFocusNotes: "Scrutinize runtime data validation and error recovery flow.",
+    providerUsed: "fallback"
+  };
+}
+var scanCodeSnippet = async (input) => {
+  const { code, language = "typescript", context } = input;
+  const systemPrompt = CODE_SCAN_SYSTEM_PROMPT;
+  const userPrompt = buildCodeScanUserPrompt(code, language, context);
+  let parsedResult = null;
+  let providerUsed = "fallback";
+  if (GROQ_API_KEY) {
+    try {
+      const response = await fetch(GROQ_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${GROQ_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "qwen/qwen3.8-27b",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt }
+          ],
+          temperature: 0.1,
+          max_tokens: 1500
+        }),
+        signal: AbortSignal.timeout(15e3)
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const content = data?.choices?.[0]?.message?.content || "";
+        const cleanJson = content.replace(/```json/g, "").replace(/```/g, "").trim();
+        parsedResult = JSON.parse(cleanJson);
+        providerUsed = "groq";
+      }
+    } catch (groqErr) {
+      console.warn(`[AI Scan Fallback] Groq scan failed: ${groqErr?.message || groqErr}. Routing to Gemini...`);
+    }
+  }
+  if (!parsedResult && GEMINI_API_KEY) {
+    try {
+      const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [
+                { text: `${systemPrompt}
+
+${userPrompt}` }
+              ]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.1,
+            maxOutputTokens: 1500
+          }
+        }),
+        signal: AbortSignal.timeout(15e3)
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const content = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        const cleanJson = content.replace(/```json/g, "").replace(/```/g, "").trim();
+        parsedResult = JSON.parse(cleanJson);
+        providerUsed = "gemini";
+      }
+    } catch (geminiErr) {
+      console.warn(`[AI Scan Fallback] Gemini scan failed: ${geminiErr?.message || geminiErr}.`);
+    }
+  }
+  if (parsedResult) {
+    const mentorFocusArray = Array.isArray(parsedResult.suggestedMentorFocus) ? parsedResult.suggestedMentorFocus : parsedResult.mentorFocusNotes ? [parsedResult.mentorFocusNotes] : ["Review edge case handling and data validation."];
+    return {
+      language: parsedResult.language || language || "TypeScript",
+      complexitySummary: {
+        timeComplexity: parsedResult.complexitySummary?.timeComplexity || "O(N)",
+        spaceComplexity: parsedResult.complexitySummary?.spaceComplexity || "O(1)",
+        maintainabilityScore: typeof parsedResult.complexitySummary?.maintainabilityScore === "number" ? parsedResult.complexitySummary.maintainabilityScore : 85
+      },
+      findings: Array.isArray(parsedResult.findings) ? parsedResult.findings : [],
+      suggestedMentorFocus: mentorFocusArray,
+      mentorFocusNotes: parsedResult.mentorFocusNotes || mentorFocusArray.join(" "),
+      providerUsed
+    };
+  }
+  return computeStaticCodeScanFallback(code, language);
+};
+
+// src/modules/ai/ai.controller.ts
+var chatWithAssistantHandler = catchAsync(
+  async (req, res) => {
+    const result = await aiService.chatWithAssistant(req.body);
+    sendSuccess(res, "AI response generated successfully", result);
+  }
+);
+var matchMentorsAndCohortsHandler = catchAsync(
+  async (req, res) => {
+    const result = await aiService.matchMentorsAndCohorts(req.body);
+    sendSuccess(res, "Matches found successfully", result);
+  }
+);
+var scanCodeSnippetHandler = catchAsync(
+  async (req, res) => {
+    const result = await aiService.scanCodeSnippet(req.body);
+    sendSuccess(res, "Code scanned successfully", result);
+  }
+);
+var aiController = {
+  chatWithAssistantHandler,
+  matchMentorsAndCohortsHandler,
+  scanCodeSnippetHandler
+};
+
+// src/modules/ai/ai.routes.ts
+var router14 = Router14();
+router14.post(
+  "/chat",
+  validate(chatSchema, "body"),
+  aiController.chatWithAssistantHandler
+);
+router14.post(
+  "/match",
+  validate(matchSchema, "body"),
+  aiController.matchMentorsAndCohortsHandler
+);
+router14.post(
+  "/code-scan",
+  validate(codeScanSchema, "body"),
+  aiController.scanCodeSnippetHandler
+);
+var ai_routes_default = router14;
+
 // src/jobs/cron.ts
 import cron from "node-cron";
 var expireAbandonedPayments = async () => {
@@ -6257,15 +7064,32 @@ var initCronJobs = () => {
 };
 
 // src/routes/v1/index.ts
-var v1Router = Router14();
+var v1Router = Router15();
 v1Router.all("/", (req, res, next) => {
   if (req.query.paymentID || req.body?.paymentID) {
     return paymentController.bkashCallbackHandler(req, res, next);
   }
-  res.json({ success: true, message: "K\u014Ddex API v1 root endpoint", data: null });
+  res.json({
+    success: true,
+    message: "DevMentor API v1 root endpoint",
+    data: {
+      author: "Zihad",
+      github: "https://github.com/Zihad-1883"
+    }
+  });
 });
 v1Router.get("/health", (_req, res) => {
-  res.json({ success: true, message: "K\u014Ddex API v1 is up and running \u{1F680}", data: null });
+  res.json({
+    success: true,
+    message: "DevMentor API v1 is up and running \u{1F680}",
+    data: {
+      name: "DevMentor API",
+      status: "healthy",
+      author: "Zihad",
+      github: "https://github.com/Zihad-1883",
+      timestamp: (/* @__PURE__ */ new Date()).toISOString()
+    }
+  });
 });
 v1Router.get(
   "/test/protected",
@@ -6296,6 +7120,7 @@ v1Router.use("/payments", paymentRoutes);
 v1Router.use("/code-reviews", codeReview_routes_default);
 v1Router.use("/exams", examRoutes);
 v1Router.use("/payouts", payout_routes_default);
+v1Router.use("/ai", ai_routes_default);
 v1Router.get(
   "/cron/cleanup-payments",
   catchAsync(async (req, res) => {
@@ -6330,8 +7155,14 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.get("/", (_req, res) => {
   res.json({
     success: true,
-    message: "Welcome to K\u014Ddex API",
-    data: { name: "K\u014Ddex API", version: "1.0.0", docs: "/api/v1/health" }
+    message: "Welcome to DevMentor API",
+    data: {
+      name: "DevMentor API",
+      version: "1.0.0",
+      author: "Zihad",
+      github: "https://github.com/Zihad-1883",
+      docs: "/api/v1/health"
+    }
   });
 });
 app.all("/api/v1/auth/*splat", (req, _res, next) => {

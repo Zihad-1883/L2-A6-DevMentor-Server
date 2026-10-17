@@ -13,7 +13,7 @@ async function main() {
   if (!existing) {
     await auth.api.signUpEmail({
       body: {
-        name: "Kōdex Admin",
+        name: "DevMentor Admin",
         email: adminEmail,
         password: adminPassword,
       },
