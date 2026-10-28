@@ -41,7 +41,7 @@ model Question {
 
     questionText       String
     options            String[]
-    correctOptionIndex Int 
+    correctOptionIndex Int
     explanation        String?
     marks              Int      @default(1)
 

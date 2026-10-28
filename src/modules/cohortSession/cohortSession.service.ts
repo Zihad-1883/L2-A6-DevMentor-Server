@@ -41,16 +41,16 @@ const addCohortSession = async (
 
   const formattedResources = Array.isArray(resources)
     ? resources.map((item, idx) => ({
-        id: item.id || `res_${Date.now()}_${idx}`,
-        title: item.title,
-        type: item.type,
-        url: item.url || null,
-        publicId: item.publicId || null,
-        fileSize: item.fileSize || null,
-        fileType: item.fileType || null,
-        content: item.content || null,
-        createdAt: item.createdAt || new Date().toISOString(),
-      }))
+      id: item.id || `res_${Date.now()}_${idx}`,
+      title: item.title,
+      type: item.type,
+      url: item.url || null,
+      publicId: item.publicId || null,
+      fileSize: item.fileSize || null,
+      fileType: item.fileType || null,
+      content: item.content || null,
+      createdAt: item.createdAt || new Date().toISOString(),
+    }))
     : [];
 
   const session = await prisma.cohortSession.create({
@@ -89,9 +89,9 @@ const getCohortSessions = async (cohortId: string, userId?: string) => {
     include: {
       participants: userId
         ? {
-            where: { studentId: userId },
-            select: { paid: true, joinedAt: true },
-          }
+          where: { studentId: userId },
+          select: { paid: true, joinedAt: true },
+        }
         : false,
     },
   });
@@ -100,7 +100,7 @@ const getCohortSessions = async (cohortId: string, userId?: string) => {
     const isPaidParticipant =
       Array.isArray(session.participants) && session.participants.length > 0 && session.participants[0].paid;
 
-    const hasAccess = isMentor || isPaidParticipant;
+    const hasAccess = isMentor || isPaidParticipant || session.creditCost === 0;
 
     return {
       id: session.id,
@@ -115,6 +115,7 @@ const getCohortSessions = async (cohortId: string, userId?: string) => {
       hasAccess,
       joinLink: hasAccess ? session.joinLink : null,
       resources: hasAccess ? session.resources : null,
+      recordingUrl: hasAccess ? session.recordingUrl : null,
       createdAt: session.createdAt,
       updatedAt: session.updatedAt,
     };
@@ -331,8 +332,8 @@ const joinCohortSession = async (sessionId: string, studentId: string) => {
       await tx.creditTransaction.create({
         data: {
           walletId: updatedStudentWallet.id,
-          amount: session.creditCost,
-          type: "DEBIT",
+          amount: -session.creditCost,
+          type: "COHORT_FEE",
           description: `Escrow hold for cohort session: ${session.title}`,
           referenceId: session.id,
         },
@@ -528,7 +529,7 @@ const cancelCohortSession = async (sessionId: string, mentorId: string) => {
           data: {
             walletId: studentWallet.id,
             amount: session.creditCost,
-            type: "CREDIT",
+            type: "SPRINT_REFUND",
             description: `Escrow refund for cancelled cohort session: ${session.title}`,
             referenceId: session.id,
           },

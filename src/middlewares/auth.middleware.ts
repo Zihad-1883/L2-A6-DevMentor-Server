@@ -77,3 +77,41 @@ export const requireAuth = async (
   }
 };
 
+export const optionalAuth = async (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const cleanHeaders = { ...req.headers };
+    if (cleanHeaders.authorization) {
+      delete cleanHeaders.cookie;
+    }
+
+    const session = await auth.api.getSession({
+      headers: cleanHeaders as unknown as Headers,
+    });
+
+    if (session?.user) {
+      const dbUser = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { role: true, isBlocked: true },
+      });
+
+      if (!dbUser?.isBlocked) {
+        const userRole = dbUser?.role || (session.user as { role?: string }).role || "student";
+
+        req.user = {
+          ...(session.user as Record<string, unknown>),
+          role: userRole,
+          isBlocked: false,
+        } as Request["user"];
+      }
+    }
+  } catch {
+    // Proceed unauthenticated
+  }
+  next();
+};
+
+

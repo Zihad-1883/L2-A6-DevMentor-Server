@@ -995,6 +995,33 @@ var requireAuth = async (req, res, next) => {
     });
   }
 };
+var optionalAuth = async (req, _res, next) => {
+  try {
+    const cleanHeaders = { ...req.headers };
+    if (cleanHeaders.authorization) {
+      delete cleanHeaders.cookie;
+    }
+    const session = await auth.api.getSession({
+      headers: cleanHeaders
+    });
+    if (session?.user) {
+      const dbUser = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { role: true, isBlocked: true }
+      });
+      if (!dbUser?.isBlocked) {
+        const userRole = dbUser?.role || session.user.role || "student";
+        req.user = {
+          ...session.user,
+          role: userRole,
+          isBlocked: false
+        };
+      }
+    }
+  } catch {
+  }
+  next();
+};
 
 // src/middlewares/rbac.middleware.ts
 var requireRole = (...roles) => {
@@ -2734,7 +2761,7 @@ var getCohortSessions = async (cohortId, userId) => {
   });
   const processedSessions = sessions.map((session) => {
     const isPaidParticipant = Array.isArray(session.participants) && session.participants.length > 0 && session.participants[0].paid;
-    const hasAccess = isMentor || isPaidParticipant;
+    const hasAccess = isMentor || isPaidParticipant || session.creditCost === 0;
     return {
       id: session.id,
       cohortId: session.cohortId,
@@ -2748,6 +2775,7 @@ var getCohortSessions = async (cohortId, userId) => {
       hasAccess,
       joinLink: hasAccess ? session.joinLink : null,
       resources: hasAccess ? session.resources : null,
+      recordingUrl: hasAccess ? session.recordingUrl : null,
       createdAt: session.createdAt,
       updatedAt: session.updatedAt
     };
@@ -2907,8 +2935,8 @@ var joinCohortSession = async (sessionId, studentId) => {
       await tx.creditTransaction.create({
         data: {
           walletId: updatedStudentWallet.id,
-          amount: session.creditCost,
-          type: "DEBIT",
+          amount: -session.creditCost,
+          type: "COHORT_FEE",
           description: `Escrow hold for cohort session: ${session.title}`,
           referenceId: session.id
         }
@@ -3075,7 +3103,7 @@ var cancelCohortSession = async (sessionId, mentorId) => {
           data: {
             walletId: studentWallet.id,
             amount: session.creditCost,
-            type: "CREDIT",
+            type: "SPRINT_REFUND",
             description: `Escrow refund for cancelled cohort session: ${session.title}`,
             referenceId: session.id
           }
@@ -3201,7 +3229,7 @@ var addSessionResourceSchema = resourceItemSchema;
 
 // src/modules/cohortSession/cohortSession.routes.ts
 var router4 = Router4();
-router4.get("/cohort/:cohortId", cohortSessionController.getCohortSessions);
+router4.get("/cohort/:cohortId", optionalAuth, cohortSessionController.getCohortSessions);
 router4.post(
   "/cohort/:cohortId",
   requireAuth,

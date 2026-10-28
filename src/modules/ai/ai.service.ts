@@ -502,10 +502,7 @@ export const aiService = {
     },
 };
 
-// ==========================================
-// 🔹 Function 3: scanCodeSnippet & Static Fallback
-// ==========================================
-
+// Function 3: scanCodeSnippet & Static Fallback
 function computeStaticCodeScanFallback(
     code: string,
     languageHint: string = "typescript"

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requireAuth } from "../../middlewares/auth.middleware.js";
+import { requireAuth, optionalAuth } from "../../middlewares/auth.middleware.js";
 import { requireRole } from "../../middlewares/rbac.middleware.js";
 import { validate } from "../../middlewares/validate.middleware.js";
 import { cohortSessionController } from "./cohortSession.controller.js";
@@ -12,7 +12,7 @@ import {
 const router = Router();
 
 // Session Query Route
-router.get("/cohort/:cohortId", cohortSessionController.getCohortSessions);
+router.get("/cohort/:cohortId", optionalAuth, cohortSessionController.getCohortSessions);
 
 // Mentor Session Creation & Resource Management Routes
 router.post(
